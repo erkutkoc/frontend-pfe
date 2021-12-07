@@ -21,8 +21,7 @@
         motDePasse: data.password,
         campus_id : Number.parseInt(data.campus)
     }
-    const response = await fetch('http://dd08-2a02-a03f-6603-9b00-fc9c-9e92-81ec-70c1.ngrok.io/login/register',{
-      // const response = await fetch('http://pfe-backend1.herokuapp.com/login',{
+    const response = await fetch('https://pfe-backend1.herokuapp.com/login/register',{
         headers: {"Content-Type" :"application/json"},
         method:'POST',
         body : JSON.stringify(toSend)

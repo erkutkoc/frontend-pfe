@@ -1,9 +1,3 @@
 <script>
-  import { Router } from "@roxi/routify";
-  import { routes } from "../.routify/routes";
+  // export const userToken = document.cookie;
 </script>
-
-
-
-
-<Router {routes} />
