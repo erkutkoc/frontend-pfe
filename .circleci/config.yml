@@ -1,10 +1,10 @@
 version: 2.1
 orbs:
-  heroku: circleci/heroku@0.0.10
+  heroku: circleci/heroku@1.2.6
 workflows:
-  heroku_deploy:
-    jobs:
-      - heroku/deploy-via-git:
-          filters:
-            branches:
-              only: main
+    example-workflow:
+      jobs:
+        - heroku/deploy-via-git:
+            api-key: a7698e3b-8964-422d-8080-a836edf16343 
+            app-name: frontend-dev-pfe 
+            branch: main 
