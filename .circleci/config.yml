@@ -4,5 +4,6 @@ orbs:
 workflows:
   heroku_deploy:
     jobs:
-      - heroku/deploy-via-git:
-          branch: main
+      - heroku/deploy-via-git
+app-name: frontend-dev-pfe 
+branch: main
