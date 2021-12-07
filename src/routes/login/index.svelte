@@ -1,6 +1,29 @@
 <script>
   import "../../styles/tailwind.css";
   import Navbar from "../../components/Navbar.svelte";
+  import UserServices from "../../services/userServices.js";
+
+  function onSubmit (e){
+    const formData = new FormData(e.target);
+    const data=[];
+    
+    // @ts-ignore
+    for (let field of formData) {
+      const [key, value] = field;
+      data[key] = value;
+    }
+    console.log(data);
+    if(data) fetchConnetion(data)
+
+  }
+  const fetchConnetion = (data) => {
+    let toSend = {
+        Email: data.email,
+        MotDePasse: data.password
+    }
+    UserServices.login(toSend);
+  };  
+
 </script>
 
 <Navbar/>
@@ -11,7 +34,7 @@
         Sign in to your account
       </h2>
     </div>
-    <form class="mt-8 space-y-6" action="#" method="POST">
+    <form on:submit|preventDefault={onSubmit} class="mt-8 space-y-6" action="#" method="POST">
       <input type="hidden" name="remember" value="true">
       <div class="rounded-md shadow-sm -space-y-px">
         <div>
@@ -53,5 +76,4 @@
     </form>
   </div>
 </div>
-
 
