@@ -13,7 +13,7 @@
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="/">
-          Home
+          Acceuil
         </a>
         <a class="navbar-item" href="/persons">
             Persons
