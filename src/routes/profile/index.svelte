@@ -6,6 +6,7 @@
     let campus = "";
 
     let length = document.cookie.search("token") + "token=".length
+    //let length
     console.log("cookie")
     console.log(document.cookie)
     
