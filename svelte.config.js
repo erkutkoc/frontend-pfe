@@ -13,7 +13,12 @@ const config = {
     kit: {
         // hydrate the <div id="svelte"> element in src/app.html
         target: '#svelte',
-        adapter: adapter({ out: 'public' })
+        adapter: adapter({ out: 'public' }),
+        vite: {
+            define: {
+                'process.env': process.env
+            }
+        }
     }
 };
 
