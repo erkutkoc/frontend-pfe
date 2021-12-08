@@ -1,6 +1,6 @@
 <nav class="navbar is-transparent">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
+      <a class="navbar-item" href="/">
         <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
       </a>
       <div class="navbar-burger" data-target="navbarExampleTransparentExample">
@@ -13,7 +13,7 @@
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="/">
-          Acceuil
+          Accueil
         </a>
         <a class="navbar-item" href="/myArticles">
           Mes articles
@@ -38,9 +38,14 @@
           </div>
         </div>
         <a class="navbar-item" href="/login">
-            Login 
+           Connexion  
         </a>
-        
+        <a class="navbar-item" href="/register">
+          Inscription 
+      </a>
+      <a class="navbar-item" href="/logout">
+        Deconnexion 
+    </a>
       </div>
     </div>
   </nav>
