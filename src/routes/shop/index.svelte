@@ -7,7 +7,7 @@
 
 <Navbar />
 <div class="container ">
-<div class="columns is-desktop">
+<!--div class="columns is-desktop">
 	<div class="column ">
 		<div class="select is-primary ">
 			<select>
@@ -17,7 +17,8 @@
 			</select>
 		</div>
 	</div>
-</div><br>
+</div-->
+<br>
 </div>
 <!--Annonce-->
 <div class="container">

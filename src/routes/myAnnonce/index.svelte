@@ -7,7 +7,6 @@
 	let currentToogle = 'default';
 	let modal;
 	let showStateDropdown = false;
-
 </script>
 
 <Navbar />
