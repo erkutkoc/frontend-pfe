@@ -36,10 +36,13 @@
         </a>
         <a class="navbar-item" href="/register">
           Inscription 
-      </a>
-      <a class="navbar-item" href="/logout">
-        Deconnexion 
-    </a>
+        </a>
+        <a class="navbar-item" href="/logout">
+          Deconnexion 
+        </a>
+        <a class="navbar-item" href="/profile">
+          Profil
+        </a>
       </div>
     </div>
   </nav>
