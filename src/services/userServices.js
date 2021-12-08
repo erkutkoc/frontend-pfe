@@ -7,8 +7,7 @@ const login = (payload) => {
     return axios
         .post(baseUrl + "/login/login", payload)
         .then(response => {
-            document.cookie = "token=" + response.data;
-            console.log(response.data);
+            document.cookie = "token=Bearer " + response.data.token;
         })
 }
 

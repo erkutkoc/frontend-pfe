@@ -3,94 +3,107 @@
 	import Navbar from '../../components/Navbar.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
+	import { findAllAnnonceByEmail } from '../../services/annonceServices.js';
+	import { onMount } from 'svelte';
+	import AnnonceList from '../../components/AnnonceList.svelte';
+	let annoncesData = [];
 	
+	onMount(async () => {
+		const res = await findAllAnnonceByEmail();
+
+		annoncesData = res;
+	});
 	let currentToogle = 'default';
 	let modal;
 	let showStateDropdown = false;
+	let filteredData = [];
+
+	function handleFilter(filter) {
+		if (currentToogle === 'E') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+
+		}
+		if (currentToogle === 'V') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
+		if (currentToogle === 'T') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
+		if (currentToogle === 'R') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
+		console.log(filteredData);
+	}
 </script>
 
 <Navbar />
-<Modal bind:this={modal}/>
+<Modal bind:this={modal} />
 <main>
 	<div class="container">
 		<div class="tabs is-centered is-boxed is-medium">
 			<ul>
 				<li class={currentToogle === 'default' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
 					<a on:click={() => (currentToogle = 'default')}>
-						<span>Mes Articles</span>
+						<span class="icon is-small has-text-grey-lighter"><i class="fas fa-circle" /></span>
+						<span>Articles</span>
 					</a>
 				</li>
-				<li class={currentToogle === 'sold' ? 'is-active' : ''}>
-					<a on:click={() => (currentToogle = 'sold')}>
+				<li class={currentToogle === 'E' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'E')}>
+						<span class="icon is-small has-text-danger-dark"><i class="fas fa-pause-circle" /></span
+						>
+						<span>En attente</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'V' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'V')}>
+						<span class="icon is-small has-text-primary-dark"
+							><i class="fas fa-check-circle" /></span
+						>
+						<span>Validée</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'R' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'R')}>
+						<span class="icon is-small" style="color:#F98A0C"
+							><i class="fas fa-minus-circle" /></span
+						>
+						<span>Réservée</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'T' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'T')}>
+						<span class="icon is-small"><i class="fas fa-times-circle" /></span>
 						<span>Vendus</span>
 					</a>
 				</li>
-				<button
-					class="button is-primary has-text-weight-bold is-outlined is-rounded is-medium"
-					on:click={()=> modal.showModal()}>Ajouter un article</button
-				>
+				<button class="button is-primary has-text-weight-bold is-outlined is-rounded is-medium" on:click={() => modal.showModal()}>Ajouter un article</button>
 			</ul>
 		</div>
 	</div>
-	<br />
-
+	<br>
 	{#if currentToogle === 'default'}
-		<div class="container is-fluid">
-			<div class="columns  is-centered">
-				<div class="card column is-four-fifths">
-					<div class="card-image">
-						<div class="is-pulled-right">
-							<div class={showStateDropdown  ? 'dropdown is-active' : 'dropdown'} >
-								<div class="dropdown-trigger">
-									<button class="button" aria-haspopup="true" aria-controls="dropdown-menu" on:click={()=> showStateDropdown=!showStateDropdown}>
-										<span>Dropdown button</span>
-										<span class="icon is-small">
-											<i class="fas fa-angle-down" aria-hidden="true" />
-										</span>
-									</button>
-								</div>
-								<div class="dropdown-menu" id="dropdown-menu" role="menu">
-									<div class="dropdown-content">
-										<a href="#" class="dropdown-item"> En attente </a>
-										<hr class="dropdown-divider" />
-										<a href="#" class="dropdown-item "> Validée </a>
-										<a href="#" class="dropdown-item"> Réservée </a>
-										
-										<a href="#" class="dropdown-item"> Vendu </a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<figure>
-							<img
-								src="https://bulma.io/images/placeholders/1280x960.png"
-								alt="Placeholder image"
-							/>
-						</figure>
-					</div>
-					<div class="card-content">
-						<div class="media">
-							<div class="media-content">
-								<p class="title is-4">Erkut KOC</p>
-								<p class="subtitle is-6">erkut.koc@student.vinci.be</p>
-							</div>
-						</div>
-
-						<div class="content">
-							Manteau en très bonne état, de couleur bleu taille M !
-							<br />
-							<time datetime="2016-1-1">11:09 PM - 1 Jan 2022</time>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	{:else}
-		<div class="container is-fluid" />
+		<AnnonceList annoncesData={annoncesData} showStateDropdown={showStateDropdown} />
+	{:else if currentToogle === 'E'}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else if currentToogle === 'V'}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else if currentToogle === 'R'}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
 	{/if}
 
 </main>
-
 <style>
 	img {
 		border-radius: 8px;

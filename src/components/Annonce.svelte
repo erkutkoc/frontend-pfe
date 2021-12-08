@@ -11,7 +11,7 @@
 
 <!--Annonce-->
 <div class="columns is-desktop is-multiline ">
-	{#each data as annonce} 
+	{#each data as annonce (annonce.id)} 
 		<div class="column card is-one-third">
 			<div class="card-image">
 				<figure>
