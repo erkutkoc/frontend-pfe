@@ -15,6 +15,12 @@
         <a class="navbar-item" href="/">
           Accueil
         </a>
+        <a class="navbar-item" href="/myArticles">
+          Mes articles
+        </a>
+        <a class="navbar-item" href="/shop">
+          Shop
+        </a>
         <a class="navbar-item" href="/persons">
             Persons
         </a>
