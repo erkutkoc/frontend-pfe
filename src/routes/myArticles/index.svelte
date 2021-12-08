@@ -3,6 +3,7 @@
 	import Navbar from '../../components/Navbar.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
+	
 	let currentToogle = 'default';
 	let modal;
 	let showStateDropdown = false;
