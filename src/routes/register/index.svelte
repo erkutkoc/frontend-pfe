@@ -11,7 +11,6 @@
 			const [key, value] = field;
 			data[key] = value;
 		}
-		console.log(data);
 		if (data) fetchRegister(data);
 	}
 	const fetchRegister = async (data) => {
@@ -20,6 +19,8 @@
 			motDePasse: data.password,
 			campus_id: Number.parseInt(data.campus)
 		};
+		console.log(toSend);
+
 		const response = await fetch('https://pfe-backend1.herokuapp.com/login/register', {
 			headers: { 'Content-Type': 'application/json' },
 			method: 'POST',

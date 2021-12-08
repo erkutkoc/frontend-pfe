@@ -2,28 +2,32 @@
   import "../../styles/tailwind.css";
   import Navbar from "../../components/Navbar.svelte";
   import UserServices from "../../services/userServices.js";
+  import { goto } from '$app/navigation';
+  import {VITE_BASE_URL} from "../../env.js";
 
   function onSubmit (e){
+    const secretSauceRecipe = VITE_BASE_URL
+    console.log(secretSauceRecipe);
     const formData = new FormData(e.target);
     const data=[];
-    
     // @ts-ignore
     for (let field of formData) {
       const [key, value] = field;
       data[key] = value;
     }
-    console.log(data);
     if(data) fetchConnetion(data)
-
   }
   const fetchConnetion = (data) => {
     let toSend = {
         Email: data.email,
         MotDePasse: data.password
     }
-    UserServices.login(toSend);
-  };  
-
+     UserServices.login(toSend)
+     .then(response =>{
+        document.cookie = "token=Bearer " + response.data.token; //setCookie = token
+        goto("/myAnnonce");
+      });
+  }; 
 </script>
 
 <Navbar/>
@@ -31,7 +35,7 @@
   <div class="max-w-md w-full space-y-8">
     <div>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Sign in to your account
+        Sign in to your account 
       </h2>
     </div>
     <form on:submit|preventDefault={onSubmit} class="mt-8 space-y-6" action="#" method="POST">
