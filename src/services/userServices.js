@@ -13,6 +13,6 @@ const login = (payload) => {
 }
 
 const UserServices = {
-    login,
+    login
 }
 export default UserServices;
