@@ -1,0 +1,116 @@
+<script>
+	import '../../styles/tailwind.css';
+	import Navbar from '../../components/Navbar.svelte';
+	import 'bulma/css/bulma.css';
+	import Modal from '../../components/Modal.svelte';
+	import { findAllAnnonceByEmail } from '../../services/annonceServices.js';
+	import { onMount } from 'svelte';
+	import AnnonceList from '../../components/AnnonceList.svelte';
+	let annoncesData = [];
+	
+	onMount(async () => {
+		const res = await findAllAnnonceByEmail();
+
+		annoncesData = res;
+	});
+	let currentToogle = 'default';
+	let modal;
+	let showStateDropdown = false;
+	let filteredData = [];
+
+	function handleFilter(filter) {
+		if (currentToogle === 'E') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+
+		}
+		if (currentToogle === 'V') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
+		if (currentToogle === 'T') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
+		if (currentToogle === 'R') {
+			filteredData = [];
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
+		console.log(filteredData);
+	}
+</script>
+
+<Navbar />
+<Modal bind:this={modal} />
+<main>
+	<div class="container">
+		<div class="tabs is-centered is-boxed is-medium">
+			<ul>
+				<li class={currentToogle === 'default' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'default')}>
+						<span class="icon is-small has-text-grey-lighter"><i class="fas fa-circle" /></span>
+						<span>Articles</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'E' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'E')}>
+						<span class="icon is-small has-text-danger-dark"><i class="fas fa-pause-circle" /></span
+						>
+						<span>En attente</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'V' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'V')}>
+						<span class="icon is-small has-text-primary-dark"
+							><i class="fas fa-check-circle" /></span
+						>
+						<span>Validée</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'R' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'R')}>
+						<span class="icon is-small" style="color:#F98A0C"
+							><i class="fas fa-minus-circle" /></span
+						>
+						<span>Réservée</span>
+					</a>
+				</li>
+				<li class={currentToogle === 'T' ? 'is-active' : ''}>
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a on:click={() => (currentToogle = 'T')}>
+						<span class="icon is-small"><i class="fas fa-times-circle" /></span>
+						<span>Vendus</span>
+					</a>
+				</li>
+				<button class="button is-primary has-text-weight-bold is-outlined is-rounded is-medium" on:click={() => modal.showModal()}>Ajouter un article</button>
+			</ul>
+		</div>
+	</div>
+	<br>
+	{#if currentToogle === 'default'}
+		<AnnonceList annoncesData={annoncesData} showStateDropdown={showStateDropdown} />
+	{:else if currentToogle === 'E'}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else if currentToogle === 'V'}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else if currentToogle === 'R'}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else}{handleFilter(currentToogle)}
+		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{/if}
+
+</main>
+<style>
+	img {
+		border-radius: 8px;
+		max-width: 45%;
+		height: auto;
+	}
+	figure {
+		text-align: center;
+	}
+</style>
