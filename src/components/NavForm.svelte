@@ -43,7 +43,7 @@
 		<div class="field">
 			<label class="label">Campus</label>
 			<div class="select">
-				<select bind:value={selectedCat} on:change={handleChangeCamp}>
+				<select bind:value={selectedCamp} on:change={handleChangeCamp}>
 					{#each campus as camp}
 					<option value={camp}>
 						{camp.campus}
