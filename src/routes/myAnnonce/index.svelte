@@ -10,7 +10,6 @@
 	
 	onMount(async () => {
 		const res = await AnnonceServices.findAllAnnonceByEmail();
-
 		annoncesData = res;
 	});
 	let currentToogle = 'default';
@@ -19,17 +18,16 @@
 	let filteredData = [];
 
 	function handleFilter(filter) {
-		console.log(filter)
 		if (currentToogle === 'E') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		if (currentToogle === 'V') {
+		else if (currentToogle === 'V') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		if (currentToogle === 'T') {
+		else if (currentToogle === 'T') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		if (currentToogle === 'R') {
+		else if (currentToogle === 'R') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
 	}
