@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseUrl = "https://pfe-backend1.herokuapp.com";
 
-export const findAllAnnonce = async() => {
+export const findAllAnnonce = async () => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -10,7 +10,32 @@ export const findAllAnnonce = async() => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async() => {
+const addAnnonce = async (data) => {
+    const token = document.cookie.split("=")[1];
+
+    try {
+        var config = {
+            method: 'post',
+            url: baseUrl + '/annonces?Content-Type=application/json',
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+        return axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+
+}
+const findAllAnnonceByEmail = async () => {
     const token = document.cookie.split("=")[1];
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {
@@ -38,6 +63,7 @@ const findAnnonceById = (id) => {
 const AnnonceServices = {
     findAllAnnonce,
     findAllAnnonceByEmail,
-    findAnnonceById
+    findAnnonceById,
+    addAnnonce
 }
 export default AnnonceServices;

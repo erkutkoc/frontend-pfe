@@ -1,4 +1,7 @@
 <script>
+import { goto } from '$app/navigation';
+
+	import annonceServices from '../services/annonceServices';
 	let shown = false;
 
 	export function showModal() {
@@ -7,6 +10,33 @@
 	export function hideModal() {
 		shown = false;
 	}
+	function onSubmit(e){
+		const formData = new FormData(e.target);
+		const data = [];
+
+		// @ts-ignore
+		for (let field of formData) {
+			const [key, value] = field;
+			data[key] = value;
+		}
+		if (data) fetchAddAnnonce(data);
+	}
+	const fetchAddAnnonce = async (data) => {
+		console.log(data.price)
+		let toSend = {
+		Titre: data.title,
+		Description: data.description,
+		Prix: Number.parseFloat(data.price),
+		Etat: "E",
+		Genre: "B",
+		Vendeur_id: 1,
+		Categorie_id: 1
+		};
+		console.log(toSend)
+		annonceServices.addAnnonce(toSend).then(
+			goto("/myAnnonce")
+		);
+	};
 </script>
 
 <div class={shown ? 'modal is-active' : 'modal'}>
@@ -19,81 +49,89 @@
 			<button class="delete" on:click={hideModal} aria-label="close" />
 		</header>
 		<section class="modal-card-body">
-			<div class="field">
-				<label class="label">Titre</label>
-				<div class="control">
-					<input class="input" type="text" placeholder="Entrez un titre" />
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">Prix</label>
-				<div class="control">
-					<input class="input" type="number" placeholder="Entrez un prix" />
-				</div>
-			</div>
-			<label class="label">Genre</label>
-			<div class="control">
-				<input class="input" type="text" placeholder="Entrez un genre" />
-			</div>
-			<label class="label">Categorie</label>
-			<div class="control">
-				<input class="input" type="text" placeholder="Entrez un catégorie" />
-			</div>
-
-			<div class="field">
-				<label class="label">Etat</label>
-				<div class="control">
-					<input class="input" type="text" placeholder="En attente" value="En attente" readonly />
-				</div>
-				<p class="help is-success has-text-weight-bold">
-					La vente est mise "En attente" afin d'être valider
-				</p>
-			</div>
-
-			<div class="field">
-				<label class="label"> Description</label>
-				<div class="control">
-					<textarea class="textarea" placeholder="Textarea" />
-				</div>
-			</div>
-
-			<div class="field is-grouped is-centered ">
-				<div class="file is-normal is-boxed has-name is-success" style="display: inline; margin-right: auto; margin-left: auto;">
-					<label class="file-label">
-						<input class="file-input" type="file" name="resume" accept="image/*" />
-						<span class="file-cta">
-							<span class="file-icon">
-								<i class="fas fa-upload" />
-							</span>
-							<span class="file-label"> Ajouter vos photos </span>
-						</span>
-						<span class="file-name has-text-centered"> tabouret.png </span>
-					</label>
-				</div>
-				<div class="file is-normal is-boxed has-name is-info" style="display: inline; margin-right: auto; margin-left: auto;">
-					<label class="file-label">
-						<input class="file-input" type="file" name="resume" accept="video/*" />
-						<span class="file-cta">
-							<span class="file-icon">
-								<i class="fas fa-upload" />
-							</span>
-							<span class="file-label"> Ajouter une vidéo </span>
-						</span>
-						<span class="file-name has-text-centered"> mavideo.mp4 </span>
-					</label>
-				</div>
-			</div>
-
-			<div class="field is-grouped is-centered">
-				<div style=" margin-left: auto; margin-right: auto;">
-					<div class="control " style="display: inline;">
-						<button class="button is-primary">Créer</button>
-					</div>
-					<div class="control" style="display: inline;">
-						<button class="button is-link is-light" on:click={hideModal}>Annuler</button>
+			<form on:submit|preventDefault={onSubmit} >
+				<div class="field">
+					<label class="label">Titre</label>
+					<div class="control">
+						<input class="input" name="title" type="text" placeholder="Entrez un titre" />
 					</div>
 				</div>
-			</div>
+				<div class="field">
+					<label class="label">Prix</label>
+					<div class="control">
+						<input class="input" type="number" step="0.01" name="price" placeholder="Entrez un prix" />
+					</div>
+				</div>
+				<label class="label">Genre</label>
+				<div class="control">
+					<input class="input" type="text" name="genre" placeholder="Entrez un genre" />
+				</div>
+				<label class="label">Categorie</label>
+				<div class="control">
+					<input class="input" type="text" name="categorie" placeholder="Entrez un catégorie" />
+				</div>
+
+				<div class="field">
+					<label class="label">Etat</label>
+					<div class="control">
+						<input class="input" type="text" placeholder="En attente" name="state" value="En attente" readonly />
+					</div>
+					<p class="help is-success has-text-weight-bold">
+						La vente est mise "En attente" afin d'être valider
+					</p>
+				</div>
+
+				<div class="field">
+					<label class="label"> Description</label>
+					<div class="control">
+						<textarea class="textarea" name="description" placeholder="Textarea" />
+					</div>
+				</div>
+
+				<div class="field is-grouped is-centered ">
+					<div
+						class="file is-normal is-boxed has-name is-success"
+						style="display: inline; margin-right: auto; margin-left: auto;"
+					>
+						<label class="file-label">
+							<input class="file-input" type="file" name="resume" accept="image/*" />
+							<span class="file-cta">
+								<span class="file-icon">
+									<i class="fas fa-upload" />
+								</span>
+								<span class="file-label"> Ajouter vos photos </span>
+							</span>
+							<span class="file-name has-text-centered"> tabouret.png </span>
+						</label>
+					</div>
+					<div
+						class="file is-normal is-boxed has-name is-info"
+						style="display: inline; margin-right: auto; margin-left: auto;"
+					>
+						<label class="file-label">
+							<input class="file-input" type="file" name="resume" accept="video/*" />
+							<span class="file-cta">
+								<span class="file-icon">
+									<i class="fas fa-upload" />
+								</span>
+								<span class="file-label"> Ajouter une vidéo </span>
+							</span>
+							<span class="file-name has-text-centered"> mavideo.mp4 </span>
+						</label>
+					</div>
+				</div>
+
+				<div class="field is-grouped is-centered">
+					<div style=" margin-left: auto; margin-right: auto;">
+						<div class="control " style="display: inline;">
+							<button class="button is-primary" type="submit">Créer</button>
+						</div>
+						<div class="control" style="display: inline;">
+							<button class="button is-link is-light" on:click={hideModal}>Annuler</button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</section>
 	</div>
 </div>

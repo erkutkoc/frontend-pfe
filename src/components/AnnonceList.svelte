@@ -68,7 +68,7 @@ import AnnonceState from "./AnnonceState.svelte";
 		height: auto;
 		text-align: center;
 		display: block;
-		margin-left: auto;
+		margin-left: 30%;
 		margin-right: auto;
 	}
 	figure {
