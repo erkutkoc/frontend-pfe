@@ -1,9 +1,14 @@
+<script>
+	function handleChange(){
+
+	}
+</script>
 <aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
 
 	<div class="field">
 		<label class="label">Categorie</label>
 		<div class="control">
-			<input class="input" type="text" placeholder="Text input" />
+			<input class="input" type="text" on:change={handleChange} placeholder="Text input" />
 		</div>
 	</div>
 
