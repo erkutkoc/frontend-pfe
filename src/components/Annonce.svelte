@@ -25,7 +25,7 @@
                 {:else}
                 <h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
                 {/if}
-				<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={"/annonce/"+annonce.id}
+				<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={"/"+annonce.id}
 					>Voir les détails</a
 				>
 			</div>
