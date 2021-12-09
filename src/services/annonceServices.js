@@ -35,6 +35,14 @@ const addAnnonce = async (data) => {
     }
 
 }
+const findAllCategorie = async () => {
+    try {
+        const response = await axios.get(baseUrl + '/categories');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching data');
+    }
+}
 const findAllAnnonceByEmail = async () => {
     const token = document.cookie.split("=")[1];
     try {
@@ -64,6 +72,7 @@ const AnnonceServices = {
     findAllAnnonce,
     findAllAnnonceByEmail,
     findAnnonceById,
-    addAnnonce
+    addAnnonce,
+    findAllCategorie
 }
 export default AnnonceServices;

@@ -1,4 +1,5 @@
 <script>
+	import { USER } from '../services/usersProperties.js';
 </script>
 
 <div id="app" class="has-background-transparent">
@@ -24,7 +25,7 @@
 		<div class="navbar-end">
 			<a class="navbar-item" href="/login"> Connexion </a>
 			<a class="navbar-item" href="/register"> Inscription </a>
-			<a class="navbar-item " href="/logout"> Deconnexion </a>
+			<a class="navbar-item " on:click={USER.reset} href="/logout"> Deconnexion </a>
 		</div>
 	</nav>
 </div>

@@ -32,7 +32,6 @@
 		}
 	}
 </script>
-
 <Navbar />
 <Modal bind:this={modal} />
 <main>

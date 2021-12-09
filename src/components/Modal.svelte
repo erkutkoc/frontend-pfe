@@ -1,5 +1,6 @@
 <script>
-import { goto } from '$app/navigation';
+	import { USER } from '../services/usersProperties.js';
+	import { goto } from '$app/navigation';
 
 	import annonceServices from '../services/annonceServices';
 	let shown = false;
@@ -10,7 +11,7 @@ import { goto } from '$app/navigation';
 	export function hideModal() {
 		shown = false;
 	}
-	function onSubmit(e){
+	function onSubmit(e) {
 		const formData = new FormData(e.target);
 		const data = [];
 
@@ -19,24 +20,28 @@ import { goto } from '$app/navigation';
 			const [key, value] = field;
 			data[key] = value;
 		}
-		if (data) fetchAddAnnonce(data);
+		fetchAddAnnonce(data);
 	}
+	let selected;
 	const fetchAddAnnonce = async (data) => {
-		console.log(data.price)
+		console.log('genre : ' + selected.value);
+
 		let toSend = {
-		Titre: data.title,
-		Description: data.description,
-		Prix: Number.parseFloat(data.price),
-		Etat: "E",
-		Genre: "B",
-		Vendeur_id: 1,
-		Categorie_id: 1
+			Titre: data.title,
+			Description: data.description,
+			Prix: Number.parseFloat(data.price),
+			Etat: 'E',
+			Genre: selected.value,
+			Vendeur_id: $USER.id,
+			Categorie_id: 1
 		};
-		console.log(toSend)
-		annonceServices.addAnnonce(toSend).then(
-			goto("/myAnnonce")
-		);
+		console.log(toSend);
+		annonceServices.addAnnonce(toSend).then(goto('/myAnnonce'));
 	};
+	let genres = [
+		{ id: 1, genre: `Bien`, value: 'B' },
+		{ id: 2, genre: `Service`, value: 'S' }
+	];
 </script>
 
 <div class={shown ? 'modal is-active' : 'modal'}>
@@ -49,7 +54,7 @@ import { goto } from '$app/navigation';
 			<button class="delete" on:click={hideModal} aria-label="close" />
 		</header>
 		<section class="modal-card-body">
-			<form on:submit|preventDefault={onSubmit} >
+			<form on:submit|preventDefault={onSubmit}>
 				<div class="field">
 					<label class="label">Titre</label>
 					<div class="control">
@@ -59,12 +64,26 @@ import { goto } from '$app/navigation';
 				<div class="field">
 					<label class="label">Prix</label>
 					<div class="control">
-						<input class="input" type="number" step="0.01" name="price" placeholder="Entrez un prix" />
+						<input
+							class="input"
+							type="number"
+							step="0.01"
+							name="price"
+							placeholder="Entrez un prix"
+						/>
 					</div>
 				</div>
-				<label class="label">Genre</label>
-				<div class="control">
-					<input class="input" type="text" name="genre" placeholder="Entrez un genre" />
+				<div class="field">
+					<label class="label">Genre</label>
+					<div class="select">
+						<select bind:value={selected}>
+							{#each genres as genre}
+								<option value={genre}>
+									{genre.genre}
+								</option>
+							{/each}
+						</select>
+					</div>
 				</div>
 				<label class="label">Categorie</label>
 				<div class="control">
@@ -74,7 +93,14 @@ import { goto } from '$app/navigation';
 				<div class="field">
 					<label class="label">Etat</label>
 					<div class="control">
-						<input class="input" type="text" placeholder="En attente" name="state" value="En attente" readonly />
+						<input
+							class="input"
+							type="text"
+							placeholder="En attente"
+							name="state"
+							value="En attente"
+							readonly
+						/>
 					</div>
 					<p class="help is-success has-text-weight-bold">
 						La vente est mise "En attente" afin d'être valider
