@@ -20,23 +20,17 @@
 
 	function handleFilter(filter) {
 		if (currentToogle === 'E') {
-			filteredData = [];
 			filteredData = annoncesData.filter((e) => e.etat == filter);
-
 		}
 		if (currentToogle === 'V') {
-			filteredData = [];
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
 		if (currentToogle === 'T') {
-			filteredData = [];
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
 		if (currentToogle === 'R') {
-			filteredData = [];
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		console.log(filteredData);
 	}
 </script>
 
@@ -93,14 +87,12 @@
 	<br>
 	{#if currentToogle === 'default'}
 		<AnnonceList annoncesData={annoncesData} showStateDropdown={showStateDropdown} />
-	{:else if currentToogle === 'E'}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
-	{:else if currentToogle === 'V'}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
-	{:else if currentToogle === 'R'}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
-	{:else}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else }
+		{#await handleFilter(currentToogle)}
+			<p>Chargement des annonces...</p>
+		{:then}
+			<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+		{/await}
 	{/if}
 
 </main>
