@@ -3,11 +3,11 @@
   import Navbar from "../../components/Navbar.svelte";
   import UserServices from "../../services/userServices.js";
   import { goto } from '$app/navigation';
-  import {VITE_BASE_URL} from "../../env.js";
+  //import {VITE_BASE_URL} from "../../env.js";
 
   function onSubmit (e){
-    const secretSauceRecipe = VITE_BASE_URL
-    console.log(secretSauceRecipe);
+    //const secretSauceRecipe = VITE_BASE_URL
+    //console.log(secretSauceRecipe);
     const formData = new FormData(e.target);
     const data=[];
     // @ts-ignore
