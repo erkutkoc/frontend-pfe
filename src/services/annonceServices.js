@@ -10,7 +10,7 @@ export const findAllAnnonce = async() => {
         console.error('Error fetching data');
     }
 }
-export const findAllAnnonceByEmail = async() => {
+const findAllAnnonceByEmail = async() => {
     const token = document.cookie.split("=")[1];
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {

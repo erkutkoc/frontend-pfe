@@ -3,13 +3,13 @@
 	import Navbar from '../../components/Navbar.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
-	import { findAllAnnonceByEmail } from '../../services/annonceServices.js';
+	import AnnonceServices from '../../services/annonceServices.js';
 	import { onMount } from 'svelte';
 	import AnnonceList from '../../components/AnnonceList.svelte';
 	let annoncesData = [];
 	
 	onMount(async () => {
-		const res = await findAllAnnonceByEmail();
+		const res = await AnnonceServices.findAllAnnonceByEmail();
 
 		annoncesData = res;
 	});
@@ -19,6 +19,7 @@
 	let filteredData = [];
 
 	function handleFilter(filter) {
+		console.log(filter)
 		if (currentToogle === 'E') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
