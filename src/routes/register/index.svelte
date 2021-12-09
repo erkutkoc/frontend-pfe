@@ -1,6 +1,8 @@
 <script>
-	import '../../styles/tailwind.css';
+ 	import "../../styles/tailwind-output.css";
 	import Navbar from '../../components/Navbar.svelte';
+	import UserServices from '../../services/userServices.js';
+	import { goto } from '$app/navigation';
 
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -19,17 +21,10 @@
 			motDePasse: data.password,
 			campus_id: Number.parseInt(data.campus)
 		};
-		console.log(toSend);
 
-		const response = await fetch('https://pfe-backend1.herokuapp.com/login/register', {
-			headers: { 'Content-Type': 'application/json' },
-			method: 'POST',
-			body: JSON.stringify(toSend)
+		UserServices.register(toSend).then(registeredUser=>{
+			goto("/myAnnonce")
 		});
-
-		const json = await response.json();
-		let result = JSON.stringify(json);
-		console.log(json);
 	};
 </script>
 
@@ -38,7 +33,7 @@
 	<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>
-				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Register</h2>
+				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Inscription</h2>
 			</div>
 			<form on:submit|preventDefault={onSubmit} class="mt-8 space-y-6" action="#" method="POST">
 				<input type="hidden" name="remember" value="true" />
@@ -52,11 +47,11 @@
 							autocomplete="email"
 							required
 							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-							placeholder="Email address"
+							placeholder="Adresse mail"
 						/>
 					</div>
 					<div>
-						<label for="password" class="sr-only">Password</label>
+						<label for="password" class="sr-only">Mot de passe</label>
 						<input
 							id="password"
 							name="password"
@@ -64,7 +59,7 @@
 							autocomplete="current-password"
 							required
 							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-							placeholder="Password"
+							placeholder="Mot de passe"
 						/>
 					</div>
 					<div>
@@ -102,7 +97,7 @@
 								/>
 							</svg>
 						</span>
-						Register
+						S'inscrire
 					</button>
 				</div>
 			</form>

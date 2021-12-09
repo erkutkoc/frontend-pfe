@@ -12,25 +12,20 @@
 					Market Vinci
 				</p>
 			</a>
-			<div class="navbar-burger" data-target="navbarExampleTransparentExample">
-				<span />
-				<span />
-				<span />
+		</div>
+	
+		<div class="navbar-start">
+			<a class="navbar-item" href="/"> Accueil </a>
+			<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
+			<div class="navbar-item has-dropdown is-hoverable">
+				<div class="navbar-dropdown is-boxed" />
 			</div>
 		</div>
-
-		<div class="navbar-menu">
-			<div class="navbar-start">
-				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
-				<a class="navbar-item" href="/persons"> Persons </a>
-				<div class="navbar-item has-dropdown is-hoverable">
-					<div class="navbar-dropdown is-boxed" />
-				</div>
-				<a class="navbar-item" href="/login"> Connexion </a>
-				<a class="navbar-item" href="/register"> Inscription </a>
-        <a class="navbar-item" href="/profile">Profil</a>
-				<a class="navbar-item" href="/logout"> Deconnexion </a>
-			</div>
+		<div class="navbar-end">
+			<a class="navbar-item" href="/login"> Connexion </a>
+			<a class="navbar-item" href="/register"> Inscription </a>
+			<a class="navbar-item" href="/profile">Profil</a>
+			<a class="navbar-item " href="/logout"> Deconnexion </a>
 		</div>
 	</nav>
 </div>

@@ -3,14 +3,13 @@
 	import Navbar from '../../components/Navbar.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
-	import { findAllAnnonceByEmail } from '../../services/annonceServices.js';
+	import AnnonceServices from '../../services/annonceServices.js';
 	import { onMount } from 'svelte';
 	import AnnonceList from '../../components/AnnonceList.svelte';
 	let annoncesData = [];
 	
 	onMount(async () => {
-		const res = await findAllAnnonceByEmail();
-
+		const res = await AnnonceServices.findAllAnnonceByEmail();
 		annoncesData = res;
 	});
 	let currentToogle = 'default';
@@ -20,23 +19,17 @@
 
 	function handleFilter(filter) {
 		if (currentToogle === 'E') {
-			filteredData = [];
-			filteredData = annoncesData.filter((e) => e.etat == filter);
-
-		}
-		if (currentToogle === 'V') {
-			filteredData = [];
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		if (currentToogle === 'T') {
-			filteredData = [];
+		else if (currentToogle === 'V') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		if (currentToogle === 'R') {
-			filteredData = [];
+		else if (currentToogle === 'T') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
-		console.log(filteredData);
+		else if (currentToogle === 'R') {
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
 	}
 </script>
 
@@ -93,14 +86,12 @@
 	<br>
 	{#if currentToogle === 'default'}
 		<AnnonceList annoncesData={annoncesData} showStateDropdown={showStateDropdown} />
-	{:else if currentToogle === 'E'}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
-	{:else if currentToogle === 'V'}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
-	{:else if currentToogle === 'R'}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
-	{:else}{handleFilter(currentToogle)}
-		<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+	{:else }
+		{#await handleFilter(currentToogle)}
+			<p>Chargement des annonces...</p>
+		{:then}
+			<AnnonceList annoncesData={filteredData} showStateDropdown={showStateDropdown} />
+		{/await}
 	{/if}
 
 </main>
