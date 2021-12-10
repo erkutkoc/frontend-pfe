@@ -1,13 +1,12 @@
 <script>
-	import '../styles/tailwind.css';
+	import '../styles/tailwind-output.css';
 	import Navbar from '../components/Navbar.svelte';
-    import HomeRendering from '../components/HomeRendering.svelte';
+    import HomeRender from '../components/HomeRender.svelte';
 	import 'bulma/css/bulma.css';
-	import { Container } from 'postcss';
 </script>
 
 <Navbar />
-<HomeRendering/>
+<HomeRender/>
 
 <div class="container">
 	<nav class="pagination is-rounded" role="navigation" aria-label="pagination">

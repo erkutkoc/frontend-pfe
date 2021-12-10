@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 const baseUrl = "https://pfe-backend1.herokuapp.com";
 
 
@@ -12,6 +11,16 @@ const register = (payload) => {
     return axios
         .post(baseUrl + "/login/register", payload);
 }
+const getUserById = (id, token) => {
+    return axios
+        .get(baseUrl + "/members/getmembre/" + id, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        });
+}
+
 
 const getProfile = () => {
     return axios
@@ -31,6 +40,7 @@ const setProfile = (payload) => {
 
 const UserServices = {
     login,
-    register
+    register,
+    getUserById
 }
 export default UserServices;
