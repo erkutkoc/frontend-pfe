@@ -6,6 +6,7 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import ErrorPage from "../components/ErrorPage.svelte";
+    import { Shadow } from 'svelte-loading-spinners';
 
     // $ : console.log(annonce)
     let annonce;
@@ -30,7 +31,9 @@
 
 {#if currentUser}
   {#if !annonce || !annonceCategorie|| !vendeur}
-    Chargement de l'annonce ... 
+    <div id="loader">
+      <Shadow size="100" color="#2c9b89" unit="px" duration="1s"></Shadow>
+    </div>
   {:else}
   <div class="bg-white">
       <div class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2">
@@ -111,5 +114,13 @@
   }
   #vendu{
     color: black;
+  }
+  #loader{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
   }
 </style>
