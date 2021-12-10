@@ -40,8 +40,7 @@ const findAllCategorie = async() => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async() => {
-    let token = document.cookie.split("=")[1];
+const findAllAnnonceByEmail = async(token) => {
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
