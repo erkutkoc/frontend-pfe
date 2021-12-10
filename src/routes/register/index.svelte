@@ -1,5 +1,4 @@
 <script>
-
 	import '../../styles/tailwind-output.css';
 	import { onMount } from 'svelte';
 	import Navbar from '../../components/Navbar.svelte';
@@ -7,6 +6,8 @@
 	import AnnonceServices from '../../services/annonceServices.js';
 	import { goto } from '$app/navigation';
 	import storage from '../../utils/storage';
+	import ErrorPage from "../../components/ErrorPage.svelte";
+
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(localStorage.getItem('user'));
@@ -46,7 +47,7 @@
 
 <main>
 	<Navbar />
-	{#if USER == null}
+	{#if !USER}
 		<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 			<div class="max-w-md w-full space-y-8">
 				<div>
@@ -118,5 +119,8 @@
 					</div>
 				</form>
 			</div>
-		</div>{/if}
+		</div>
+		{:else}
+			<ErrorPage message="Vous etes deja connectes."/>
+		{/if}
 </main>
