@@ -1,6 +1,10 @@
 <script>
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
     
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    goto("/login"); 
+    onMount(async () => {
+        localStorage.removeItem("user")
+        goto("/login"); 
+    })
+   
 </script>

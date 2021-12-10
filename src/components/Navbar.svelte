@@ -1,5 +1,9 @@
 <script>
-	import { USER } from '../services/usersProperties.js';
+	import { onMount } from 'svelte';
+	let USER;
+	onMount(async () => {
+		USER = JSON.parse(localStorage.getItem('user'));
+	});
 </script>
 
 <div id="app" class="has-background-transparent">
@@ -14,18 +18,25 @@
 				</p>
 			</a>
 		</div>
-	
+
 		<div class="navbar-start">
 			<a class="navbar-item" href="/"> Accueil </a>
-			<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
+			{#if USER != null}
+				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
+			{/if}
 			<div class="navbar-item has-dropdown is-hoverable">
 				<div class="navbar-dropdown is-boxed" />
 			</div>
 		</div>
 		<div class="navbar-end">
-			<a class="navbar-item" href="/login"> Connexion </a>
-			<a class="navbar-item" href="/register"> Inscription </a>
-			<a class="navbar-item " on:click={USER.reset} href="/logout"> Deconnexion </a>
+			{#if USER == null}
+				<a class="navbar-item" href="/login"> Connexion </a>
+
+				<a class="navbar-item" href="/register"> Inscription </a>
+			{/if}
+			{#if USER != null}
+				<a class="navbar-item" href="/logout"> Deconnexion </a>
+			{/if}
 		</div>
 	</nav>
 </div>

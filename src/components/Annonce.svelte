@@ -1,11 +1,10 @@
 <script>
-	import { findAllAnnonce } from '../services/annonceServices.js';
+	import AnnonceServices  from '../services/annonceServices.js';
 	import { selectedCategorie } from '../services/filterProperties.js';
 	import { onMount } from 'svelte';
-	import { loop_guard } from 'svelte/internal';
 	let data = [];
 	onMount(async () => {
-		const res = await findAllAnnonce();
+		const res = await AnnonceServices.findAllAnnonce();
 		data = res;
 	});
 </script>

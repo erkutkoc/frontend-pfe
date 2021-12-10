@@ -1,9 +1,10 @@
 <script>
-	import { USER } from '../services/usersProperties.js';
 	import { goto } from '$app/navigation';
-
-	import annonceServices from '../services/annonceServices';
+	import { onMount } from 'svelte';
+	import AnnonceServices from '../services/annonceServices';
+	
 	let shown = false;
+	let USER;
 
 	export function showModal() {
 		shown = true;
@@ -11,6 +12,9 @@
 	export function hideModal() {
 		shown = false;
 	}
+	onMount(async () => {
+        USER = JSON.parse(localStorage.getItem("user"));
+    })
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
 		const data = [];
@@ -34,7 +38,7 @@
 			Categorie_id: 1
 		};
 		console.log(toSend);
-		annonceServices.addAnnonce(toSend).then(goto('/myAnnonce'));
+		AnnonceServices.addAnnonce(toSend,USER.token).then(goto('/myAnnonce'));
 	};
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },

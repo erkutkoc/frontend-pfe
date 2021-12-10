@@ -1,5 +1,9 @@
 <script>
-	import '../../styles/tailwind.css';
+		let USER;
+	onMount(async () => {
+		USER = JSON.parse(localStorage.getItem('user'));
+	});
+	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
@@ -33,6 +37,7 @@
 	}
 </script>
 <Navbar />
+{#if USER != null}
 <Modal bind:this={modal} />
 <main>
 	<div class="container">
@@ -94,6 +99,7 @@
 	{/if}
 
 </main>
+{/if}
 <style>
 	img {
 		border-radius: 8px;
