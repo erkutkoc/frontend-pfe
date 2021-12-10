@@ -28,15 +28,13 @@
 	}
 	let selected;
 	const fetchAddAnnonce = async (data) => {
-		console.log('genre : ' + selected.value);
-
 		let toSend = {
 			Titre: data.title,
 			Description: data.description,
 			Prix: Number.parseFloat(data.price),
 			Etat: 'E',
 			Genre: selected.value,
-			Vendeur_id: USER.id,
+			Vendeur_id: 1,
 			Categorie_id: 1
 		};
 		console.log(toSend);
@@ -58,7 +56,7 @@
 			<button class="delete" on:click={hideModal} aria-label="close" />
 		</header>
 		<section class="modal-card-body">
-			<form on:submit|preventDefault={onSubmit}>
+			<form on:submit|preventDefault={onSubmit} method="POST">
 				<div class="field">
 					<label class="label">Titre</label>
 					<div class="control">

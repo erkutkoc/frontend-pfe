@@ -31,7 +31,6 @@ const addAnnonce = async(data, token) => {
     } catch (e) {
         console.error(e);
     }
-
 }
 const findAllCategorie = async() => {
     try {
