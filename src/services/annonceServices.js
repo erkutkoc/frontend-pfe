@@ -12,7 +12,6 @@ export const findAllAnnonce = async () => {
 }
 const addAnnonce = async (data) => {
     const token = document.cookie.split("=")[1];
-
     try {
         var config = {
             method: 'post',
@@ -33,7 +32,6 @@ const addAnnonce = async (data) => {
     } catch (e) {
         console.error(e);
     }
-
 }
 const findAllCategorie = async () => {
     try {
