@@ -70,12 +70,22 @@ const findAnnonceById = (id) => {
             }
         });
 }
+const getAllCampus = () => {
+    return axios
+        .get(baseUrl + "/adresses/", {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        });
+}
 
 const AnnonceServices = {
     findAllAnnonce,
     findAllAnnonceByEmail,
     findAnnonceById,
     addAnnonce,
-    findAllCategorie
+    findAllCategorie,
+    getAllCampus
 }
 export default AnnonceServices;

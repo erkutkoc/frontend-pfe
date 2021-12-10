@@ -1,9 +1,13 @@
 <script>
  	import "../../styles/tailwind-output.css";
+	import { onMount } from 'svelte';
 	import Navbar from '../../components/Navbar.svelte';
 	import UserServices from '../../services/userServices.js';
+	import AnnonceServices from '../../services/annonceServices.js';
 	import { goto } from '$app/navigation';
 	import { userData} from '../../services/usersProperties.js';
+
+	 $ : campus = [];
 
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -23,13 +27,18 @@
 			campus_id: Number.parseInt(data.campus)
 		};
 
-		const user = UserServices.register(toSend).then(registeredUser=>{
+		const user = UserServices.register(toSend).then(registeredUser =>{
 			goto("/");
 			return registeredUser.data;
 		});
 		userData.set(user);
 		sessionStorage.setItem("userData", JSON.stringify(user));//test
 	};
+	onMount(async () => {
+		const allCampus = await AnnonceServices.getAllCampus();
+		campus = allCampus.data;
+		console.log(campus)
+	})
 </script>
 
 <main>
@@ -66,17 +75,16 @@
 							placeholder="Mot de passe"
 						/>
 					</div>
-					<div>
-						<label for="campus" class="sr-only">Password</label>
-						<input
-							id="campus"
-							name="campus"
-							type="text"
-							autocomplete="campus"
-							required
+					<div >
+						<select
 							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-							placeholder="Campus"
-						/>
+						>
+						<option value="">Choisissez votre campus</option>
+						{#each campus as c}
+							<option value="{c.id}">{c.rue}</option>
+						{/each}
+							
+						</select>
 					</div>
 				</div>
 

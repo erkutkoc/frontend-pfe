@@ -3,7 +3,6 @@
 	import Navbar from '../components/Navbar.svelte';
     import HomeRendering from '../components/HomeRendering.svelte';
 	import 'bulma/css/bulma.css';
-	import { Container } from 'postcss';
 </script>
 
 <Navbar />
