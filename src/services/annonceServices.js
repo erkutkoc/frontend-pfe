@@ -2,7 +2,6 @@ import axios from "axios";
 import { userData } from "../services/usersProperties";
 
 const baseUrl = "https://pfe-backend1.herokuapp.com"; // laisser ca comme ca ?
-let token = document.cookie.split("=")[1];
 
 // userData.subscribe(user => {
 //     if (!user) return;
@@ -18,6 +17,7 @@ export const findAllAnnonce = async() => {
     }
 }
 const addAnnonce = async(data) => {
+    let token = document.cookie.split("=")[1];
     try {
         var config = {
             method: 'post',
@@ -49,6 +49,7 @@ const findAllCategorie = async() => {
     }
 }
 const findAllAnnonceByEmail = async() => {
+    let token = document.cookie.split("=")[1];
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
@@ -62,6 +63,7 @@ const findAllAnnonceByEmail = async() => {
     }
 }
 const findAnnonceById = (id) => {
+    let token = document.cookie.split("=")[1];
     return axios
         .get(baseUrl + "/annonces/" + id, {
             headers: {
@@ -71,6 +73,7 @@ const findAnnonceById = (id) => {
         });
 }
 const getAllCampus = () => {
+    let token = document.cookie.split("=")[1];
     return axios
         .get(baseUrl + "/adresses/", {
             headers: {

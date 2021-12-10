@@ -37,7 +37,6 @@
 	onMount(async () => {
 		const allCampus = await AnnonceServices.getAllCampus();
 		campus = allCampus.data;
-		console.log(campus)
 	})
 </script>
 

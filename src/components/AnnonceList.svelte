@@ -1,5 +1,5 @@
 <script>
-import AnnonceState from "./AnnonceState.svelte";
+	import AnnonceState from "./AnnonceState.svelte";
 
 	export let annoncesData;
 </script>

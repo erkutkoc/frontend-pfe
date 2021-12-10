@@ -2,7 +2,7 @@
 	import { USER } from '../services/usersProperties.js';
 	import { goto } from '$app/navigation';
 
-	import annonceServices from '../services/annonceServices';
+	import AnnonceServices from '../services/annonceServices';
 	let shown = false;
 
 	export function showModal() {
@@ -36,7 +36,7 @@
 			Categorie_id: 1
 		};
 		console.log(toSend);
-		annonceServices.addAnnonce(toSend).then(goto('/myAnnonce'));
+		AnnonceServices.addAnnonce(toSend).then(goto('/myAnnonce'));
 	};
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
