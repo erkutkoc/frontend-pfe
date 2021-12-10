@@ -5,64 +5,77 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
 
+    $ : console.log(annonce)
     let annonce;
     let currentUser;
+    let annonceCategorie;
     const idAnnonce = $page.params.id;
 
     onMount(async () => {
         currentUser = JSON.parse(localStorage.getItem("user"));
-        const response =  await AnnonceServices.findAnnonceById(idAnnonce,currentUser.token);
-        annonce = response;
+        let fetchAnnonce =  await AnnonceServices.findAnnonceById(idAnnonce,currentUser.token);
+        annonce = fetchAnnonce.data;
+
+        let fetchCategories = await AnnonceServices.findAllCategorie();
+        annonceCategorie = fetchCategories.filter(c => c.id == annonce.categorie_id)[0]
     })
 </script>
 
 <Navbar/>
-{#if annonce === undefined}
+{#if annonce === undefined || annonceCategorie === undefined}
   Chargement de l'annonce ... 
 {:else}
-<p>{annonce.data.prix}</p>
-<p>{annonce.data.description}</p>
-<p>{annonce.data.prix}</p>
-<p>{annonce.data.etat}</p>
-<p>{annonce.data.genre}</p>
-<p>{annonce.data.vendeur_id}</p>
-<p>{annonce.data.categorie_id}</p>
+
+<p>{annonce.vendeur_id}</p>
 
 <div class="bg-white">
     <div class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2">
       <div>
-        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">{annonce.data.id}# {annonce.data.titre}</h2>
-        <p class="mt-4 text-gray-500">The walnut wood card tray is precision milled to perfectly fit a stack of Focus cards. The powder coated steel divider separates active cards from new ones, or can be used to archive important task lists.</p>
-  
+        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">{annonce.id}# {annonce.titre}</h2>
+        <p class="mt-4 text-gray-500">
+          {#if annonce.etat =='E' }
+            <b><i id='attente'>En attente</i></b>
+          {:else if annonce.etat =='V' }
+            <b><i id ="validee"> Validée</i></b>
+          {:else if annonce.etat =='R' }
+            <b><i id ="reservee">Réservée</i></b>
+          {:else if annonce.etat =='T' }
+            <b><i id ="vendu">Vendue</i></b>
+          {/if}
+        
+        </p>
+        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl" id="prix">
+          {#if annonce.prix == undefined || annonce.prix == 0}
+             Gratuit
+          {:else}
+            {annonce.prix} €
+          {/if}
+        </h2>
         <dl class="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Origin</dt>
-            <dd class="mt-2 text-sm text-gray-500">Designed by Good Goods, Inc.</dd>
+            <dt class="font-medium text-gray-900">Description</dt>
+            <dd class="mt-2 text-sm text-gray-500">{annonce.description}</dd>
           </div>
   
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Material</dt>
-            <dd class="mt-2 text-sm text-gray-500">Solid walnut base with rare earth magnets and powder coated steel card cover</dd>
+            <dt class="font-medium text-gray-900">Genre</dt>
+            <dd class="mt-2 text-sm text-gray-500">
+              {#if annonce.genre =='S' }
+                Service
+              {:else }
+                Bien
+              {/if}
+            </dd>
           </div>
   
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Dimensions</dt>
+            <dt class="font-medium text-gray-900">Vendeur</dt>
             <dd class="mt-2 text-sm text-gray-500">6.25&quot; x 3.55&quot; x 1.15&quot;</dd>
           </div>
   
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Finish</dt>
-            <dd class="mt-2 text-sm text-gray-500">Hand sanded and finished with natural oil</dd>
-          </div>
-  
-          <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Includes</dt>
-            <dd class="mt-2 text-sm text-gray-500">Wood card tray and 3 refill packs</dd>
-          </div>
-  
-          <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Considerations</dt>
-            <dd class="mt-2 text-sm text-gray-500">Made from natural materials. Grain and color vary with each item.</dd>
+            <dt class="font-medium text-gray-900">Categorie</dt>
+            <dd class="mt-2 text-sm text-gray-500" > {annonceCategorie.nom}</dd>
           </div>
         </dl>
       </div>
@@ -75,3 +88,22 @@
     </div>
 </div>
 {/if}
+
+<style>
+  #prix{
+    color: darkcyan;
+    text-align: end;
+  }
+  #attente{
+    color: red;
+  }
+  #validee{
+    color: green;
+  }
+  #reservee{
+    color: orange;
+  }
+  #vendu{
+    color: black;
+  }
+</style>

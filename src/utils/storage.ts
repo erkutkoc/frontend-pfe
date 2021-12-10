@@ -1,3 +1,4 @@
+// https://stackoverflow.com/questions/56488202/how-to-persist-svelte-store
 import { browser } from '$app/env';
 import type { Writable } from 'svelte/store';
 import { writable, get } from 'svelte/store'
