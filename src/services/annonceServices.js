@@ -10,8 +10,7 @@ const findAllAnnonce = async() => {
         console.error('Error fetching data');
     }
 }
-const addAnnonce = async(data) => {
-    let token = document.cookie.split("=")[1];
+const addAnnonce = async(data, token) => {
     try {
         var config = {
             method: 'post',
