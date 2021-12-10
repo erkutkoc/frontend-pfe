@@ -6,6 +6,7 @@ function selectedCat() {
     return {
         subscribe,
         setSelected: (categorie) => set(categorie),
+        reset: () => set(null)
     };
 }
 function selectedMin(){
@@ -14,6 +15,7 @@ function selectedMin(){
     return {
         subscribe,
         setSelected: (min) => set(min),
+        reset: () => set(-1)
     };
 }
 function selectedMax(){
@@ -22,6 +24,7 @@ function selectedMax(){
     return {
         subscribe,
         setSelected: (max) => set(max),
+        reset: () => set(-1)
     };
 }
 
@@ -31,6 +34,7 @@ function selectedCamp() {
     return {
         subscribe,
         setSelected: (campus) => set(campus),
+        reset: () => set(null)
     };
 }
 

@@ -16,17 +16,29 @@
 	let selectedCamp;
 	let selectedMin;
 	let selectedMax;
+	let loading = false;
 	function handleChangeCat() {
 		selectedCategorie.setSelected(selectedCat);
+		loading = true;
 	}
 	function handleChangeCamp() {
 		selectedCampus.setSelected(selectedCamp);
+		loading = true;
 	}
 	function handleChangeMinPrice(){
 		selectedMinPrice.setSelected(selectedMin);
+		loading = true;
 	}
 	function handleChangeMaxPrice(){
 		selectedMaxPrice.setSelected(selectedMax);
+		loading = true;
+	}
+	function handleResetFilter(){
+		selectedCategorie.reset();
+		selectedCampus.reset();
+		selectedMinPrice.reset();
+		selectedMaxPrice.reset();
+		loading = false;
 	}
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
@@ -67,18 +79,22 @@
 		<div class="control">
 			<input id="max" class="input" bind:value={selectedMax}  on:change|preventDefault={handleChangeMaxPrice} type="number" step="0.01" placeholder="Prix max" />
 		</div>
+		{#if loading}
+		<button class="button is-primary is-loading">Loading</button>
+		{/if}
 	</a>
 
 	<div class="panel-block">
-		<button class="button is-link is-outlined is-fullwidth"> Reset </button>
-		<button class="button is-primary is-outlined is-fullwidth"> Rechercher</button>
+		<button class="button is-info is-fullwidth" on:click={handleResetFilter}> Reset </button>
+		<button class="button is-primary is-fullwidth" on:click={() => loading = false}> Rechercher</button>
 	</div>
 </nav>
 <style>
 	.panel-block{
 		margin:auto;
 		height: auto;
-		font-size: 12px;
+		font-size: 14px;
+		font-weight: bolder;
 	}
 	#min{
 
