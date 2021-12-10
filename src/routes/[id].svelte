@@ -3,29 +3,21 @@
     import AnnonceServices from "../services/annonceServices";
     import Navbar from "../components/Navbar.svelte";
     import { onMount } from 'svelte';
+    import { page } from '$app/stores';
 
     let annonce;
-    // onMount(async () => {
-    //     const response =  await AnnonceServices.findAnnonceById(1);
-    //     annonce = response;
-    // })
-    const fetchAnnonce = (async () => {
-      const response = await AnnonceServices.findAnnonceById(1);
-      annonce=response;
-	})()
-    
+    const idAnnonce = $page.params.id;
+
+    onMount(async () => {
+        const response =  await AnnonceServices.findAnnonceById(idAnnonce);
+        annonce = response;
+    })
 </script>
 
 <Navbar/>
-<!-- {#if annonce === undefined}
+{#if annonce === undefined}
   Chargement de l'annonce ... 
 {:else}
-  {annonce.data.prix}
-{/if} -->
-
-{#await fetchAnnonce}
-	<p>Chargement de l'annonce...</p>
-{:then}
 <p>{annonce.data.prix}</p>
 <p>{annonce.data.id}</p>
 <p>{annonce.data.titre}</p>
@@ -84,6 +76,4 @@
       </div>
     </div>
 </div>
-{:catch error}
-	<p>An error occurred!</p>
-{/await}
+{/if}

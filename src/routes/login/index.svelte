@@ -1,13 +1,10 @@
 <script>
-	import { USER } from '../../services/usersProperties.js';
+	import { userData } from '../../services/usersProperties.js';
 	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
 	import UserServices from '../../services/userServices.js';
 	import { goto } from '$app/navigation';
 
-	function setUser(user) {
-		USER.create(user);
-	}
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
 		const data = [];
@@ -23,13 +20,13 @@
 			Email: data.email,
 			MotDePasse: data.password
 		};
-
 		const user = await UserServices.login(toSend).then((connectedUser) => {
 			document.cookie = 'token=Bearer ' + connectedUser.data.token; //setCookie = token
-			goto('/myAnnonce');
-      return connectedUser.data;
+			goto('/');
+      		return connectedUser.data;
 		});
-		setUser(user);
+		userData.set(user);
+		sessionStorage.setItem("userData", JSON.stringify(user));//test
 	};
 </script>
 <Navbar />

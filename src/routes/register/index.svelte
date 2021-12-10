@@ -3,6 +3,7 @@
 	import Navbar from '../../components/Navbar.svelte';
 	import UserServices from '../../services/userServices.js';
 	import { goto } from '$app/navigation';
+	import { userData} from '../../services/usersProperties.js';
 
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -22,9 +23,12 @@
 			campus_id: Number.parseInt(data.campus)
 		};
 
-		UserServices.register(toSend).then(registeredUser=>{
-			goto("/myAnnonce")
+		const user = UserServices.register(toSend).then(registeredUser=>{
+			goto("/");
+			return registeredUser.data;
 		});
+		userData.set(user);
+		sessionStorage.setItem("userData", JSON.stringify(user));//test
 	};
 </script>
 

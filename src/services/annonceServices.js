@@ -1,8 +1,15 @@
 import axios from "axios";
+import { userData } from "../services/usersProperties";
 
-const baseUrl = "https://pfe-backend1.herokuapp.com";
+const baseUrl = "https://pfe-backend1.herokuapp.com"; // laisser ca comme ca ?
+let token = document.cookie.split("=")[1];
 
-export const findAllAnnonce = async () => {
+// userData.subscribe(user => {
+//     if (!user) return;
+//     token = "Bearer " + user.token; // enlever le bearer niveaubackend
+// });
+
+export const findAllAnnonce = async() => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -10,13 +17,11 @@ export const findAllAnnonce = async () => {
         console.error('Error fetching data');
     }
 }
-const addAnnonce = async (data) => {
-    const token = document.cookie.split("=")[1];
-
+const addAnnonce = async(data) => {
     try {
         var config = {
             method: 'post',
-            url: baseUrl + '/annonces?Content-Type=application/json',
+            url: baseUrl + '/annonces',
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
@@ -24,18 +29,18 @@ const addAnnonce = async (data) => {
             data: data
         };
         return axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+            .then(function(response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     } catch (e) {
         console.error(e);
     }
 
 }
-const findAllCategorie = async () => {
+const findAllCategorie = async() => {
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
@@ -43,8 +48,7 @@ const findAllCategorie = async () => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async () => {
-    const token = document.cookie.split("=")[1];
+const findAllAnnonceByEmail = async() => {
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
@@ -58,7 +62,6 @@ const findAllAnnonceByEmail = async () => {
     }
 }
 const findAnnonceById = (id) => {
-    let token = document.cookie.split("=")[1];
     return axios
         .get(baseUrl + "/annonces/" + id, {
             headers: {

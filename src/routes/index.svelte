@@ -1,5 +1,5 @@
 <script>
-	import '../styles/tailwind.css';
+	import '../styles/tailwind-output.css';
 	import Navbar from '../components/Navbar.svelte';
     import HomeRendering from '../components/HomeRendering.svelte';
 	import 'bulma/css/bulma.css';
