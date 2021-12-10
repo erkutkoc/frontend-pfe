@@ -40,11 +40,12 @@ const findAllCategorie = async() => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async(token) => {
+const findAllAnnonceByEmail = async(user) => {
     try {
+        console.log(user)
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
-                'Authorization': token,
+                'Authorization': user.token,
                 'Content-Type': 'application/json'
             }
         });

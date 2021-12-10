@@ -1,6 +1,6 @@
 <script>
 	import AnnonceServices  from '../services/annonceServices.js';
-	import { selectedCategorie } from '../utils/filterProperties.js';
+	import { selectedCategorie, selectedMaxPrice, selectedMinPrice } from '../utils/filterProperties.js';
 	import { onMount } from 'svelte';
 	let data = [];
 	onMount(async () => {
