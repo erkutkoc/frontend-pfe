@@ -11,9 +11,20 @@ const register = (payload) => {
     return axios
         .post(baseUrl + "/login/register", payload);
 }
+const getUserById = (id, token) => {
+    return axios
+        .get(baseUrl + "/members/getmembre/" + id, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        });
+}
+
 
 const UserServices = {
     login,
-    register
+    register,
+    getUserById
 }
 export default UserServices;

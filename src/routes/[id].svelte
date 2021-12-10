@@ -1,15 +1,18 @@
 <script>
     import "../styles/tailwind-output.css";
     import AnnonceServices from "../services/annonceServices";
+    import UserServices from "../services/userServices";
     import Navbar from "../components/Navbar.svelte";
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import ErrorPage from "../components/ErrorPage.svelte";
+    import { Shadow } from 'svelte-loading-spinners';
 
-    $ : console.log(annonce)
+    $ : console.log(vendeur)
     let annonce;
     let currentUser;
     let annonceCategorie;
+    let vendeur;
     const idAnnonce = $page.params.id;
 
     onMount(async () => {
@@ -18,18 +21,20 @@
         annonce = fetchAnnonce.data;
 
         let fetchCategories = await AnnonceServices.findAllCategorie();
-        annonceCategorie = fetchCategories.filter(c => c.id == annonce.categorie_id)[0]
+        annonceCategorie = fetchCategories.filter(c => c.id == annonce.categorie_id)[0];
+
+        let fetchVendeur = await UserServices.getUserById(annonce.vendeur_id,currentUser.token);
+        vendeur = fetchVendeur.data;
     })
 </script>
   <Navbar/>
 
 {#if currentUser}
-  {#if annonce === undefined || annonceCategorie === undefined}
-    Chargement de l'annonce ... 
+  {#if !annonce || !annonceCategorie|| !vendeur}
+    <div id="loader">
+      <Shadow size="100" color="#2c9b89" unit="px" duration="1s"></Shadow>
+    </div>
   {:else}
-
-  <p>{annonce.vendeur_id}</p>
-
   <div class="bg-white">
       <div class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2">
         <div>
@@ -38,16 +43,16 @@
             {#if annonce.etat =='E' }
               <b><i id='attente'>En attente</i></b>
             {:else if annonce.etat =='V' }
-              <b><i id ="validee"> Validée</i></b>
+              <b><i id ="validee"> Validé</i></b>
             {:else if annonce.etat =='R' }
-              <b><i id ="reservee">Réservée</i></b>
+              <b><i id ="reservee">Réservé</i></b>
             {:else if annonce.etat =='T' }
-              <b><i id ="vendu">Vendue</i></b>
+              <b><i id ="vendu">Vendu</i></b>
             {/if}
           
           </p>
           <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl" id="prix">
-            {#if annonce.prix == undefined || annonce.prix == 0}
+            {#if !annonce.prix || annonce.prix == 0}
               Gratuit
             {:else}
               {annonce.prix} €
@@ -72,7 +77,7 @@
     
             <div class="border-t border-gray-200 pt-4">
               <dt class="font-medium text-gray-900">Vendeur</dt>
-              <dd class="mt-2 text-sm text-gray-500">6.25&quot; x 3.55&quot; x 1.15&quot;</dd>
+              <dd class="mt-2 text-sm text-gray-500">{vendeur.email}</dd>
             </div>
     
             <div class="border-t border-gray-200 pt-4">
@@ -80,12 +85,27 @@
               <dd class="mt-2 text-sm text-gray-500" > {annonceCategorie.nom}</dd>
             </div>
           </dl>
+            <div style="width: 100%">
+              <br>
+              <p class= "font-medium text-gray-900" id ="labelCarte" >Carte :</p>
+              <iframe id="map" title="map"
+                SameSite=Strict
+                width="400"
+                height="400" 
+                frameborder="0" 
+                scrolling="yes" 
+                marginheight="0" 
+                marginwidth="0" 
+                src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={vendeur.adresse} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+              </iframe>
+            </div>
         </div>
         <div class="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8">
           <img src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-01.jpg" alt="Walnut card tray with white powder coated steel divider and 3 punchout holes." class="bg-gray-100 rounded-lg">
           <img src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-02.jpg" alt="Top down view of walnut card tray with embedded magnets and card groove." class="bg-gray-100 rounded-lg">
           <img src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-03.jpg" alt="Side of walnut card tray with card groove and recessed card area." class="bg-gray-100 rounded-lg">
           <img src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-04.jpg" alt="Walnut card tray filled with cards and card angled in dedicated groove." class="bg-gray-100 rounded-lg">
+       
         </div>
       </div>
   </div>
@@ -110,4 +130,20 @@
   #vendu{
     color: black;
   }
+  #loader{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+  #labelCarte{
+    text-align: center;
+  }
+  #map{
+   margin-left: auto;
+   margin-right: auto;
+  }
+  
 </style>
