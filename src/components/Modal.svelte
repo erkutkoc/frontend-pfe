@@ -65,7 +65,7 @@
 				<div class="field">
 					<label class="label">Titre</label>
 					<div class="control">
-						<input class="input" name="title" type="text" placeholder="Entrez un titre" />
+						<input class="input" name="title" type="text" placeholder="Entrez un titre" required/>
 					</div>
 				</div>
 				<div class="field">
@@ -77,13 +77,14 @@
 							step="0.01"
 							name="price"
 							placeholder="Entrez un prix"
+							required
 						/>
 					</div>
 				</div>
 				<div class="field">
 					<label class="label">Genre</label>
 					<div class="select">
-						<select bind:value={selected}>
+						<select bind:value={selected} required>
 							{#each genres as genre}
 								<option value={genre}>
 									{genre.genre}
@@ -94,7 +95,7 @@
 				</div>
 				<label class="label">Catégorie </label>
 				<div class="select">
-					<select bind:value={selectedCat}>
+					<select bind:value={selectedCat} required>
 						{#each categories as categorie}
 							<option value={categorie}>
 								{categorie.nom}
@@ -123,7 +124,7 @@
 				<div class="field">
 					<label class="label"> Description</label>
 					<div class="control">
-						<textarea class="textarea" name="description" placeholder="Textarea" />
+						<textarea class="textarea" name="description" placeholder="Textarea" required/>
 					</div>
 				</div>
 

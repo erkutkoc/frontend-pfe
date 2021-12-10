@@ -115,5 +115,5 @@
 	</div>
 </div>
 {:else}
-	<ErrorPage message="Vous etes deja connectes."/>
+	<ErrorPage message="Vous êtes déjà connectées" link="/"/>
 {/if}
