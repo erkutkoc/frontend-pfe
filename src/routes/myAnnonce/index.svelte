@@ -10,13 +10,13 @@
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(localStorage.getItem('user'));
+		if(USER == null) return;
+		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
+			annoncesData = res;
 	});
 	let annoncesData = [];
-	if (USER)
-		onMount(async () => {
-			const res = await AnnonceServices.findAllAnnonceByEmail(USER.token);
-			annoncesData = res;
-		});
+
+
 	let currentToogle = 'default';
 	let modal;
 	let showStateDropdown = false;

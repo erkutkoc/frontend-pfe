@@ -1,7 +1,12 @@
 <script>
 	import annonceServices from '../services/annonceServices';
 	import { onMount } from 'svelte';
-	import {selectedCategorie, selectedCampus, selectedMaxPrice, selectedMinPrice} from '../utils/filterProperties.js';
+	import {
+		selectedCategorie,
+		selectedCampus,
+		selectedMaxPrice,
+		selectedMinPrice
+	} from '../utils/filterProperties.js';
 	let categories = [];
 	onMount(async () => {
 		const res = await annonceServices.findAllCategorie();
@@ -9,71 +14,76 @@
 	});
 	let selectedCat;
 	let selectedCamp;
-	function handleChangeCat(){
-		selectedCategorie.setSelected(selectedCat)
-		selectedCamp = {};
-	}	
-	function handleChangeCamp(){
-		selectedCampus.setSelected(selectedCamp)
-		selectedCat = {};
+	let selectedMin;
+	let selectedMax;
+	function handleChangeCat() {
+		selectedCategorie.setSelected(selectedCat);
+	}
+	function handleChangeCamp() {
+		selectedCampus.setSelected(selectedCamp);
+	}
+	function handleChangeMinPrice(){
+		selectedMinPrice.setSelected(selectedMin);
+	}
+	function handleChangeMaxPrice(){
+		selectedMaxPrice.setSelected(selectedMax);
 	}
 	let campus = [
-		{id : -1 ,campus : ``, value :``},
-		{ id: 1, campus: `Ixelles`, value:`Ixelles` },
+		{ id: -1, campus: ``, value: `` },
+		{ id: 1, campus: `Ixelles`, value: `Ixelles` },
 		{ id: 2, campus: `Louvain-la-Neuve`, value: `Louvain-la-Neuve` },
-		{ id: 3, campus: `Woluwe`, value:`Woluwe` },
+		{ id: 3, campus: `Woluwe`, value: `Woluwe` }
 	];
 </script>
 
-
-<aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
-	<div class="field">
-			<label class="label">Categorie</label>
-			<div class="select">
-				<select bind:value={selectedCat} on:change={handleChangeCat}>
-					{#each categories as categorie}
+<nav class="panel">
+	<p class="panel-heading has-background-info has-text-white">Recherche par filtre</p>
+	<a class="panel-block">
+		<label class="label">Catégorie </label>
+		<div class="select">
+			<select bind:value={selectedCat} on:change={handleChangeCat}>
+				{#each categories as categorie}
 					<option value={categorie}>
 						{categorie.nom}
 					</option>
-					{/each}
-				</select>
-			</div>
+				{/each}
+			</select>
 		</div>
-
-		<div class="field">
-			<label class="label">Campus</label>
-			<div class="select">
-				<select bind:value={selectedCamp} on:change={handleChangeCamp}>
-					{#each campus as camp}
+		<label class="label">Campus</label>
+		<div class="select">
+			<select bind:value={selectedCamp} on:change={handleChangeCamp}>
+				{#each campus as camp}
 					<option value={camp}>
 						{camp.campus}
 					</option>
-					{/each}
-				</select>
-			</div>
+				{/each}
+			</select>
 		</div>
+		<label class="label">Min</label>
+		<div class="control">
+			<input id="min" class="input" bind:value={selectedMin} on:change={handleChangeMinPrice} type="min" placeholder="Prix min" />
+		</div>
+		<label class="label">Max</label>
+		<div class="control">
+			<input id="max" class="input" bind:value={selectedMax}  on:change={handleChangeMaxPrice} type="max" placeholder="Prix max" />
+		</div>
+	</a>
 
-		<div class="">
-			<div class="field">
-				<label class="label">Min</label>
-				<div class="control">
-					<input class="input" type="min" placeholder="Prix min" />
-				</div>
-			</div>
-		</div>
-		<div class="">
-			<div class="field">
-				<label class="label">Max</label>
-				<div class="control">
-					<input class="input" type="max" placeholder="Prix max" />
-				</div>
-			</div>
-		</div>
-		<div>
-			<div class="field ">
-				<div class="control">
-					<button class="button is-primary">Rechercher</button>
-				</div>
-			</div>
-		</div>
-</aside>
+	<div class="panel-block">
+		<button class="button is-link is-outlined is-fullwidth"> Reset </button>
+		<button class="button is-primary is-outlined is-fullwidth"> Rechercher</button>
+	</div>
+</nav>
+<style>
+	.panel-block{
+		margin:auto;
+		height: auto;
+		font-size: 12px;
+	}
+	#min{
+
+	}
+	#max{
+
+	}
+</style>
