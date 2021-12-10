@@ -1,15 +1,17 @@
 <script>
     import "../styles/tailwind-output.css";
     import AnnonceServices from "../services/annonceServices";
+    import UserServices from "../services/userServices";
     import Navbar from "../components/Navbar.svelte";
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import ErrorPage from "../components/ErrorPage.svelte";
 
-    $ : console.log(annonce)
+    // $ : console.log(annonce)
     let annonce;
     let currentUser;
     let annonceCategorie;
+    let vendeur;
     const idAnnonce = $page.params.id;
 
     onMount(async () => {
@@ -18,18 +20,18 @@
         annonce = fetchAnnonce.data;
 
         let fetchCategories = await AnnonceServices.findAllCategorie();
-        annonceCategorie = fetchCategories.filter(c => c.id == annonce.categorie_id)[0]
+        annonceCategorie = fetchCategories.filter(c => c.id == annonce.categorie_id)[0];
+
+        let fetchVendeur = await UserServices.getUserById(annonce.vendeur_id,currentUser.token);
+        vendeur = fetchVendeur.data;
     })
 </script>
   <Navbar/>
 
 {#if currentUser}
-  {#if annonce === undefined || annonceCategorie === undefined}
+  {#if !annonce || !annonceCategorie|| !vendeur}
     Chargement de l'annonce ... 
   {:else}
-
-  <p>{annonce.vendeur_id}</p>
-
   <div class="bg-white">
       <div class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2">
         <div>
@@ -38,16 +40,16 @@
             {#if annonce.etat =='E' }
               <b><i id='attente'>En attente</i></b>
             {:else if annonce.etat =='V' }
-              <b><i id ="validee"> Validée</i></b>
+              <b><i id ="validee"> Validé</i></b>
             {:else if annonce.etat =='R' }
-              <b><i id ="reservee">Réservée</i></b>
+              <b><i id ="reservee">Réservé</i></b>
             {:else if annonce.etat =='T' }
-              <b><i id ="vendu">Vendue</i></b>
+              <b><i id ="vendu">Vendu</i></b>
             {/if}
           
           </p>
           <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl" id="prix">
-            {#if annonce.prix == undefined || annonce.prix == 0}
+            {#if !annonce.prix || annonce.prix == 0}
               Gratuit
             {:else}
               {annonce.prix} €
@@ -72,7 +74,7 @@
     
             <div class="border-t border-gray-200 pt-4">
               <dt class="font-medium text-gray-900">Vendeur</dt>
-              <dd class="mt-2 text-sm text-gray-500">6.25&quot; x 3.55&quot; x 1.15&quot;</dd>
+              <dd class="mt-2 text-sm text-gray-500">{vendeur.email}</dd>
             </div>
     
             <div class="border-t border-gray-200 pt-4">
