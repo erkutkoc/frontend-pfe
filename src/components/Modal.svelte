@@ -12,8 +12,11 @@
 	export function hideModal() {
 		shown = false;
 	}
+	let categories = [];
 	onMount(async () => {
         USER = JSON.parse(localStorage.getItem("user"));
+		const res = await AnnonceServices.findAllCategorie();
+		categories = res;
     })
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -26,6 +29,7 @@
 		}
 		fetchAddAnnonce(data);
 	}
+	let selectedCat;
 	let selected;
 	const fetchAddAnnonce = async (data) => {
 		let toSend = {
@@ -34,9 +38,10 @@
 			Prix: Number.parseFloat(data.price),
 			Etat: 'E',
 			Genre: selected.value,
-			Vendeur_id: 1,
-			Categorie_id: 1
+			Vendeur_id: USER.id,
+			Categorie_id: selectedCat.id
 		};
+		
 		console.log(toSend);
 		AnnonceServices.addAnnonce(toSend,USER.token).then(goto('/myAnnonce'));
 	};
@@ -87,9 +92,15 @@
 						</select>
 					</div>
 				</div>
-				<label class="label">Categorie</label>
-				<div class="control">
-					<input class="input" type="text" name="categorie" placeholder="Entrez un catégorie" />
+				<label class="label">Catégorie </label>
+				<div class="select">
+					<select bind:value={selectedCat}>
+						{#each categories as categorie}
+							<option value={categorie}>
+								{categorie.nom}
+							</option>
+						{/each}
+					</select>
 				</div>
 
 				<div class="field">

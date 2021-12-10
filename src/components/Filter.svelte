@@ -61,11 +61,11 @@
 		</div>
 		<label class="label">Min</label>
 		<div class="control">
-			<input id="min" class="input" bind:value={selectedMin} on:change={handleChangeMinPrice} type="min" placeholder="Prix min" />
+			<input id="min" class="input" bind:value={selectedMin} on:change|preventDefault={handleChangeMinPrice} type="number" step="0.01" placeholder="Prix min" />
 		</div>
 		<label class="label">Max</label>
 		<div class="control">
-			<input id="max" class="input" bind:value={selectedMax}  on:change={handleChangeMaxPrice} type="max" placeholder="Prix max" />
+			<input id="max" class="input" bind:value={selectedMax}  on:change|preventDefault={handleChangeMaxPrice} type="number" step="0.01" placeholder="Prix max" />
 		</div>
 	</a>
 

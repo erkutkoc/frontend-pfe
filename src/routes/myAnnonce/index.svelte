@@ -5,7 +5,7 @@
 	import Modal from '../../components/Modal.svelte';
 	import AnnonceServices from '../../services/annonceServices.js';
 	import { onMount } from 'svelte';
-	import AnnonceList from '../../components/AnnonceList.svelte';
+	import AnnonceList from '../../components/AnnonceDisplay.svelte';
 
 	let USER;
 	onMount(async () => {

@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 function selectedCat() {
-    const { subscribe, set } = writable({});
+    const { subscribe, set } = writable(null);
 
     return {
         subscribe,
@@ -9,7 +9,7 @@ function selectedCat() {
     };
 }
 function selectedMin(){
-    const { subscribe, set } = writable({});
+    const { subscribe, set } = writable(-1);
 
     return {
         subscribe,
@@ -17,7 +17,7 @@ function selectedMin(){
     };
 }
 function selectedMax(){
-    const { subscribe, set } = writable({});
+    const { subscribe, set } = writable(-1);
 
     return {
         subscribe,
