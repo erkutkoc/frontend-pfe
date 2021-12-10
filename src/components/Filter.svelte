@@ -1,7 +1,7 @@
 <script>
 	import annonceServices from '../services/annonceServices';
 	import { onMount } from 'svelte';
-	import {selectedCategorie, selectedCampus} from '../services/filterProperties.js';
+	import {selectedCategorie, selectedCampus, selectedMaxPrice, selectedMinPrice} from '../utils/filterProperties.js';
 	let categories = [];
 	onMount(async () => {
 		const res = await annonceServices.findAllCategorie();
@@ -12,7 +12,7 @@
 	function handleChangeCat(){
 		selectedCategorie.setSelected(selectedCat)
 		selectedCamp = {};
-	}
+	}	
 	function handleChangeCamp(){
 		selectedCampus.setSelected(selectedCamp)
 		selectedCat = {};
