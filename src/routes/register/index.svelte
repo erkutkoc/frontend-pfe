@@ -5,7 +5,7 @@
 	import UserServices from '../../services/userServices.js';
 	import AnnonceServices from '../../services/annonceServices.js';
 	import { goto } from '$app/navigation';
-	import { userData} from '../../services/usersProperties.js';
+	import storage from "../../utils/storage";
 
 	 $ : campus = [];
 
@@ -27,12 +27,11 @@
 			campus_id: Number.parseInt(data.campus)
 		};
 
-		const user = UserServices.register(toSend).then(registeredUser =>{
+		await UserServices.register(toSend).then(registeredUser =>{
+			registeredUser.data.token= "Bearer " +registeredUser.data.token;
+			storage("user",registeredUser.data);
 			goto("/");
-			return registeredUser.data;
 		});
-		userData.set(user);
-		sessionStorage.setItem("userData", JSON.stringify(user));//test
 	};
 	onMount(async () => {
 		const allCampus = await AnnonceServices.getAllCampus();
@@ -76,13 +75,13 @@
 					</div>
 					<div >
 						<select
+							name="campus"
 							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 						>
 						<option value="">Choisissez votre campus</option>
 						{#each campus as c}
-							<option value="{c.id}">{c.rue}</option>
+							<option value="{c.id}">{c.ville}</option>
 						{/each}
-							
 						</select>
 					</div>
 				</div>

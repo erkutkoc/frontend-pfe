@@ -1,9 +1,9 @@
 <script>
-	import { userData } from '../../services/usersProperties.js';
 	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
 	import UserServices from '../../services/userServices.js';
 	import { goto } from '$app/navigation';
+	import storage from "../../utils/storage";
 
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -20,13 +20,11 @@
 			Email: data.email,
 			MotDePasse: data.password
 		};
-		const user = await UserServices.login(toSend).then((connectedUser) => {
-			document.cookie = 'token=Bearer ' + connectedUser.data.token; //setCookie = token
+		await UserServices.login(toSend).then((connectedUser) => {
+			connectedUser.data.token= "Bearer " +connectedUser.data.token;
+			storage("user",connectedUser.data);
 			goto('/');
-      		return connectedUser.data;
 		});
-		userData.set(user);
-		sessionStorage.setItem("userData", JSON.stringify(user));//test
 	};
 </script>
 <Navbar />

@@ -1,14 +1,8 @@
 import axios from "axios";
-import { userData } from "../services/usersProperties";
 
 const baseUrl = "https://pfe-backend1.herokuapp.com"; // laisser ca comme ca ?
 
-// userData.subscribe(user => {
-//     if (!user) return;
-//     token = "Bearer " + user.token; // enlever le bearer niveaubackend
-// });
-
-export const findAllAnnonce = async() => {
+const findAllAnnonce = async() => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -62,8 +56,7 @@ const findAllAnnonceByEmail = async() => {
         console.error('Error fetching data');
     }
 }
-const findAnnonceById = (id) => {
-    let token = document.cookie.split("=")[1];
+const findAnnonceById = (id, token) => {
     return axios
         .get(baseUrl + "/annonces/" + id, {
             headers: {
@@ -73,11 +66,9 @@ const findAnnonceById = (id) => {
         });
 }
 const getAllCampus = () => {
-    let token = document.cookie.split("=")[1];
     return axios
         .get(baseUrl + "/adresses/", {
             headers: {
-                'Authorization': token,
                 'Content-Type': 'application/json'
             }
         });
