@@ -110,10 +110,11 @@
 					</span>
 					Se connecter
 				</button>
+				<a class="has-text-primary" href="/register">Vous n'avez pas de compte ? </a>
 			</div>
 		</form>
 	</div>
 </div>
 {:else}
-	<ErrorPage message="Vous etes deja connectes."/>
+	<ErrorPage message="Vous êtes déjà connectées" link="/"/>
 {/if}
