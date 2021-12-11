@@ -1,5 +1,5 @@
 <script>
-	import Annonce from './Annonce.svelte';
+	import AnnonceList from './AnnonceList.svelte';
 	import Filter from './Filter.svelte';
 </script>
 <Filter />
@@ -7,7 +7,7 @@
 	
 	<div class="container column is-10">
 		<div class="section">
-			<Annonce />
+			<AnnonceList />
 		</div>
 	</div>
 </section>

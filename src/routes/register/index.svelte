@@ -116,11 +116,12 @@
 							</span>
 							S'inscrire
 						</button>
+						<a class="has-text-primary" href="/login">Vous avez un compte ? </a>
 					</div>
 				</form>
 			</div>
 		</div>
 		{:else}
-			<ErrorPage message="Vous etes deja connectes."/>
+		<ErrorPage message="Vous êtes déjà connectées! Vous ne pouvez pas vous enregistrer !" link="/"/>
 		{/if}
 </main>

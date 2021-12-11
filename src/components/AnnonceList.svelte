@@ -1,77 +1,112 @@
 <script>
-	import AnnonceState from "./AnnonceState.svelte";
-
-	export let annoncesData;
+	import AnnonceServices from '../services/annonceServices.js';
+	import Annonce from './Annonce.svelte';
+	import {
+		selectedCategorie,
+		selectedMaxPrice,
+		selectedMinPrice,
+		selectedCampus,
+		sort
+	} from '../utils/filterProperties.js';
+	import { onMount } from 'svelte';
+	let data = [];
+	onMount(async () => {
+		const res = await AnnonceServices.findAllAnnonce();
+		data = res;
+	});
 </script>
 
-{#each annoncesData as annonce  (annonce.id)}
-	<div class="container is-fluid">
-		<div class="columns  is-centered">
-			<div class="card column is-four-fifths">
-				<div class="card-image">
-					<AnnonceState annonce={annonce}></AnnonceState>
-					<figure>
-						<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
-					</figure>
-				</div>
-				<div class="card-content">
-					<footer class="card-footer">
-					<div class="card-footer-item">
-						<p>{annonce.titre}</p>
-					</div>
-				</footer>
-					<div class="card">
-						<footer class="card-footer">
-							<div class="card-footer-item">
-					
-						{#if annonce.prix != null}
-							<p>{annonce.prix} €</p>
-						{:else}
-							<p>Objet à donner / Objet donner</p>
-						{/if}
-							</div>
-							
-							<div class="card-footer-item">
-								{#if annonce.etat === 'E'}
-									<span class="icon is-small has-text-danger-dark"
-										><i class="fas fa-pause-circle" /></span
-									>
-									<span> En attente</span>
-								{:else if annonce.etat === 'V'}
-									<span class="icon is-small has-text-primary-dark"
-										><i class="fas fa-check-circle" /></span
-									>
-									<span> Validée</span>
-								{:else if annonce.etat === 'T'}
-									<span class="icon is-small"><i class="fas fa-times-circle" /></span>
-									<span> Vendus</span>
-								{:else if annonce.etat === 'R'}
-									<span class="icon is-small" style="color:#F98A0C"
-										><i class="fas fa-minus-circle" /></span
-									>
-									<span> Réservée</span>
-								{/if}
-							</div>
-						</footer>
-					  </div>
-					
-				</div>
-			</div>
-		</div>
+{#if $selectedCategorie == null && $selectedMinPrice == -1 && $selectedMaxPrice == -1 && $selectedCampus == null}
+	<!--Annonce-->
+	<div class="columns is-desktop is-multiline ">
+		{#each data as annonce (annonce.id)}
+			<Annonce {annonce} />
+		{/each}
 	</div>
-{/each}
 
-<style>
-	img {
-		border-radius: 8px;
-		max-width: 35%;
-		height: auto;
-		text-align: center;
-		display: block;
-		margin-left: 30%;
-		margin-right: auto;
-	}
-	figure {
-		text-align: center;
-	}
-</style>
+	<br />
+{:else if $selectedCampus != null}
+	<!--Annonce-->
+	<div class="columns is-desktop is-multiline ">
+		{#each $selectedCampus as annonce (annonce.id)}
+			{#if $selectedCategorie != null && $selectedMaxPrice != -1 && $selectedMinPrice != -1}
+				<!-- min  && max && categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id && annonce.prix <= $selectedMaxPrice && annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedCategorie != null && $selectedMaxPrice != -1 && $selectedMinPrice == -1}
+				<!-- max  && categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id && annonce.prix <= $selectedMaxPrice};
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedCategorie != null && $selectedMaxPrice == -1 && $selectedMinPrice != -1}
+				<!-- min  && categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id && annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedMaxPrice != -1 && $selectedMinPrice != -1 && $selectedCategorie == null}
+				<!-- min &&  max -->
+				{#if annonce.prix <= $selectedMaxPrice && annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedCategorie != null && $selectedMaxPrice == -1 && $selectedMinPrice == -1}
+				<!-- categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedMinPrice != -1 && $selectedCategorie == null && $selectedMaxPrice == -1}
+				<!-- Min-->
+				{#if annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />{/if}
+			{:else if $selectedMaxPrice != -1 && $selectedMinPrice == -1 && $selectedCategorie == null}
+				<!--  Max-->
+				{#if annonce.prix <= $selectedMaxPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else}
+				<Annonce {annonce} />
+			{/if}
+		{/each}
+	</div>
+{:else}
+	<!--Annonce-->
+	<div class="columns is-desktop is-multiline ">
+		{#each data as annonce (annonce.id)}
+			{#if $selectedCategorie != null && $selectedMaxPrice != -1 && $selectedMinPrice != -1}
+				<!-- min  && max && categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id && annonce.prix <= $selectedMaxPrice && annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedCategorie != null && $selectedMaxPrice != -1 && $selectedMinPrice == -1}
+				<!-- max  && categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id && annonce.prix <= $selectedMaxPrice};
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedCategorie != null && $selectedMaxPrice == -1 && $selectedMinPrice != -1}
+				<!-- min  && categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id && annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedMaxPrice != -1 && $selectedMinPrice != -1 && $selectedCategorie == null}
+				<!-- min &&  max -->
+				{#if annonce.prix <= $selectedMaxPrice && annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedCategorie != null && $selectedMaxPrice == -1 && $selectedMinPrice == -1}
+				<!-- categorie-->
+				{#if annonce.categorie_id == $selectedCategorie.id}
+					<Annonce {annonce} />
+				{/if}
+			{:else if $selectedMinPrice != -1 && $selectedCategorie == null && $selectedMaxPrice == -1}
+				<!-- Min-->
+				{#if annonce.prix >= $selectedMinPrice}
+					<Annonce {annonce} />{/if}
+			{:else if $selectedMaxPrice != -1 && $selectedMinPrice == -1 && $selectedCategorie == null}
+				<!--  Max-->
+				{#if annonce.prix <= $selectedMaxPrice}
+					<Annonce {annonce} />
+				{/if}
+			{/if}
+		{/each}
+	</div>
+{/if}
