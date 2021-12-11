@@ -7,6 +7,7 @@
 	let USER;
 	let fetchAddDataContainer;
 
+
 	export function showModal() {
 		shown = true;
 	}
@@ -38,7 +39,7 @@
 		fetchAddDataContainer.append("Etat", 'E');
 		fetchAddDataContainer.append("Genre", selected.value);
 		fetchAddDataContainer.append("Vendeur_id", USER.id);
-		fetchAddDataContainer.append("Categorie_id", data.categorie); 
+		fetchAddDataContainer.append("Categorie_id", selectedCat.id); 
 		AnnonceServices.uploadAnnonce(fetchAddDataContainer,USER.token);
 	};
 	let genres = [
@@ -90,10 +91,10 @@
 				<div class="field">
 					<label class="label">Genre</label>
 					<div class="select">
-						<select bind:value={selected} required>
-							{#each genres as genre}
-								<option value={genre}>
-									{genre.genre}
+						<select name ="genre" bind:value={selected} required>
+							{#each genres as element}
+								<option value={element}>
+									{element.genre}
 								</option>
 							{/each}
 						</select>
@@ -101,7 +102,7 @@
 				</div>
 				<label class="label">Catégorie </label>
 				<div class="select">
-					<select bind:value={selectedCat} required>
+					<select name ="categorie" bind:value={selectedCat} required>
 						{#each categories as categorie}
 							<option value={categorie}>
 								{categorie.nom}
@@ -123,7 +124,7 @@
 						/>
 					</div>
 					<p class="help is-success has-text-weight-bold">
-						La vente est mise "En attente" afin d'être valider
+						La vente est mise "En attente" afin d'être validee
 					</p>
 				</div>
 

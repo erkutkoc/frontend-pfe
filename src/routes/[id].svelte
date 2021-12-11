@@ -10,11 +10,11 @@
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	// import '@splidejs/splide/dist/css/splide.min.css';
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
-  import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
+	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	// import '@splidejs/splide/dist/css/splide-core.min.css';
 
+	const baseUrl = "https://backend-staging-pfe.herokuapp.com";
 	const idAnnonce = $page.params.id;
-	$: console.log(annonce);
 	let annonce;
 	let currentUser = ' ';
 	let annonceCategorie;
@@ -36,6 +36,7 @@
 
 	onMount(async () => {
 		currentUser = JSON.parse(localStorage.getItem('user'));
+		if (!currentUser) return;
 		let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
 		annonce = fetchAnnonce.data;
 
@@ -86,7 +87,6 @@
 							<dt class="font-medium text-gray-900">Description</dt>
 							<dd class="mt-2 text-sm text-gray-500">{annonce.description}</dd>
 						</div>
-
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Genre</dt>
 							<dd class="mt-2 text-sm text-gray-500">
@@ -97,12 +97,10 @@
 								{/if}
 							</dd>
 						</div>
-
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Vendeur</dt>
 							<dd class="mt-2 text-sm text-gray-500">{vendeur.email}</dd>
 						</div>
-
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Categorie</dt>
 							<dd class="mt-2 text-sm text-gray-500">{annonceCategorie.nom}</dd>
@@ -127,25 +125,25 @@
 				</div>
 				<Splide
 					options={{
-						rewind : true,
-            autoplay : true,
-            pauseOnHover : true,
-            arrows :'slider',
+						rewind: true,
+						autoplay: true,
+						pauseOnHover: true,
+						arrows: 'slider',
 						width: 450,
 						gap: '1rem',
-						type: 'slide', // slide or loop or fade -> animations 
-            focus : 'center',
+						type: 'slide', // slide or loop or fade -> animations
+						focus: 'center'
 					}}
-          hasSliderWrapper
+					hasSliderWrapper
 				>
 					{#each annonce.urlPhoto as photo}
 						<SplideSlide>
 							{#if videoTypes.includes(photo.split('.')[1])}
 								<!-- svelte-ignore a11y-media-has-caption -->
-								<video controls src="https://pfe-backend1.herokuapp.com/medias/{photo}" />
+								<video controls src="{baseUrl}/medias/{photo}" />
 							{:else}
 								<img
-									src="https://pfe-backend1.herokuapp.com/medias/{photo}"
+									src="{baseUrl}/medias/{photo}"
 									alt="imgs de l'annonce"
 									class="bg-gray-100 rounded-lg"
 								/>

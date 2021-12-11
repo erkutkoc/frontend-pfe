@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://pfe-backend1.herokuapp.com";
+const baseUrl = "https://backend-staging-pfe.herokuapp.com";
 
 
 const login = async(payload) => {
