@@ -110,6 +110,7 @@
 					</span>
 					Se connecter
 				</button>
+				<a class="has-text-primary" href="/register">Vous n'avez pas de compte ? </a>
 			</div>
 		</form>
 	</div>

@@ -2,6 +2,7 @@
 	export let message;
 	export let content;
 	export let link;
+    export let linkValue;
 </script>
 
 <section class="hero is-danger" id="error">
@@ -14,11 +15,17 @@
 				{content}
 			</div>
 		{/if}
-        {#if link != null}
+        {#if link != null && linkValue == null}
         <div id="text">
 			<a href={link} id="text">cliquer ici</a>
         </div>
 		{/if}
+        {#if link != null && linkValue != null}
+        <div id="text">
+			<a href={link} id="text">{linkValue}</a>
+        </div>
+		{/if}
+
 	</div>
 </section>
 

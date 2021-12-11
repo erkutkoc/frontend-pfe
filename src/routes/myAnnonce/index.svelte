@@ -1,6 +1,7 @@
 <script>
 	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
+	import ErrorPage from '../../components/ErrorPage.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
 	import AnnonceServices from '../../services/annonceServices.js';
@@ -101,6 +102,8 @@
 			{/await}
 		{/if}
 	</main>
+{:else}
+<ErrorPage message="Connectez vous pour accéder à vos annonces !" link="/login" linkValue="Se connecter"/>
 {/if}
 
 <style>
