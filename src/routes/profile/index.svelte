@@ -1,30 +1,24 @@
 <script>
+import { onMount } from "svelte";
+
     import Navbar from "../../components/Navbar.svelte";
     import '../../styles/tailwind.css';
+    import AnnonceServices from '../../services/annonceServices.js';
 
-    let email = "";
-    let password = "";
-    let campus = "";
+    let password = ""
+    let campus = []
+    let campusUser = 1
+    let email = ""
 
-    let length = document.cookie.search("token") + "token=".length
-    //let length
+    let USER;
+	onMount(async () => {
+        const allCampus = await AnnonceServices.getAllCampus();
+		campus = allCampus.data;
+		USER = JSON.parse(localStorage.getItem('user'))
+        email = USER.email
+        campusUser = USER.campus_Id
+	});
     
-    //fetch data from back
-    console.log("fetch data");
-    const fetchProfile = (async () => {
-        const response = await fetch('https://pfe-backend1.herokuapp.com/Members/GetMembre',{
-            headers: {"Content-Type" :"application/json", Authorization: document.cookie.slice(length) },
-            method:'GET',
-        });
-        return await response.json()
-    })()
-
-    const dataProcessing = ((profileData) => {
-        console.log(profileData);
-        email = profileData.email;
-        campus = profileData.campus;
-    })
-
     //change data in db
     function onSubmit (e){
     
@@ -40,7 +34,7 @@
     }
     const putProfile = async (data) => {
         let toSend = {
-            email: email,
+            email: USER.email,
             motDePasse: data.password,
             campus_id: Number.parseInt(data.campus)
         };
@@ -61,15 +55,6 @@
 
 <main>
     <Navbar />
-    {#await fetchProfile}
-        <p>...Chargement</p>
-    {:then data}
-        {dataProcessing(data)}
-    {:catch error}
-        <p>Un problème s'est produit</p>
-    {/await}
-
-
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>
@@ -105,9 +90,13 @@
 					<div>
 						<label for="campus" class="sr-only">Campus</label>
 						<select name="campus" id="campus" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-                            <option value="1">Woluwe</option>
-                            <option value="2">Ixelles</option>
-                            <option value="3">Louvain-La-Neuve</option>
+                            {#each campus as c}
+                                {#if c.id == campusUser}
+                                    <option value={c.id} selected>{c.ville}</option>
+                                {:else}
+                                    <option value={c.id}>{c.ville}</option>
+                                {/if}
+                            {/each}
                         </select>
 					</div>
 				</div>
