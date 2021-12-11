@@ -4,6 +4,7 @@
 	import UserServices from '../services/userServices';
 	import Navbar from '../components/Navbar.svelte';
 	import { onMount } from 'svelte';
+	import { is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
 	import ErrorPage from '../components/ErrorPage.svelte';
 	import { Shadow } from 'svelte-loading-spinners';
@@ -123,34 +124,41 @@
 						/>
 					</div>
 				</div>
-				<Splide
-					options={{
-						rewind: true,
-						autoplay: true,
-						pauseOnHover: true,
-						arrows: 'slider',
-						width: 450,
-						gap: '1rem',
-						type: 'slide', // slide or loop or fade -> animations
-						focus: 'center'
-					}}
-					hasSliderWrapper
-				>
-					{#each annonce.urlPhoto as photo}
-						<SplideSlide>
-							{#if videoTypes.includes(photo.split('.')[1])}
-								<!-- svelte-ignore a11y-media-has-caption -->
-								<video controls src="{baseUrl}/medias/{photo}" />
-							{:else}
-								<img
-									src="{baseUrl}/medias/{photo}"
-									alt="imgs de l'annonce"
-									class="bg-gray-100 rounded-lg"
-								/>
-							{/if}
-						</SplideSlide>
-					{/each}
-				</Splide>
+				{#if !is_empty(annonce.urlPhoto)}
+					<Splide
+						options={{
+							rewind: true,
+							autoplay: true,
+							pauseOnHover: true,
+							arrows: 'slider',
+							width: 450,
+							gap: '1rem',
+							type: 'slide', // slide or loop or fade -> animations
+							focus: 'center'
+						}}
+						hasSliderWrapper
+					>
+						{#each annonce.urlPhoto as photo}
+							<SplideSlide>
+								{#if videoTypes.includes(photo.split('.')[1])}
+									<!-- svelte-ignore a11y-media-has-caption -->
+									<video controls src="{baseUrl}/medias/{photo}" />
+								{:else}
+									<img
+										src="{baseUrl}/medias/{photo}"
+										alt="imgs de l'annonce"
+										class="bg-gray-100 rounded-lg"
+									/>
+								{/if}
+							</SplideSlide>
+						{/each}
+					</Splide>
+					{:else}<img
+						src="../../static/noimage.png"
+						alt="imgs de l'annonce"
+						class="bg-gray-100 rounded-lg"
+						/>
+				{/if}
 			</div>
 		</div>
 	{/if}
