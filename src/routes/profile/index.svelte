@@ -5,10 +5,10 @@ import { onMount } from "svelte";
     import '../../styles/tailwind.css';
     import AnnonceServices from '../../services/annonceServices.js';
 
-    let password = ""
     let campus = []
     let campusUser = 1
     let email = ""
+    let token
 
     let USER;
 	onMount(async () => {
@@ -17,6 +17,7 @@ import { onMount } from "svelte";
 		USER = JSON.parse(localStorage.getItem('user'))
         email = USER.email
         campusUser = USER.campus_Id
+        token = USER.token;
 	});
     
     //change data in db
@@ -42,7 +43,9 @@ import { onMount } from "svelte";
         console.log(toSend);
 
         const response = fetch('https://pfe-backend1.herokuapp.com/Members/UpdateMembre',{
-            headers: {"Content-Type" :"application/json", Authorization: document.cookie.slice(length) },
+            headers: {"Content-Type" :"application/json", 
+                Authorization: token
+            },
             method:'PUT',
             body : JSON.stringify(toSend)
         });

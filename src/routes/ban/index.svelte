@@ -97,7 +97,7 @@
 			<div>
 				{#if filteredMembers.length != 0}
 					{#each filteredMembers as member}
-						<Member email={member.email} id={member.id} token={token} banned={banned} banDate={member.banni.substring(0, 10)} />
+						<Member email={member.email} id={member.id} token={token} banned={banned} banDate={member.banni ? member.banni.substring(0, 10) : null} />
 					{/each}
 				{:else if filtered}
 					<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
