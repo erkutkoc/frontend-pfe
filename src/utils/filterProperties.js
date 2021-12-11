@@ -9,7 +9,8 @@ function selectedCat() {
         reset: () => set(null)
     };
 }
-function sortAnnonces(){
+
+function sortAnnonces() {
     const { subscribe, set } = writable("titreAZ");
 
     return {
@@ -18,7 +19,8 @@ function sortAnnonces(){
         reset: () => set("titreAZ")
     };
 }
-function selectedMin(){
+
+function selectedMin() {
     const { subscribe, set } = writable(-1);
 
     return {
@@ -27,7 +29,8 @@ function selectedMin(){
         reset: () => set(-1)
     };
 }
-function selectedMax(){
+
+function selectedMax() {
     const { subscribe, set } = writable(-1);
 
     return {

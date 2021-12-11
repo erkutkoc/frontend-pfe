@@ -2,9 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import AnnonceServices from '../services/annonceServices';
-	
+
 	let shown = false;
 	let USER;
+	let fetchAddDataContainer;
+
 
 	export function showModal() {
 		shown = true;
@@ -21,7 +23,6 @@
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
 		const data = [];
-
 		// @ts-ignore
 		for (let field of formData) {
 			const [key, value] = field;
@@ -32,23 +33,29 @@
 	let selectedCat;
 	let selected;
 	const fetchAddAnnonce = async (data) => {
-		let toSend = {
-			Titre: data.title,
-			Description: data.description,
-			Prix: Number.parseFloat(data.price),
-			Etat: 'E',
-			Genre: selected.value,
-			Vendeur_id: USER.id,
-			Categorie_id: selectedCat.id
-		};
-		
-		console.log(toSend);
-		AnnonceServices.addAnnonce(toSend,USER.token).then(goto('/myAnnonce'));
+		fetchAddDataContainer.append("Titre", data.title);
+		fetchAddDataContainer.append("Description", data.description);
+		fetchAddDataContainer.append("Prix", Number.parseFloat(data.price));
+		fetchAddDataContainer.append("Etat", 'E');
+		fetchAddDataContainer.append("Genre", selected.value);
+		fetchAddDataContainer.append("Vendeur_id", USER.id);
+		fetchAddDataContainer.append("Categorie_id", selectedCat.id); 
+		AnnonceServices.uploadAnnonce(fetchAddDataContainer,USER.token);
 	};
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
 		{ id: 2, genre: `Service`, value: 'S' }
 	];
+	const handleMedia = async (e) => {
+		fetchAddDataContainer=[];
+		let files = e.target.files;
+		const formData = new FormData();
+		
+		for (let index = 0; index < files.length; index++) {
+			formData.append('ImageFile',files[index]);
+		}
+		fetchAddDataContainer = formData;
+	};
 </script>
 
 <div class={shown ? 'modal is-active' : 'modal'}>
@@ -84,10 +91,10 @@
 				<div class="field">
 					<label class="label">Genre</label>
 					<div class="select">
-						<select bind:value={selected} required>
-							{#each genres as genre}
-								<option value={genre}>
-									{genre.genre}
+						<select name ="genre" bind:value={selected} required>
+							{#each genres as element}
+								<option value={element}>
+									{element.genre}
 								</option>
 							{/each}
 						</select>
@@ -95,7 +102,7 @@
 				</div>
 				<label class="label">Catégorie </label>
 				<div class="select">
-					<select bind:value={selectedCat} required>
+					<select name ="categorie" bind:value={selectedCat} required>
 						{#each categories as categorie}
 							<option value={categorie}>
 								{categorie.nom}
@@ -117,7 +124,7 @@
 						/>
 					</div>
 					<p class="help is-success has-text-weight-bold">
-						La vente est mise "En attente" afin d'être valider
+						La vente est mise "En attente" afin d'être validee
 					</p>
 				</div>
 
@@ -134,7 +141,13 @@
 						style="display: inline; margin-right: auto; margin-left: auto;"
 					>
 						<label class="file-label">
-							<input class="file-input" type="file" name="resume" accept="image/*" />
+							<input on:change="{handleMedia}"
+								class="file-input"
+								type="file"
+								name="resume"
+								accept="image/*"
+								multiple
+							/>
 							<span class="file-cta">
 								<span class="file-icon">
 									<i class="fas fa-upload" />
@@ -149,7 +162,12 @@
 						style="display: inline; margin-right: auto; margin-left: auto;"
 					>
 						<label class="file-label">
-							<input class="file-input" type="file" name="resume" accept="video/*" />
+							<input on:change="{handleMedia}"
+								class="file-input"
+								type="file"
+								name="resume"
+								accept="video/*"
+							/>
 							<span class="file-cta">
 								<span class="file-icon">
 									<i class="fas fa-upload" />

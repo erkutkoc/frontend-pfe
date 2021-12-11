@@ -23,6 +23,10 @@
 			<a class="navbar-item" href="/"> Accueil </a>
 			{#if USER != null}
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
+				<a class="navbar-item" href="/profile"> Profil </a>
+				{#if USER.administrateur}
+					<a class="navbar-item" href="/ban"> Bannir </a>
+				{/if}
 			{/if}
 			<div class="navbar-item has-dropdown is-hoverable">
 				<div class="navbar-dropdown is-boxed" />
