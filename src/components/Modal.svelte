@@ -74,7 +74,7 @@
 						<input
 							class="input"
 							type="number"
-							step="0.01"
+							step="0.1"
 							name="price"
 							placeholder="Entrez un prix"
 							required

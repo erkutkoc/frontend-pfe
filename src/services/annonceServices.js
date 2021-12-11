@@ -53,7 +53,6 @@ const findAllCategorie = async () => {
 }
 const findAllAnnonceByEmail = async (user) => {
     try {
-        console.log(user)
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
                 'Authorization': user.token,
@@ -80,7 +79,19 @@ const getAllCampus = () => {
             headers: {
                 'Content-Type': 'application/json'
             }
+
         });
+}
+const updateAnnonce = async (data, token) => {
+    console.log(data)
+    return axios
+        .put(baseUrl + "/annonces", data, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+
 }
 
 const AnnonceServices = {
@@ -90,6 +101,7 @@ const AnnonceServices = {
     addAnnonce,
     findAllCategorie,
     getAllCampus,
-    findAllByCampus
+    findAllByCampus,
+    updateAnnonce
 }
 export default AnnonceServices;
