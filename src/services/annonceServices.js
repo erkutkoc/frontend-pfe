@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://pfe-backend1.herokuapp.com"; // laisser ca comme ca ?
+const baseUrl = "https://pfe-backend1.herokuapp.com";
 
 const findAllAnnonce = async() => {
     try {
@@ -8,28 +8,6 @@ const findAllAnnonce = async() => {
         return response.data;
     } catch (e) {
         console.error('Error fetching data');
-    }
-}
-const addAnnonce = async(data, token) => {
-    try {
-        var config = {
-            method: 'post',
-            url: baseUrl + '/annonces',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
-        return axios(config)
-            .then(function(response) {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
-    } catch (e) {
-        console.error(e);
     }
 }
 const findAllCategorie = async() => {
@@ -54,7 +32,7 @@ const findAllAnnonceByEmail = async(user) => {
         console.error('Error fetching data');
     }
 }
-const findAnnonceById = (id, token) => {
+const findAnnonceById = async(id, token) => {
     return axios
         .get(baseUrl + "/annonces/" + id, {
             headers: {
@@ -63,7 +41,7 @@ const findAnnonceById = (id, token) => {
             }
         });
 }
-const getAllCampus = () => {
+const getAllCampus = async() => {
     return axios
         .get(baseUrl + "/adresses/", {
             headers: {
@@ -71,13 +49,23 @@ const getAllCampus = () => {
             }
         });
 }
+const uploadAnnonce = async(data, token) => {
+    console.log('in upload annonce')
+    return axios
+        .post(baseUrl + "/annonces", data, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+}
 
 const AnnonceServices = {
     findAllAnnonce,
     findAllAnnonceByEmail,
     findAnnonceById,
-    addAnnonce,
     findAllCategorie,
-    getAllCampus
+    getAllCampus,
+    uploadAnnonce
 }
 export default AnnonceServices;

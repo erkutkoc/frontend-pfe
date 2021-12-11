@@ -8,7 +8,8 @@ function selectedCat() {
         setSelected: (categorie) => set(categorie),
     };
 }
-function selectedMin(){
+
+function selectedMin() {
     const { subscribe, set } = writable({});
 
     return {
@@ -16,7 +17,8 @@ function selectedMin(){
         setSelected: (min) => set(min),
     };
 }
-function selectedMax(){
+
+function selectedMax() {
     const { subscribe, set } = writable({});
 
     return {
