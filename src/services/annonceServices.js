@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const baseUrl = "https://pfe-backend1.herokuapp.com"; // laisser ca comme ca ?
+const baseUrl = "https://pfe-backend1.herokuapp.com";
 
-const findAllAnnonce = async () => {
+const findAllAnnonce = async() => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -10,29 +10,7 @@ const findAllAnnonce = async () => {
         console.error('Error fetching data');
     }
 }
-const addAnnonce = async (data, token) => {
-    try {
-        var config = {
-            method: 'post',
-            url: baseUrl + '/annonces',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
-        return axios(config)
-            .then(function (response) {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    } catch (e) {
-        console.error(e);
-    }
-}
-const findAllByCampus = async (name) => {
+const findAllByCampus = async(name) => {
     if (name != null) {
         try {
             const response = await axios.get(baseUrl + '/annonces/campus/' + name);
@@ -43,7 +21,7 @@ const findAllByCampus = async (name) => {
         }
     }
 }
-const findAllCategorie = async () => {
+const findAllCategorie = async() => {
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
@@ -51,7 +29,7 @@ const findAllCategorie = async () => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async (user) => {
+const findAllAnnonceByEmail = async(user) => {
     try {
         console.log(user)
         const response = await axios.get(baseUrl + '/annonces/email', {
@@ -65,7 +43,7 @@ const findAllAnnonceByEmail = async (user) => {
         console.error('Error fetching data');
     }
 }
-const findAnnonceById = (id, token) => {
+const findAnnonceById = async(id, token) => {
     return axios
         .get(baseUrl + "/annonces/" + id, {
             headers: {
@@ -74,7 +52,7 @@ const findAnnonceById = (id, token) => {
             }
         });
 }
-const getAllCampus = () => {
+const getAllCampus = async() => {
     return axios
         .get(baseUrl + "/adresses/", {
             headers: {
@@ -82,14 +60,24 @@ const getAllCampus = () => {
             }
         });
 }
+const uploadAnnonce = async(data, token) => {
+    console.log('in upload annonce')
+    return axios
+        .post(baseUrl + "/annonces", data, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+}
 
 const AnnonceServices = {
     findAllAnnonce,
     findAllAnnonceByEmail,
     findAnnonceById,
-    addAnnonce,
     findAllCategorie,
     getAllCampus,
+    uploadAnnonce,
     findAllByCampus
 }
 export default AnnonceServices;

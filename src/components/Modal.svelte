@@ -2,9 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import AnnonceServices from '../services/annonceServices';
-	
+
 	let shown = false;
 	let USER;
+	let fetchAddDataContainer;
 
 	export function showModal() {
 		shown = true;
@@ -21,7 +22,6 @@
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
 		const data = [];
-
 		// @ts-ignore
 		for (let field of formData) {
 			const [key, value] = field;
@@ -32,23 +32,29 @@
 	let selectedCat;
 	let selected;
 	const fetchAddAnnonce = async (data) => {
-		let toSend = {
-			Titre: data.title,
-			Description: data.description,
-			Prix: Number.parseFloat(data.price),
-			Etat: 'E',
-			Genre: selected.value,
-			Vendeur_id: USER.id,
-			Categorie_id: selectedCat.id
-		};
-		
-		console.log(toSend);
-		AnnonceServices.addAnnonce(toSend,USER.token).then(goto('/myAnnonce'));
+		fetchAddDataContainer.append("Titre", data.title);
+		fetchAddDataContainer.append("Description", data.description);
+		fetchAddDataContainer.append("Prix", Number.parseFloat(data.price));
+		fetchAddDataContainer.append("Etat", 'E');
+		fetchAddDataContainer.append("Genre", selected.value);
+		fetchAddDataContainer.append("Vendeur_id", USER.id);
+		fetchAddDataContainer.append("Categorie_id", data.categorie); 
+		AnnonceServices.uploadAnnonce(fetchAddDataContainer,USER.token);
 	};
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
 		{ id: 2, genre: `Service`, value: 'S' }
 	];
+	const handleMedia = async (e) => {
+		fetchAddDataContainer=[];
+		let files = e.target.files;
+		const formData = new FormData();
+		
+		for (let index = 0; index < files.length; index++) {
+			formData.append('ImageFile',files[index]);
+		}
+		fetchAddDataContainer = formData;
+	};
 </script>
 
 <div class={shown ? 'modal is-active' : 'modal'}>
@@ -134,7 +140,13 @@
 						style="display: inline; margin-right: auto; margin-left: auto;"
 					>
 						<label class="file-label">
-							<input class="file-input" type="file" name="resume" accept="image/*" />
+							<input on:change="{handleMedia}"
+								class="file-input"
+								type="file"
+								name="resume"
+								accept="image/*"
+								multiple
+							/>
 							<span class="file-cta">
 								<span class="file-icon">
 									<i class="fas fa-upload" />
@@ -149,7 +161,12 @@
 						style="display: inline; margin-right: auto; margin-left: auto;"
 					>
 						<label class="file-label">
-							<input class="file-input" type="file" name="resume" accept="video/*" />
+							<input on:change="{handleMedia}"
+								class="file-input"
+								type="file"
+								name="resume"
+								accept="video/*"
+							/>
 							<span class="file-cta">
 								<span class="file-icon">
 									<i class="fas fa-upload" />
