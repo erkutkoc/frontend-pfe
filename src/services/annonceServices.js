@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseUrl = "https://pfe-backend1.herokuapp.com"; // laisser ca comme ca ?
 
-const findAllAnnonce = async() => {
+const findAllAnnonce = async () => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -10,7 +10,7 @@ const findAllAnnonce = async() => {
         console.error('Error fetching data');
     }
 }
-const addAnnonce = async(data, token) => {
+const addAnnonce = async (data, token) => {
     try {
         var config = {
             method: 'post',
@@ -22,17 +22,28 @@ const addAnnonce = async(data, token) => {
             data: data
         };
         return axios(config)
-            .then(function(response) {
+            .then(function (response) {
                 console.log(JSON.stringify(response.data));
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error);
             });
     } catch (e) {
         console.error(e);
     }
 }
-const findAllCategorie = async() => {
+const findAllByCampus = async (name) => {
+    if (name != null) {
+        try {
+            const response = await axios.get(baseUrl + '/annonces/campus/' + name);
+            console.log(response.data)
+            return response.data;
+        } catch (e) {
+            console.error('Error fetching data');
+        }
+    }
+}
+const findAllCategorie = async () => {
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
@@ -40,7 +51,7 @@ const findAllCategorie = async() => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async(user) => {
+const findAllAnnonceByEmail = async (user) => {
     try {
         console.log(user)
         const response = await axios.get(baseUrl + '/annonces/email', {
@@ -78,6 +89,7 @@ const AnnonceServices = {
     findAnnonceById,
     addAnnonce,
     findAllCategorie,
-    getAllCampus
+    getAllCampus,
+    findAllByCampus
 }
 export default AnnonceServices;

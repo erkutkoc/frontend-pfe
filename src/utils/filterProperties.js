@@ -9,6 +9,15 @@ function selectedCat() {
         reset: () => set(null)
     };
 }
+function sortAnnonces(){
+    const { subscribe, set } = writable("titreAZ");
+
+    return {
+        subscribe,
+        setSort: (sort) => set(sort),
+        reset: () => set("titreAZ")
+    };
+}
 function selectedMin(){
     const { subscribe, set } = writable(-1);
 
@@ -29,7 +38,7 @@ function selectedMax(){
 }
 
 function selectedCamp() {
-    const { subscribe, set } = writable({});
+    const { subscribe, set } = writable(null);
 
     return {
         subscribe,
@@ -42,3 +51,4 @@ export const selectedCategorie = selectedCat();
 export const selectedCampus = selectedCamp();
 export const selectedMinPrice = selectedMin();
 export const selectedMaxPrice = selectedMax();
+export const sort = sortAnnonces();
