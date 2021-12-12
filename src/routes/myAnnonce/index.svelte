@@ -33,6 +33,9 @@
 		} else if (currentToogle === 'R') {
 			filteredData = annoncesData.filter((e) => e.etat == filter);
 		}
+		else if (currentToogle === 'A') {
+			filteredData = annoncesData.filter((e) => e.etat == filter);
+		}
 	}
 </script>
 
@@ -82,6 +85,13 @@
 						<a on:click={() => (currentToogle = 'T')}>
 							<span class="icon is-small"><i class="fas fa-times-circle" /></span>
 							<span>Vendus</span>
+						</a>
+					</li>
+					<li class={currentToogle === 'A' ? 'is-active' : ''}>
+						<!-- svelte-ignore a11y-missing-attribute -->
+						<a on:click={() => (currentToogle = 'A')}>
+							<span class="icon is-small has-text-danger-dark"><i class="fas fa-times-circle" /></span>
+							<span>Supprimer</span>
 						</a>
 					</li>
 					<button
