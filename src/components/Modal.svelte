@@ -57,6 +57,10 @@
 	];
 	const handleMedia = async (e) => {
 		let files = e.target.files;
+		if(files.length >= 10 ){
+			alert(`La limite d'upload est de 10.`);
+			return;
+		} 
 		const formData = new FormData();
 
 		for (let index = 0; index < files.length; index++) {
