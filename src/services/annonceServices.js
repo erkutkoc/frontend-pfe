@@ -3,6 +3,7 @@ import axios from "axios";
 const baseUrl = "https://backend-staging-pfe.herokuapp.com";
 
 const findAllAnnonce = async () => {
+    console.log("dans le findAllAnnonce service");
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -22,6 +23,7 @@ const findAllByCampus = async (name) => {
     }
 }
 const findAllCategorie = async () => {
+    console.log("dans le findAllCategories service");
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;

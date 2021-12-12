@@ -3,7 +3,7 @@
 	let USER;
 	let username;
 	onMount(async () => {
-		USER = JSON.parse(localStorage.getItem('user'));
+		USER = JSON.parse(sessionStorage.getItem('user'));
 		username = USER.email.split(".")[0];
 	});
 </script>

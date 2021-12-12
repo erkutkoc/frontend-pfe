@@ -96,6 +96,7 @@
 						<input
 							class="input"
 							type="number"
+							step="0.01"
 							min="0"
 							name="price"
 							placeholder="Entrez un prix"

@@ -9,6 +9,7 @@
 		console.log("validate"+id);
 	}
 </script>
+<!--
 <div style="float:right">
 	<form on:submit|preventDefault={handleValidate} method="PUT" style="display:inline-block">
 		<button type="submit" value={annonce.id} style="color:green"><i class="fas fa-check" /></button>
@@ -20,10 +21,11 @@
 	</form>
 
 </div>
+-->
 <div class="column card is-one-third">
 
 	<div class="card-image">
-		<figure>
+		<figure class="image is-5by3">
 			<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
 		</figure>
 	</div>
