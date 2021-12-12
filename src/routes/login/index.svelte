@@ -9,7 +9,7 @@
 
 	let USER;
 	onMount(async () => {
-		USER = JSON.parse(localStorage.getItem('user'));
+		USER = JSON.parse(sessionStorage.getItem('user'));
 	});
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -78,12 +78,6 @@
 						class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
 					/>
 					<label for="remember-me" class="ml-2 block text-sm text-gray-900"> Remember me </label>
-				</div>
-
-				<div class="text-sm">
-					<a href="/" class="font-medium text-indigo-600 hover:text-indigo-500">
-						Mot de passe oublié?
-					</a>
 				</div>
 			</div>
 

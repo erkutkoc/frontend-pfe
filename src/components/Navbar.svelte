@@ -25,7 +25,7 @@
 			<a class="navbar-item" href="/"> Accueil </a>
 			{#if USER != null}
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
-			
+				<a class="navbar-item" href="/chat"> Chat </a>
 				{#if USER.administrateur}
 					<a class="navbar-item" href="/ban"> Bannir </a>
 					<a class="navbar-item" href="/annonces/management"> Gestion des annonces </a>

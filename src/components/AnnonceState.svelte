@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation';
 	let USER;
 	onMount(async () => {
-        USER = JSON.parse(localStorage.getItem("user"));
+        USER = JSON.parse(sessionStorage.getItem("user"));
     })
 	function onChangeState(updatedAnnonce) {
 		if (updatedAnnonce) fetchUpdate(updatedAnnonce.target[0].value);

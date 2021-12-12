@@ -4,8 +4,8 @@
 	import { onMount } from 'svelte';
 	let admin;
 	onMount(async () => {
-		const USER = JSON.parse(localStorage.getItem('user'));
-		if (USER == null) return;
+		const USER = JSON.parse(sessionStorage.getItem('user'));
+		if(USER == null) return;
 		admin = USER.administrateur;
 	});
 	export let annoncesData;

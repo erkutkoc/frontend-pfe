@@ -1,5 +1,6 @@
 <script>
-import { onMount } from "svelte";
+    import { onMount } from "svelte";
+    import { Shadow } from 'svelte-loading-spinners';
 
     import Navbar from "../../components/Navbar.svelte";
     import '../../styles/tailwind.css';
@@ -9,12 +10,13 @@ import { onMount } from "svelte";
     let campusUser = 1
     let email = ""
     let token
+    let loading = false
 
     let USER;
 	onMount(async () => {
         const allCampus = await AnnonceServices.getAllCampus();
 		campus = allCampus.data;
-		USER = JSON.parse(localStorage.getItem('user'))
+		USER = JSON.parse(sessionStorage.getItem('user'))
         email = USER.email
         campusUser = USER.campus_Id
         token = USER.token;
@@ -23,6 +25,7 @@ import { onMount } from "svelte";
     //change data in db
     function onSubmit (e){
     
+        loading = true
         const formData = new FormData(e.target);
             const data = [];
 
@@ -31,7 +34,7 @@ import { onMount } from "svelte";
                 const [key, value] = field;
                 data[key] = value;
             }
-            if (data) putProfile(data);
+            if (data) putProfile(data)
     }
     const putProfile = async (data) => {
         let toSend = {
@@ -39,18 +42,16 @@ import { onMount } from "svelte";
             motDePasse: data.password,
             campus_id: Number.parseInt(data.campus)
         };
-        console.log("toSend");
-        console.log(toSend);
 
-        const response = fetch('https://pfe-backend1.herokuapp.com/Members/UpdateMembre',{
+        const response = await fetch('https://pfe-backend1.herokuapp.com/Members/UpdateMembre',{
             headers: {"Content-Type" :"application/json", 
                 Authorization: token
             },
             method:'PUT',
             body : JSON.stringify(toSend)
         });
-        console.log(response);
-        return response;
+        loading = false
+        return response
         
     }
 </script>
@@ -61,7 +62,7 @@ import { onMount } from "svelte";
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>
-				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900"><h2>Voici vos données personnelles:</h2></h2>
+				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Modifiez vos données personnelles:</h2>
 			</div>
 			<form on:submit|preventDefault={onSubmit} class="mt-8 space-y-6" action="#" method="POST">
 				<input type="hidden" name="remember" value="true" />
@@ -109,6 +110,15 @@ import { onMount } from "svelte";
 						type="submit"
 						class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 					>
+                        {#if loading}
+                            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                <!-- Heroicon name: solid/lock-closed -->
+                                <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                    <Shadow size="15" color="#2c9b89" unit="px" duration="1s" />
+                                </span>
+                            </span>
+                        {/if}
+                        
 						Modifier
 					</button>
 				</div>

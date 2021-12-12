@@ -78,7 +78,7 @@ const uploadAnnonce = async (data, token) => {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }
-        })
+        });
 }
 
 const AnnonceServices = {
