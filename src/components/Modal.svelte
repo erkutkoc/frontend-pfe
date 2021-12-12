@@ -8,7 +8,6 @@
 	let USER;
 	let fetchAddDataContainer;
 	$: allCampus = [];
-	$ : console.log(allCampus)
 
 	export function showModal() {
 		shown = true;
