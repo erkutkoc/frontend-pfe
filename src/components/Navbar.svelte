@@ -24,6 +24,7 @@
 			{#if USER != null}
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
 				<a class="navbar-item" href="/profile"> Profil </a>
+				<a class="navbar-item" href="/chat"> Chat </a>
 				{#if USER.administrateur}
 					<a class="navbar-item" href="/ban"> Bannir </a>
 				{/if}

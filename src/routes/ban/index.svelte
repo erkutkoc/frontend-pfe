@@ -3,6 +3,7 @@
 	import Member from '../../components/MemberLine.svelte';
 	import Navbar from '../../components/Navbar.svelte';
 	import { onMount } from 'svelte';
+	import UserServices from '../../services/userServices.js';
 
 	let membersArray = []
     let bannedMembers = []
@@ -16,13 +17,21 @@
     let banned = false;
 
 	let USER;
-	onMount(() => {
+	onMount(async () => {
 		USER = JSON.parse(localStorage.getItem('user'));
 		token = USER.token;
+		/*let data = await UserServices.getAllUsers(USER.token).data
+		baseMembers = membersArray = data
+			.filter((m) => new Date(m.banni).valueOf() < Date.now())
+			.filter((m) => m.id != USER.id)
+			.sort((a, b) => a.email.localeCompare(b.email));
+		bannedMembers = result
+			.filter((m) => new Date(m.banni).valueOf() > Date.now())
+			.sort((a, b) => a.email.localeCompare(b.email));
+		console.log(baseMembers)*/
 	});
 
 	$: {
-		console.log(`token `);
 		let promise = fetchMembers();
 		promise
 			.then((result) => {
