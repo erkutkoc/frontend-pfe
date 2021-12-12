@@ -16,7 +16,7 @@
 	}
 	let categories = [];
 	onMount(async () => {
-		USER = JSON.parse(localStorage.getItem('user'));
+		USER = JSON.parse(sessionStorage.getItem('user'));
 		const res = await AnnonceServices.findAllCategorie();
 		categories = res;
 		fetchAddDataContainer = new FormData();
@@ -48,7 +48,6 @@
 		await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token)
 			.then((rep) => {
 				isLoading = false;
-				console.log(rep);
 				goto('/'+rep.data);
 			})
 	}
@@ -70,7 +69,6 @@
 </script>
 
 {#if isLoading}
-	{console.log('rendering laoding')}
 	<div id="loader">
 		<Shadow size="100" color="#2c9b89" unit="px" duration="1s" />
 	</div>

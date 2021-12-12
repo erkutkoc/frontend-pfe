@@ -10,7 +10,7 @@
 
 	let USER;
 	onMount(async () => {
-		USER = JSON.parse(localStorage.getItem('user'));
+		USER = JSON.parse(sessionStorage.getItem('user'));
 		if(USER == null) return;
 		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
 			annoncesData = res;

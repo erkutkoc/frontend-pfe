@@ -13,7 +13,6 @@
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
 	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	// import '@splidejs/splide/dist/css/splide-core.min.css';
-
 	const baseUrl = "https://backend-staging-pfe.herokuapp.com";
 	const idAnnonce = $page.params.id;
 	let annonce;
@@ -36,7 +35,7 @@
 	// const imgTypes = ['tiff','pjp',	'jfif','bmp','gif',	'svg','png',	'xbm','dib',	'jxl','jpeg','svgz','jpg',	'webp','ico','tif','pjpeg','avif' ];
 
 	onMount(async () => {
-		currentUser = JSON.parse(localStorage.getItem('user'));
+		currentUser = JSON.parse(sessionStorage.getItem('user'));
 		if (!currentUser) return;
 		let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
 		annonce = fetchAnnonce.data;
@@ -120,7 +119,7 @@
 							scrolling="yes"
 							marginheight="0"
 							marginwidth="0"
-							src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={vendeur.adresse} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+							src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={annonce.adresses} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
 						/>
 					</div>
 				</div>

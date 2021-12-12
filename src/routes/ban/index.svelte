@@ -17,7 +17,7 @@
 
 	let USER;
 	onMount(() => {
-		USER = JSON.parse(localStorage.getItem('user'));
+		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
 	});
 
