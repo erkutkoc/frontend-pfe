@@ -4,16 +4,19 @@
 	import UserServices from '../services/userServices';
 	import Navbar from '../components/Navbar.svelte';
 	import { onMount } from 'svelte';
-	import { is_empty } from 'svelte/internal';
+	import { each, is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
 	import ErrorPage from '../components/ErrorPage.svelte';
 	import { Shadow } from 'svelte-loading-spinners';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
-	// import '@splidejs/splide/dist/css/splide.min.css';
-	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
 	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
-	// import '@splidejs/splide/dist/css/splide-core.min.css';
-	const baseUrl = "https://backend-staging-pfe.herokuapp.com";
+	import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
+	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
+	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
+	// import '@splidejs/splide/dist/css/splide-core.min.css'; // other colors for splider
+
+	const baseUrl = 'https://backend-staging-pfe.herokuapp.com';
+
 	const idAnnonce = $page.params.id;
 	let annonce;
 	let currentUser = ' ';
@@ -107,20 +110,30 @@
 						</div>
 					</dl>
 					<div style="width: 100%">
-						<br />
-						<p class="font-medium text-gray-900" id="labelCarte">Carte :</p>
-						<iframe
-							id="map"
-							title="map"
-							SameSite="Strict"
-							width="400"
-							height="400"
-							frameborder="0"
-							scrolling="yes"
-							marginheight="0"
-							marginwidth="0"
-							src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={annonce.adresses} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-						/>
+						<Tabs><br /><br /><br />
+							<p class="font-medium text-gray-900" id="labelCarte">Adresse(s) de retrait :</p>
+							<TabList>
+								{#each annonce.adresses as adresse}
+									<Tab>Adresse {adresse.id}</Tab>
+								{/each}
+							</TabList>
+							{#each annonce.adresses as adresse}
+								<TabPanel>
+									<iframe
+										id="map"
+										title="map"
+										SameSite="Strict"
+										width="400"
+										height="400"
+										frameborder="0"
+										scrolling="yes"
+										marginheight="0"
+										marginwidth="0"
+										src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={adresse.rue} {adresse.numero} {adresse.ville} {adresse.code_postal} {adresse.ville} {adresse.pays} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+									/>
+								</TabPanel>
+							{/each}
+						</Tabs>
 					</div>
 				</div>
 				{#if !is_empty(annonce.urlPhoto)}
@@ -152,11 +165,11 @@
 							</SplideSlide>
 						{/each}
 					</Splide>
-					{:else}<img
+				{:else}<img
 						src="../../static/noimage.png"
 						alt="imgs de l'annonce"
 						class="bg-gray-100 rounded-lg"
-						/>
+					/>
 				{/if}
 			</div>
 		</div>
