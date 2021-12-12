@@ -1,7 +1,7 @@
 <script>
 	export let annonce;
 	let admin = false;
-	import CurrentState from "./CurrentState.svelte"
+	import CurrentState from './CurrentState.svelte';
 	import AnnonceServices from '../services/annonceServices.js';
 	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
@@ -36,7 +36,8 @@
 		}
 	};
 </script>
-<CurrentState {annonce}></CurrentState>
+
+<CurrentState {annonce} />
 
 {#if admin && homePage}
 	Supprimer
