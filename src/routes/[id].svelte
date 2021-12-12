@@ -4,17 +4,17 @@
 	import UserServices from '../services/userServices';
 	import Navbar from '../components/Navbar.svelte';
 	import { onMount } from 'svelte';
+	import { is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
 	import ErrorPage from '../components/ErrorPage.svelte';
 	import { Shadow } from 'svelte-loading-spinners';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	// import '@splidejs/splide/dist/css/splide.min.css';
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
-  import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
+	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	// import '@splidejs/splide/dist/css/splide-core.min.css';
-
+	const baseUrl = "https://backend-staging-pfe.herokuapp.com";
 	const idAnnonce = $page.params.id;
-	$: console.log(annonce);
 	let annonce;
 	let currentUser = ' ';
 	let annonceCategorie;
@@ -35,7 +35,8 @@
 	// const imgTypes = ['tiff','pjp',	'jfif','bmp','gif',	'svg','png',	'xbm','dib',	'jxl','jpeg','svgz','jpg',	'webp','ico','tif','pjpeg','avif' ];
 
 	onMount(async () => {
-		currentUser = JSON.parse(localStorage.getItem('user'));
+		currentUser = JSON.parse(sessionStorage.getItem('user'));
+		if (!currentUser) return;
 		let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
 		annonce = fetchAnnonce.data;
 
@@ -86,7 +87,6 @@
 							<dt class="font-medium text-gray-900">Description</dt>
 							<dd class="mt-2 text-sm text-gray-500">{annonce.description}</dd>
 						</div>
-
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Genre</dt>
 							<dd class="mt-2 text-sm text-gray-500">
@@ -97,12 +97,10 @@
 								{/if}
 							</dd>
 						</div>
-
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Vendeur</dt>
 							<dd class="mt-2 text-sm text-gray-500">{vendeur.email}</dd>
 						</div>
-
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Categorie</dt>
 							<dd class="mt-2 text-sm text-gray-500">{annonceCategorie.nom}</dd>
@@ -121,38 +119,45 @@
 							scrolling="yes"
 							marginheight="0"
 							marginwidth="0"
-							src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={vendeur.adresse} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+							src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={annonce.adresses} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
 						/>
 					</div>
 				</div>
-				<Splide
-					options={{
-						rewind : true,
-            autoplay : true,
-            pauseOnHover : true,
-            arrows :'slider',
-						width: 450,
-						gap: '1rem',
-						type: 'slide', // slide or loop or fade -> animations 
-            focus : 'center',
-					}}
-          hasSliderWrapper
-				>
-					{#each annonce.urlPhoto as photo}
-						<SplideSlide>
-							{#if videoTypes.includes(photo.split('.')[1])}
-								<!-- svelte-ignore a11y-media-has-caption -->
-								<video controls src="https://pfe-backend1.herokuapp.com/medias/{photo}" />
-							{:else}
-								<img
-									src="https://pfe-backend1.herokuapp.com/medias/{photo}"
-									alt="imgs de l'annonce"
-									class="bg-gray-100 rounded-lg"
-								/>
-							{/if}
-						</SplideSlide>
-					{/each}
-				</Splide>
+				{#if !is_empty(annonce.urlPhoto)}
+					<Splide
+						options={{
+							rewind: true,
+							autoplay: true,
+							pauseOnHover: true,
+							arrows: 'slider',
+							width: 450,
+							gap: '1rem',
+							type: 'slide', // slide or loop or fade -> animations
+							focus: 'center'
+						}}
+						hasSliderWrapper
+					>
+						{#each annonce.urlPhoto as photo}
+							<SplideSlide>
+								{#if videoTypes.includes(photo.split('.')[1])}
+									<!-- svelte-ignore a11y-media-has-caption -->
+									<video controls src="{baseUrl}/medias/{photo}" />
+								{:else}
+									<img
+										src="{baseUrl}/medias/{photo}"
+										alt="imgs de l'annonce"
+										class="bg-gray-100 rounded-lg"
+									/>
+								{/if}
+							</SplideSlide>
+						{/each}
+					</Splide>
+					{:else}<img
+						src="../../static/noimage.png"
+						alt="imgs de l'annonce"
+						class="bg-gray-100 rounded-lg"
+						/>
+				{/if}
 			</div>
 		</div>
 	{/if}

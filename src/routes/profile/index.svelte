@@ -16,7 +16,7 @@
 	onMount(async () => {
         const allCampus = await AnnonceServices.getAllCampus();
 		campus = allCampus.data;
-		USER = JSON.parse(localStorage.getItem('user'))
+		USER = JSON.parse(sessionStorage.getItem('user'))
         email = USER.email
         campusUser = USER.campus_Id
         token = USER.token;

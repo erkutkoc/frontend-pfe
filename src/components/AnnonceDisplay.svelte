@@ -1,6 +1,14 @@
 <script>
 	import AnnonceState from "./AnnonceState.svelte";
 
+
+	import { onMount } from 'svelte';
+	let admin;
+	onMount(async () => {
+		const USER = JSON.parse(sessionStorage.getItem('user'));
+		if(USER == null) return;
+		admin = USER.administrateur;
+	});
 	export let annoncesData;
 </script>
 
@@ -9,7 +17,7 @@
 		<div class="columns  is-centered">
 			<div class="card column is-four-fifths">
 				<div class="card-image">
-					<AnnonceState annonce={annonce}></AnnonceState>
+					<AnnonceState annonce={annonce} {admin}></AnnonceState>
 					<figure>
 						<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
 					</figure>

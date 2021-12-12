@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	let USER;
 	onMount(async () => {
-		USER = JSON.parse(localStorage.getItem('user'));
+		USER = JSON.parse(sessionStorage.getItem('user'));
 	});
 </script>
 

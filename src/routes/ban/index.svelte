@@ -17,8 +17,8 @@
     let banned = false;
 
 	let USER;
-	onMount(async () => {
-		USER = JSON.parse(localStorage.getItem('user'));
+	onMount(() => {
+		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
 		/*let data = await UserServices.getAllUsers(USER.token).data
 		baseMembers = membersArray = data

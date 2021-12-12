@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     
     onMount(async () => {
-        localStorage.removeItem("user")
+        sessionStorage.removeItem("user")
         goto("/login"); 
     })
    
