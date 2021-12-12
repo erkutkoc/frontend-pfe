@@ -3,19 +3,19 @@
 	import { onMount } from 'svelte';
 	import AnnonceServices from '../services/annonceServices';
 	import { Shadow } from 'svelte-loading-spinners';
+
+	let shown = false;
+	let USER;
+	let fetchAddDataContainer;
+	$: allCampus = [];
+
 	export function showModal() {
 		shown = true;
 	}
 	export function hideModal() {
 		shown = false;
 	}
-	let shown = false;
-	let USER;
-	let fetchAddDataContainer;
-	$: allCampus = [];
-
 	let selectedCampus = [];
-	$: console.log(selectedCampus);
 
 	let categories = [];
 	onMount(async () => {

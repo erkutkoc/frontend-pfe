@@ -1,7 +1,7 @@
 <script>
 	export let annonce;
 	let admin = false;
-	import CurrentState from "./CurrentState.svelte"
+	import CurrentState from './CurrentState.svelte';
 	import AnnonceServices from '../services/annonceServices.js';
 	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
@@ -9,7 +9,9 @@
 	export let homePage;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
+		if(USER){
 		admin = USER.administrateur;
+		}
 	});
 	function onChangeState(updatedAnnonce) {
 		if (updatedAnnonce) fetchUpdate(updatedAnnonce.target[0].value);
@@ -36,7 +38,8 @@
 		}
 	};
 </script>
-<CurrentState {annonce}></CurrentState>
+
+<CurrentState {annonce} />
 
 {#if admin && homePage}
 	Supprimer

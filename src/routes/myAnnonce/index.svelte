@@ -7,17 +7,16 @@
 	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
 	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
-	import {annonces, filteredAnnonces} from './../../utils/stores.js';
+	import { annonces, filteredAnnonces } from './../../utils/stores.js';
 	let loaded = false;
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
-		if(USER == null) return;
+		if (USER == null) return;
 		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
 		$annonces = res;
 		loaded = true;
 	});
-
 
 	let currentToogle = 'default';
 	let modal;
@@ -31,7 +30,7 @@
 			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'R') {
 			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
-		}else if (currentToogle === 'A') {
+		} else if (currentToogle === 'A') {
 			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
 		}
 	}
@@ -88,7 +87,9 @@
 					<li class={currentToogle === 'A' ? 'is-active' : ''}>
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a on:click={() => (currentToogle = 'A')}>
-							<span class="icon is-small has-text-danger-dark"><i class="fas fa-times-circle" /></span>
+							<span class="icon is-small has-text-danger-dark"
+								><i class="fas fa-times-circle" /></span
+							>
 							<span>Supprimer</span>
 						</a>
 					</li>
@@ -101,7 +102,6 @@
 		</div>
 		<br />
 		{#if currentToogle === 'default'}
-		
 			<AnnonceDisplay annonces={$annonces} />
 		{:else}
 			{#await handleFilter(currentToogle)}
@@ -111,8 +111,10 @@
 			{/await}
 		{/if}
 	</main>
-{:else}
-{#if loaded}
-<ErrorPage message="Connectez vous pour accéder à vos annonces !" link="/login" linkValue="Se connecter"/>
-{/if}
+{:else if loaded}
+	<ErrorPage
+		message="Connectez vous pour accéder à vos annonces !"
+		link="/login"
+		linkValue="Se connecter"
+	/>
 {/if}

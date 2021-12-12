@@ -15,7 +15,6 @@ const findAllByCampus = async(name) => {
     if (name != null) {
         try {
             const response = await axios.get(baseUrl + '/annonces/campus/' + name);
-            console.log(response.data)
             return response.data;
         } catch (e) {
             console.error('Error fetching data');
@@ -82,7 +81,6 @@ const updateAnnonce = async(data, token, admin) => {
     }
 }
 const uploadAnnonce = async(data, token) => {
-    console.log('in upload annonce')
     return axios
         .post(baseUrl + "/annonces", data, {
             headers: {

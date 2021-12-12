@@ -22,14 +22,11 @@
 	//probablement plus opti de charger les messages de la conv ici
 	//je sais pas si c'est mieux de les trier par date en back ou en front
 	const handleClickDiscussion = (discussion) => {
-		console.log('dans le click');
 		selectedDiscussion = discussion;
-		console.log(selectedDiscussion);
 	};
 
     //requête post
     const handleSubmit = (discussion) => {
-		console.log('dans le submit');
 	};
 
 </script>

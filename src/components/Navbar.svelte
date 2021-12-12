@@ -4,7 +4,9 @@
 	let username;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
+		if(USER){
 		username = USER.email.split(".")[0];
+		}
 	});
 </script>
 
@@ -14,7 +16,7 @@
 			<a class="navbar-item" href="/">
 				<p
 					style="font-family: 'Brush Script MT', cursive;"
-					class="is-size-1 has-text-weight-bold has-text-link "
+					class="is-size-1 has-text-weight-bold has-text-info "
 				>
 					Market Vinci
 				</p>
@@ -27,8 +29,7 @@
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
 				<a class="navbar-item" href="/chat"> Chat </a>
 				{#if USER.administrateur}
-					<a class="navbar-item" href="/ban"> Bannir </a>
-					<a class="navbar-item" href="/annonces/management"> Gestion des annonces </a>
+					<a class="navbar-item has-text-info" href="/administrations"> Administration </a>
 				{/if}
 			{/if}
 			<div class="navbar-item has-dropdown is-hoverable">
