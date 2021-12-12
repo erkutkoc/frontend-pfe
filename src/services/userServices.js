@@ -18,7 +18,7 @@ const getUserById = async(id, token) => {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }
-        });
+        })
 }
 
 const UserServices = {
