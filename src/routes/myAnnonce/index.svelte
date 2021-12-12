@@ -4,37 +4,35 @@
 	import ErrorPage from '../../components/ErrorPage.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
-	import AnnonceServices from '../../services/annonceServices.js';
+	import AnnonceServices from '../../services/AnnonceServices.js';
 	import { onMount } from 'svelte';
-	import AnnonceList from '../../components/AnnonceDisplay.svelte';
-
+	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
+	import {annonces, filteredAnnonces} from './../../utils/stores.js';
+	let loaded = false;
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if(USER == null) return;
 		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
-			annoncesData = res;
+		$annonces = res;
+		loaded = true;
 	});
-	let annoncesData = [];
 
 
 	let currentToogle = 'default';
 	let modal;
-	let showStateDropdown = false;
-	let filteredData = [];
 
 	function handleFilter(filter) {
 		if (currentToogle === 'E') {
-			filteredData = annoncesData.filter((e) => e.etat == filter);
+			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'V') {
-			filteredData = annoncesData.filter((e) => e.etat == filter);
+			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'T') {
-			filteredData = annoncesData.filter((e) => e.etat == filter);
+			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'R') {
-			filteredData = annoncesData.filter((e) => e.etat == filter);
-		}
-		else if (currentToogle === 'A') {
-			filteredData = annoncesData.filter((e) => e.etat == filter);
+			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+		}else if (currentToogle === 'A') {
+			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
 		}
 	}
 </script>
@@ -56,7 +54,7 @@
 					<li class={currentToogle === 'E' ? 'is-active' : ''}>
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a on:click={() => (currentToogle = 'E')}>
-							<span class="icon is-small has-text-danger-dark"
+							<span class="icon is-small" style="color : hsl(217, 71%, 53%)"
 								><i class="fas fa-pause-circle" /></span
 							>
 							<span>En attente</span>
@@ -103,17 +101,20 @@
 		</div>
 		<br />
 		{#if currentToogle === 'default'}
-			<AnnonceList {annoncesData} {showStateDropdown} />
+		
+			<AnnonceDisplay annonces={$annonces} />
 		{:else}
 			{#await handleFilter(currentToogle)}
-				<p>Chargement des annonces...</p>
+				<p>Chargement des $annonces...</p>
 			{:then}
-				<AnnonceList annoncesData={filteredData} {showStateDropdown} />
+				<AnnonceDisplay annonces={$filteredAnnonces} />
 			{/await}
 		{/if}
 	</main>
 {:else}
+{#if loaded}
 <ErrorPage message="Connectez vous pour accéder à vos annonces !" link="/login" linkValue="Se connecter"/>
+{/if}
 {/if}
 
 <style>

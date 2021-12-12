@@ -1,70 +1,120 @@
 <script>
 	import annonceServices from '../services/annonceServices';
+	import AnnonceList from './AnnonceList.svelte';
+	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
-	import {
-		selectedCategorie,
-		selectedCampus,
-		selectedMaxPrice,
-		selectedMinPrice,
-		sort
-	} from '../utils/filterProperties.js';
 	let categories = [];
-	onMount(async () => {
-		const res = await annonceServices.findAllCategorie();
-		categories = res;
-	});
-	let selectedCat;
-	let selectedCamp;
-	let selectedMin;
-	let selectedMax;
+	let selectedCat = null;
+	let selectedCamp = null;
+	let selectedMin = -1;
+	let selectedMax = -1;
+	let sort = 'default';
 	let annoncesByCampus = [];
-	const fetchAnnoncesByCampus = async () => {
-		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
-		annoncesByCampus = resp;
-		selectedCampus.setSelected(annoncesByCampus);
-	};
-
-	let loading = false;
-	function handleChangeCat() {
-		selectedCategorie.setSelected(selectedCat);
-		loading = true;
-	}
-	function handleChangeCamp() {
-		fetchAnnoncesByCampus();
-		loading = true;
-	}
-	function handleChangeMinPrice() {
-		selectedMinPrice.setSelected(selectedMin);
-		loading = true;
-	}
-	function handleChangeMaxPrice() {
-		selectedMaxPrice.setSelected(selectedMax);
-		loading = true;
-	}
-	function handleResetFilter() {
-		selectedCategorie.reset();
-		selectedCampus.reset();
-		selectedMinPrice.reset();
-		selectedMaxPrice.reset();
-		sort.reset();
-		loading = false;
-	}
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
 		{ id: 1, campus: `Ixelles`, value: `Ixelles` },
 		{ id: 2, campus: `Louvain-la-Neuve`, value: `Louvain-la-Neuve` },
 		{ id: 3, campus: `Woluwe-Saint-Lambert`, value: `Woluwe-Saint-Lambert` }
 	];
+	onMount(async () => {
+		const res = await annonceServices.findAllCategorie();
+		categories = res;
+		const resp = await annonceServices.findAllAnnonce();
+		//let filtered = resp;
+		//allAnnonces = 
+		$annonces = resp.filter(a => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+		$filteredAnnonces = $annonces;
+	});
+
+	const fetchAnnoncesByCampus = async () => {
+		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
+		annoncesByCampus = resp;
+		$filteredAnnonces = annoncesByCampus;
+	};
+
+	function handleChange(e) {
+		$filteredAnnonces = $annonces;
+		if (e.target.id == 'min') {
+			selectedMin = e.target.value;
+		}
+		if (e.target.id == 'max') {
+			selectedMax = e.target.value;
+		}
+		if (e.target.id == 'prixCroissant') {
+			sort = 'prixCroissant';
+			dropdown = !dropdown;
+		}
+		if (e.target.id == 'prixDecroissant') {
+			sort = 'prixDecroissant';
+			dropdown = !dropdown;
+		}
+		if (e.target.id == 'titreAZ') {
+			sort = 'titreAZ';
+			dropdown = !dropdown;
+		}
+		if (e.target.id == 'titreZA') {
+			sort = 'titreZA';
+			dropdown = !dropdown;
+		}
+
+
+		if (selectedCamp) {
+			fetchAnnoncesByCampus();
+		}
+		if (selectedCat) {
+			  let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			  $filteredAnnonces = vals;
+		}
+		if (selectedMin != -1) {
+			let vals = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
+			$filteredAnnonces = vals;
+		}
+		if (selectedMax != -1) {
+			let vals = $filteredAnnonces.filter((a) => a.prix <= selectedMax);
+			$filteredAnnonces = vals;
+		}
+		if (sort != 'default') {
+			if (sort == 'prixCroissant') {
+				$filteredAnnonces.sort(function (a, b) {
+					return a.prix - b.prix;
+				});
+			}
+			if (sort == 'prixDecroissant') {
+				$filteredAnnonces.sort(function (a, b) {
+					return b.prix - a.prix;
+				});
+			}
+			if (sort == 'titreAZ') {
+				$filteredAnnonces.sort(function (a, b) {
+					if (a.titre < b.titre) return -1;
+				});
+			}
+			if (sort == 'titreZA') {
+				$filteredAnnonces.sort(function (a, b) {
+					if (a.titre > b.titre) return -1;
+				});
+			}
+		}
+		console.log($filteredAnnonces)
+	}
+
+	function handleResetFilter() {
+		$filteredAnnonces = $annonces;
+		selectedCat = null;
+		selectedCamp = null;
+		selectedMin = -1;
+		selectedMax = -1;
+		sort = 'default';
+	}
+
 	let dropdown = false;
-	let selectedButton = 'default';
 </script>
 
 <nav class="panel">
-	<p class="panel-heading has-background-info has-text-white">Recherche par filtre</p>
 	<a class="panel-block">
 		<label class="label">Catégorie </label>
 		<div class="select">
-			<select bind:value={selectedCat} on:change={handleChangeCat}>
+			<select bind:value={selectedCat} on:input={handleChange}>
 				{#each categories as categorie}
 					<option value={categorie}>
 						{categorie.nom}
@@ -74,7 +124,7 @@
 		</div>
 		<label class="label">Campus</label>
 		<div class="select">
-			<select bind:value={selectedCamp} on:change={handleChangeCamp}>
+			<select bind:value={selectedCamp} on:input={handleChange}>
 				{#each campus as camp}
 					<option value={camp}>
 						{camp.campus}
@@ -84,39 +134,18 @@
 		</div>
 		<label class="label">Min</label>
 		<div class="control">
-			<input
-				id="min"
-				class="input"
-				bind:value={selectedMin}
-				on:change={handleChangeMinPrice}
-				type="number"
-				step="0.01"
-				placeholder="Prix min"
-			/>
+			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
 		<label class="label">Max</label>
 		<div class="control">
-			<input
-				id="max"
-				class="input"
-				bind:value={selectedMax}
-				on:change={handleChangeMaxPrice}
-				type="number"
-				step="0.01"
-				placeholder="Prix max"
-			/>
+			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
-		{#if loading}
-			<button class="button is-primary is-loading">Loading</button>
-		{/if}
 	</a>
 
 	<div class="panel-block">
-		<button class="button is-info is-fullwidth" on:click={handleResetFilter}> Reset </button>
-		<button class="button is-primary is-fullwidth" on:click={() => (loading = false)}>
-			Rechercher</button
-		>
-		<div class={dropdown ? 'dropdown is-right is-active' : 'dropdown is-right'}>
+		<button class="button is-info" on:click={handleResetFilter}> Reset </button>
+
+		<div class={dropdown ? 'dropdown is-left is-active' : 'dropdown is-left'}>
 			<div class="dropdown-trigger">
 				<button
 					class="button"
@@ -131,52 +160,18 @@
 				</button>
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu" role="menu">
-				<div class="dropdown-content">
-					<a
-						href="#"
-						class="dropdown-item"
-						id="prixCroissant"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						Prix Croissant
-					</a>
-					<a
-						class="dropdown-item"
-						id="prixDecroissant"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						Prix Decroissant
-					</a>
+				<div class="dropdown-content" on:click={handleChange}>
+					<a href="#" class="dropdown-item" id="prixCroissant"> Prix Croissant </a>
+					<a class="dropdown-item" id="prixDecroissant"> Prix Decroissant </a>
 					<hr class="dropdown-divider" />
-					<a
-						href="#"
-						class="dropdown-item"
-						id="titreAZ"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						A -> Z
-					</a>
-					<a
-						href="#"
-						class="dropdown-item"
-						id="titreZA"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						Z -> A
-					</a>
+					<a href="#" class="dropdown-item" id="titreAZ"> A -> Z </a>
+					<a href="#" class="dropdown-item" id="titreZA"> Z -> A </a>
 				</div>
 			</div>
 		</div>
 	</div>
 </nav>
+<AnnonceList data={$filteredAnnonces}/>
 
 <style>
 	.panel-block {
@@ -184,9 +179,5 @@
 		height: auto;
 		font-size: 14px;
 		font-weight: bolder;
-	}
-	#min {
-	}
-	#max {
 	}
 </style>

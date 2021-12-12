@@ -1,8 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	let USER;
+	let username;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
+		username = USER.email.split(".")[0];
 	});
 </script>
 
@@ -14,7 +16,7 @@
 					style="font-family: 'Brush Script MT', cursive;"
 					class="is-size-1 has-text-weight-bold has-text-link "
 				>
-					Market Vinci
+					Market
 				</p>
 			</a>
 		</div>
@@ -23,10 +25,10 @@
 			<a class="navbar-item" href="/"> Accueil </a>
 			{#if USER != null}
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
-				<a class="navbar-item" href="/profile"> Profil </a>
 				<a class="navbar-item" href="/chat"> Chat </a>
 				{#if USER.administrateur}
 					<a class="navbar-item" href="/ban"> Bannir </a>
+					<a class="navbar-item" href="/annonces/management"> Gestion des annonces </a>
 				{/if}
 			{/if}
 			<div class="navbar-item has-dropdown is-hoverable">
@@ -40,6 +42,8 @@
 				<a class="navbar-item" href="/register"> Inscription </a>
 			{/if}
 			{#if USER != null}
+			<a class="navbar-item has-text-primary" href="/profile">{username}</a>
+
 				<a class="navbar-item" href="/logout"> Deconnexion </a>
 			{/if}
 		</div>
@@ -63,6 +67,12 @@
 		border-bottom: solid;
 	}
 	a {
+		font-family: 'Nunito', sans-serif;
+		font-size: 24px;
+		vertical-align: bottom;
+	}
+	p {
+		vertical-align: bottom;
 		font-family: 'Nunito', sans-serif;
 		font-size: 24px;
 	}

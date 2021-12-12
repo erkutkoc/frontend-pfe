@@ -60,15 +60,27 @@ const getAllCampus = async () => {
 
         });
 }
-const updateAnnonce = async (data, token) => {
-    console.log(data)
-    return axios
-        .put(baseUrl + "/annonces", data, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        })
+const updateAnnonce = async (data, token, admin) => {
+    //console.log(data)
+    //console.log(token)
+    //console.log(admin)
+    if (admin) {
+        return axios
+            .put(baseUrl + "/annonces/admin", data, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+    } else {
+        return axios
+            .put(baseUrl + "/annonces", data, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+    }
 }
 const uploadAnnonce = async (data, token) => {
     console.log('in upload annonce')

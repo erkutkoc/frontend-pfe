@@ -1,85 +1,57 @@
 <script>
-	import AnnonceState from "./AnnonceState.svelte";
-
-
+	import AnnonceState from './AnnonceState.svelte';
 	import { onMount } from 'svelte';
-	let admin;
+
+	let admin = false;
 	onMount(async () => {
 		const USER = JSON.parse(sessionStorage.getItem('user'));
-		if(USER == null) return;
+		if (USER == null) return;
 		admin = USER.administrateur;
 	});
-	export let annoncesData;
+	export let annonces;
 </script>
 
-{#each annoncesData as annonce  (annonce.id)}
-	<div class="container is-fluid">
-		<div class="columns  is-centered">
-			<div class="card column is-four-fifths">
-				<div class="card-image">
-					<AnnonceState annonce={annonce} {admin}></AnnonceState>
-					<figure>
-						<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
-					</figure>
-				</div>
-				<div class="card-content">
-					<footer class="card-footer">
-					<div class="card-footer-item">
-						<p>{annonce.titre}</p>
+<div class="container column is-fullhd">
+	<div class="section">
+		<div class="columns is-desktop is-multiline ">
+			{#each annonces as annonce (annonce.id)}
+				<div class="card column is-one-third">
+					<div class="card-image">
+						<figure class="image is-5by3">
+							<img src="https://bulma.io/images/placeholders/128x128.png" alt="annonce image" />
+						</figure>
 					</div>
-				</footer>
-					<div class="card">
-						<footer class="card-footer">
-							<div class="card-footer-item">
-					
+					<div class="card-content">
+						<h4 class="title is-4">{annonce.titre}</h4>
 						{#if annonce.prix != null}
-							<p>{annonce.prix} €</p>
+							<h5 class="title is-5">{annonce.prix}</h5>
 						{:else}
-							<p>Objet à donner / Objet donner</p>
+							<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 						{/if}
-							</div>
-							
-							<div class="card-footer-item">
-								{#if annonce.etat === 'E'}
-									<span class="icon is-small has-text-danger-dark"
-										><i class="fas fa-pause-circle" /></span
-									>
-									<span> En attente</span>
-								{:else if annonce.etat === 'V'}
-									<span class="icon is-small has-text-primary-dark"
-										><i class="fas fa-check-circle" /></span
-									>
-									<span> Validée</span>
-								{:else if annonce.etat === 'T'}
-									<span class="icon is-small"><i class="fas fa-times-circle" /></span>
-									<span> Vendus</span>
-								{:else if annonce.etat === 'R'}
-									<span class="icon is-small" style="color:#F98A0C"
-										><i class="fas fa-minus-circle" /></span
-									>
-									<span> Réservée</span>
-								{/if}
-							</div>
-						</footer>
-					  </div>
+						Etat actuel
+						<AnnonceState {annonce} homePage={false} />
+						<a
+							class="button is-primary is-rounded is-pulled-right"
+							id={annonce.id}
+							href={'/' + annonce.id}>Voir les détails</a
+						>
+					</div>
 					
 				</div>
-			</div>
+			{/each}
 		</div>
 	</div>
-{/each}
+</div>
 
 <style>
-	img {
-		border-radius: 8px;
-		max-width: 35%;
-		height: auto;
-		text-align: center;
-		display: block;
-		margin-left: 30%;
-		margin-right: auto;
+	span {
+		display: none;
+		font-weight: bold;
 	}
-	figure {
-		text-align: center;
+	a:hover + span {
+		display: block;
+	}
+	#currentState {
+		font-weight: bold;
 	}
 </style>
