@@ -9,7 +9,9 @@
 	export let homePage;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
+		if(USER){
 		admin = USER.administrateur;
+		}
 	});
 	function onChangeState(updatedAnnonce) {
 		if (updatedAnnonce) fetchUpdate(updatedAnnonce.target[0].value);
