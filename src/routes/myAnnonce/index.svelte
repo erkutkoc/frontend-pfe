@@ -4,7 +4,7 @@
 	import ErrorPage from '../../components/ErrorPage.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
-	import AnnonceServices from '../../services/AnnonceServices.js';
+	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
 	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
 	import {annonces, filteredAnnonces} from './../../utils/stores.js';
