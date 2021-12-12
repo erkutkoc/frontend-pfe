@@ -25,7 +25,6 @@
 			<a href={link} id="text">{linkValue}</a>
         </div>
 		{/if}
-
 	</div>
 </section>
 
