@@ -19,6 +19,7 @@
         "tailwind:build": "cross-env TAILWIND_MODE=build cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/tailwind-output.css"
     },
     "devDependencies": {
+        "@rollup/plugin-replace": "^3.0.0",
         "@sveltejs/adapter-node": "next",
         "@sveltejs/kit": "next",
         "@typescript-eslint/eslint-plugin": "^4.19.0",
@@ -26,6 +27,7 @@
         "autoprefixer": "^10.4.0",
         "concurrently": "^6.4.0",
         "cross-env": "^7.0.3",
+        "dotenv": "^10.0.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-svelte3": "^3.2.1",

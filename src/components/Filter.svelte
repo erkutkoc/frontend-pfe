@@ -1,16 +1,14 @@
 <script>
 	import annonceServices from '../services/annonceServices';
 	import AnnonceList from './AnnonceList.svelte';
-
+	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
-	let sort;
 	let categories = [];
-	let allAnnonces = [];
-	let annoncesFiltered = [];
 	let selectedCat = null;
 	let selectedCamp = null;
 	let selectedMin = -1;
 	let selectedMax = -1;
+	let sort = 'default';
 	let annoncesByCampus = [];
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
@@ -23,53 +21,90 @@
 		categories = res;
 		const resp = await annonceServices.findAllAnnonce();
 		//let filtered = resp;
-		//allAnnonces = filtered.filter(a => a.etat != 'A' && a.etat != 'E');
-		allAnnonces = resp;
-		annoncesFiltered = allAnnonces;
+		//allAnnonces = 
+		$annonces = resp.filter(a => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+		$filteredAnnonces = $annonces;
 	});
-
 
 	const fetchAnnoncesByCampus = async () => {
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
 		annoncesByCampus = resp;
-		annoncesFiltered = annoncesByCampus;
+		$filteredAnnonces = annoncesByCampus;
 	};
 
 	function handleChange(e) {
-		if(e.target.id == "min"){
+		$filteredAnnonces = $annonces;
+		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
-		if(e.target.id == "max"){
+		if (e.target.id == 'max') {
 			selectedMax = e.target.value;
 		}
-		//reset annoncesFiltered
-		annoncesFiltered = allAnnonces;
-		if(selectedCamp){
+		if (e.target.id == 'prixCroissant') {
+			sort = 'prixCroissant';
+			dropdown = !dropdown;
+		}
+		if (e.target.id == 'prixDecroissant') {
+			sort = 'prixDecroissant';
+			dropdown = !dropdown;
+		}
+		if (e.target.id == 'titreAZ') {
+			sort = 'titreAZ';
+			dropdown = !dropdown;
+		}
+		if (e.target.id == 'titreZA') {
+			sort = 'titreZA';
+			dropdown = !dropdown;
+		}
+
+
+		if (selectedCamp) {
 			fetchAnnoncesByCampus();
 		}
-		if(selectedCat){
-			let vals = annoncesFiltered.filter(a => a.categorie_id === selectedCat.id);
-			annoncesFiltered = vals;
+		if (selectedCat) {
+			  let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			  $filteredAnnonces = vals;
 		}
-		if(selectedMin != -1){
-			console.log('dansa le min')
-			console.log(selectedMin)
-			let vals = annoncesFiltered.filter(a => a.prix >= selectedMin);
-			annoncesFiltered = vals;
+		if (selectedMin != -1) {
+			let vals = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
+			$filteredAnnonces = vals;
 		}
-		if(selectedMax != -1){
-			console.log('dansa le mnax')
-			let vals = annoncesFiltered.filter(a => a.prix <= selectedMax);
-			annoncesFiltered = vals;
+		if (selectedMax != -1) {
+			let vals = $filteredAnnonces.filter((a) => a.prix <= selectedMax);
+			$filteredAnnonces = vals;
 		}
+		if (sort != 'default') {
+			if (sort == 'prixCroissant') {
+				$filteredAnnonces.sort(function (a, b) {
+					return a.prix - b.prix;
+				});
+			}
+			if (sort == 'prixDecroissant') {
+				$filteredAnnonces.sort(function (a, b) {
+					return b.prix - a.prix;
+				});
+			}
+			if (sort == 'titreAZ') {
+				$filteredAnnonces.sort(function (a, b) {
+					if (a.titre < b.titre) return -1;
+				});
+			}
+			if (sort == 'titreZA') {
+				$filteredAnnonces.sort(function (a, b) {
+					if (a.titre > b.titre) return -1;
+				});
+			}
+		}
+		console.log($filteredAnnonces)
 	}
 
 	function handleResetFilter() {
-		annoncesFiltered = allAnnonces;
+		$filteredAnnonces = $annonces;
 		selectedCat = null;
 		selectedCamp = null;
 		selectedMin = -1;
 		selectedMax = -1;
+		sort = 'default';
 	}
 
 	let dropdown = false;
@@ -99,29 +134,11 @@
 		</div>
 		<label class="label">Min</label>
 		<div class="control">
-			<input
-				id="min"
-				class="input"
-
-				on:input={handleChange}
-				type="number"
-				step="0.01"
-				min="0"
-				
-			/>
+			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
 		<label class="label">Max</label>
 		<div class="control">
-			<input
-				id="max"
-				class="input"
-
-				on:input={handleChange}
-				type="number"
-				step="0.01"
-				min="0"
-				
-			/>
+			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
 	</a>
 
@@ -143,55 +160,18 @@
 				</button>
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu" role="menu">
-				<div class="dropdown-content">
-					<a
-						href="#"
-						class="dropdown-item"
-						id="prixCroissant"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						Prix Croissant
-					</a>
-					<a
-						class="dropdown-item"
-						id="prixDecroissant"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						Prix Decroissant
-					</a>
+				<div class="dropdown-content" on:click={handleChange}>
+					<a href="#" class="dropdown-item" id="prixCroissant"> Prix Croissant </a>
+					<a class="dropdown-item" id="prixDecroissant"> Prix Decroissant </a>
 					<hr class="dropdown-divider" />
-					<a
-						href="#"
-						class="dropdown-item"
-						id="titreAZ"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						A -> Z
-					</a>
-					<a
-						href="#"
-						class="dropdown-item"
-						id="titreZA"
-						on:click={(e) => {
-							sort.setSort(e.id);
-						}}
-					>
-						Z -> A
-					</a>
+					<a href="#" class="dropdown-item" id="titreAZ"> A -> Z </a>
+					<a href="#" class="dropdown-item" id="titreZA"> Z -> A </a>
 				</div>
 			</div>
 		</div>
 	</div>
 </nav>
-<AnnonceList
-	data={annoncesFiltered}
-/>
+<AnnonceList data={$filteredAnnonces}/>
 
 <style>
 	.panel-block {
@@ -199,9 +179,5 @@
 		height: auto;
 		font-size: 14px;
 		font-weight: bolder;
-	}
-	#min {
-	}
-	#max {
 	}
 </style>

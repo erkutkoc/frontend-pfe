@@ -3,7 +3,6 @@ import axios from "axios";
 const baseUrl = "https://backend-staging-pfe.herokuapp.com";
 
 const findAllAnnonce = async () => {
-    console.log("dans le findAllAnnonce service");
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -23,7 +22,6 @@ const findAllByCampus = async (name) => {
     }
 }
 const findAllCategorie = async () => {
-    console.log("dans le findAllCategories service");
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
@@ -62,15 +60,27 @@ const getAllCampus = async () => {
 
         });
 }
-const updateAnnonce = async (data, token) => {
-    console.log(data)
-    return axios
-        .put(baseUrl + "/annonces", data, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        })
+const updateAnnonce = async (data, token, admin) => {
+    //console.log(data)
+    //console.log(token)
+    //console.log(admin)
+    if (admin) {
+        return axios
+            .put(baseUrl + "/annonces/admin", data, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+    } else {
+        return axios
+            .put(baseUrl + "/annonces", data, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+    }
 }
 const uploadAnnonce = async (data, token) => {
     console.log('in upload annonce')
