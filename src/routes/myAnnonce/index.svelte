@@ -116,14 +116,3 @@
 <ErrorPage message="Connectez vous pour accéder à vos annonces !" link="/login" linkValue="Se connecter"/>
 {/if}
 {/if}
-
-<style>
-	img {
-		border-radius: 8px;
-		max-width: 45%;
-		height: auto;
-	}
-	figure {
-		text-align: center;
-	}
-</style>
