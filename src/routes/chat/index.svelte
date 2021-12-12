@@ -5,10 +5,14 @@
 	let emailSearched = '';
 	let selectedDiscussion = null;
 
-	let discussions = [];
+	let discussions = [
+		{intender:"Xavier", lastMessage:"lmqjsdlfjqsmdlfjqsldj"}, 
+		{intender:"Linet", lastMessage:"qsdmfljqmsldjfmlqsjd"}
+	];
 	let filteredDiscussions = [];
 
 	let messages = [];
+	filteredDiscussions = discussions
 
 	//j'imagine qu'il faudra ajouter au moins une table en db dont on récupère les données ici
 	//on met un champ dernier message direct dans la conversation ?
@@ -16,15 +20,13 @@
 	//sert pour la recherche d'une discussion
 	function handleInput(e) {
 		emailSearched = e.target.value;
-        filteredDiscussions = discussions.filter((d) => d.email.startsWith(emailSearched));
+        filteredDiscussions = discussions.filter((d) => d.intender.toUpperCase().startsWith(emailSearched.toUpperCase()));
 	}
 
 	//probablement plus opti de charger les messages de la conv ici
 	//je sais pas si c'est mieux de les trier par date en back ou en front
 	const handleClickDiscussion = (discussion) => {
-		console.log('dans le click');
 		selectedDiscussion = discussion;
-		console.log(selectedDiscussion);
 	};
 
     //requête post
@@ -54,7 +56,7 @@
 			</div>
 			<div>
 				{#if selectedDiscussion == null}
-					<!--{#each filteredDiscussions as discussion}
+					{#each filteredDiscussions as discussion}
                         <div class="card">
                             <footer class="card-footer">
                                 
@@ -62,40 +64,16 @@
                                     class="card-footer-item column is-two-fifths"
                                     on:click={(e) => handleClickDiscussion({discussion})}
                                 >
-                                    <p>Nom</p>
+                                    <p>{discussion.intender}</p>
                                 </div>
 
                                 <div class="card-footer-item">
-                                    <p>Dernier message</p>
+                                    <p>{discussion.lastMessage}</p>
                                 </div>
                     
                             </footer>
                         </div>
-                    {/each}-->
-
-					<div class="card" on:click={(e) => handleClickDiscussion(1)}>
-						<footer class="card-footer">
-							<div class="card-footer-item column is-two-fifths">
-								<p>Xavier</p>
-							</div>
-
-							<div class="card-footer-item">
-								<p>Dernier message</p>
-							</div>
-						</footer>
-					</div>
-
-					<div class="card" on:click={(e) => handleClickDiscussion(2)}>
-						<footer class="card-footer">
-							<div class="card-footer-item column is-two-fifths">
-								<p>Linet</p>
-							</div>
-
-							<div class="card-footer-item">
-								<p>Dernier message</p>
-							</div>
-						</footer>
-					</div>
+                    {/each}
 				{:else}
 					<button
 						on:click={(e) => (selectedDiscussion = null)}
