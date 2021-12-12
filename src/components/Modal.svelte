@@ -7,6 +7,8 @@
 	let shown = false;
 	let USER;
 	let fetchAddDataContainer;
+	$: allCampus = [];
+	$ : console.log(allCampus)
 
 	export function showModal() {
 		shown = true;
@@ -20,6 +22,9 @@
 		const res = await AnnonceServices.findAllCategorie();
 		categories = res;
 		fetchAddDataContainer = new FormData();
+
+		const fetchAllCampus = await AnnonceServices.getAllCampus();
+		allCampus = fetchAllCampus.data;
 	});
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -45,11 +50,10 @@
 		fetchAddDataContainer.append('Categorie_id', selectedCat.id);
 
 		isLoading = true;
-		await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token)
-			.then((rep) => {
-				isLoading = false;
-				goto('/'+rep.data);
-			})
+		await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token).then((rep) => {
+			isLoading = false;
+			goto('/' + rep.data);
+		});
 	}
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
@@ -57,10 +61,10 @@
 	];
 	const handleMedia = async (e) => {
 		let files = e.target.files;
-		if(files.length >= 10 ){
+		if (files.length >= 10) {
 			alert(`La limite d'upload est de 10.`);
 			return;
-		} 
+		}
 		const formData = new FormData();
 
 		for (let index = 0; index < files.length; index++) {
@@ -89,13 +93,13 @@
 		<section class="modal-card-body">
 			<form on:submit|preventDefault={onSubmit} method="POST">
 				<div class="field">
-					<label class="label">Titre</label>
+					<p class="label">Titre</p>
 					<div class="control">
 						<input class="input" name="title" type="text" placeholder="Entrez un titre" required />
 					</div>
 				</div>
 				<div class="field">
-					<label class="label">Prix</label>
+					<p class="label">Prix</p>
 					<div class="control">
 						<input
 							class="input"
@@ -119,7 +123,7 @@
 						</select>
 					</div>
 				</div>
-				<label class="label">Catégorie </label>
+				<p class="label">Catégorie </p>
 				<div class="select">
 					<select name="categorie" bind:value={selectedCat} required>
 						{#each categories as categorie}
@@ -148,12 +152,28 @@
 				</div>
 
 				<div class="field">
-					<label class="label"> Description</label>
+					<p class="label"> Description</p>
 					<div class="control">
-						<textarea class="textarea" name="description" placeholder="Textarea" required />
+						<textarea
+							class="textarea"
+							name="description"
+							placeholder="Inserez une description..."
+							required
+						/>
 					</div>
 				</div>
 
+				<div class="field">
+					<p class="label"> Adresses</p>
+					{#each allCampus as campus}
+						<div class="control">
+							<label for="adresses">Campus {campus.ville}</label>
+							<input type="checkbox" value="{campus.id}" name="adresses"/> 
+							{(USER.adresse.ville == campus.ville) ? 'checked disabled' : '/>' } 
+							
+						</div>
+					{/each}
+				</div>
 				<div class="field is-grouped is-centered ">
 					<div
 						class="file is-normal is-boxed has-name is-success"
