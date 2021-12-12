@@ -77,6 +77,7 @@
 					value="T">Changer l'état en Vendu</button
 				>
 			</form>
+			
 		</div>
 	{/if}
 	{#if annonce.etat === 'R'}
@@ -89,6 +90,18 @@
 					id={annonce.id}
 					value="T">Changer l'état en Vendu</button
 				>
+			</form>
+		</div>
+		<div>
+			<form on:submit|preventDefault={onChangeState} method="POST">
+				<button
+					class="button has-text-weight-bold"
+					style="background:hsl(171, 100%, 29%); color:white"
+					type="submit"
+					id={annonce.id}
+					value="V"
+					>Annuler la réservation
+				</button>
 			</form>
 		</div>
 	{/if}

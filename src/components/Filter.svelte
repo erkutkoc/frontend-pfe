@@ -24,22 +24,17 @@
 		selectedCampus.setSelected(annoncesByCampus);
 	};
 
-	let loading = false;
 	function handleChangeCat() {
 		selectedCategorie.setSelected(selectedCat);
-		loading = true;
 	}
 	function handleChangeCamp() {
 		fetchAnnoncesByCampus();
-		loading = true;
 	}
 	function handleChangeMinPrice() {
 		selectedMinPrice.setSelected(selectedMin);
-		loading = true;
 	}
 	function handleChangeMaxPrice() {
 		selectedMaxPrice.setSelected(selectedMax);
-		loading = true;
 	}
 	function handleResetFilter() {
 		selectedCategorie.reset();
@@ -47,7 +42,6 @@
 		selectedMinPrice.reset();
 		selectedMaxPrice.reset();
 		sort.reset();
-		loading = false;
 	}
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
@@ -106,14 +100,11 @@
 				placeholder="Prix max"
 			/>
 		</div>
-		{#if loading}
-			<button class="button is-primary is-loading">Loading</button>
-		{/if}
 	</a>
 
 	<div class="panel-block">
 		<button class="button is-info is-fullwidth" on:click={handleResetFilter}> Reset </button>
-		<button class="button is-primary is-fullwidth" on:click={() => (loading = false)}>
+		<button class="button is-primary is-fullwidth">
 			Rechercher</button
 		>
 		<div class={dropdown ? 'dropdown is-right is-active' : 'dropdown is-right'}>

@@ -6,7 +6,7 @@
 	import Modal from '../../components/Modal.svelte';
 	import AnnonceServices from '../../services/annonceServices.js';
 	import { onMount } from 'svelte';
-	import AnnonceList from '../../components/AnnonceDisplay.svelte';
+	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
 
 	let USER;
 	onMount(async () => {
@@ -56,7 +56,7 @@
 					<li class={currentToogle === 'E' ? 'is-active' : ''}>
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a on:click={() => (currentToogle = 'E')}>
-							<span class="icon is-small has-text-danger-dark"
+							<span class="icon is-small" style="color : hsl(217, 71%, 53%)"
 								><i class="fas fa-pause-circle" /></span
 							>
 							<span>En attente</span>
@@ -103,12 +103,12 @@
 		</div>
 		<br />
 		{#if currentToogle === 'default'}
-			<AnnonceList {annoncesData} {showStateDropdown} />
+			<AnnonceDisplay {annoncesData} {showStateDropdown} />
 		{:else}
 			{#await handleFilter(currentToogle)}
 				<p>Chargement des annonces...</p>
 			{:then}
-				<AnnonceList annoncesData={filteredData} {showStateDropdown} />
+				<AnnonceDisplay annoncesData={filteredData} {showStateDropdown} />
 			{/await}
 		{/if}
 	</main>

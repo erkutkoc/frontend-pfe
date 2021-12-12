@@ -1,47 +1,45 @@
 <script>
-	import AnnonceState from "./AnnonceState.svelte";
-
+	import AnnonceState from './AnnonceState.svelte';
 
 	import { onMount } from 'svelte';
 	let admin;
 	onMount(async () => {
 		const USER = JSON.parse(localStorage.getItem('user'));
-		if(USER == null) return;
+		if (USER == null) return;
 		admin = USER.administrateur;
 	});
 	export let annoncesData;
 </script>
 
-{#each annoncesData as annonce  (annonce.id)}
+{#each annoncesData as annonce (annonce.id)}
 	<div class="container is-fluid">
 		<div class="columns  is-centered">
 			<div class="card column is-four-fifths">
 				<div class="card-image">
-					<AnnonceState annonce={annonce} {admin}></AnnonceState>
+					<AnnonceState {annonce} {admin} />
 					<figure>
 						<img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
 					</figure>
 				</div>
 				<div class="card-content">
 					<footer class="card-footer">
-					<div class="card-footer-item">
-						<p>{annonce.titre}</p>
-					</div>
-				</footer>
+						<div class="card-footer-item">
+							<p>{annonce.titre}</p>
+						</div>
+					</footer>
 					<div class="card">
 						<footer class="card-footer">
 							<div class="card-footer-item">
-					
-						{#if annonce.prix != null}
-							<p>{annonce.prix} €</p>
-						{:else}
-							<p>Objet à donner / Objet donner</p>
-						{/if}
+								{#if annonce.prix != null}
+									<p>{annonce.prix} €</p>
+								{:else}
+									<p>Objet à donner / Objet donner</p>
+								{/if}
 							</div>
-							
+
 							<div class="card-footer-item">
 								{#if annonce.etat === 'E'}
-									<span class="icon is-small has-text-danger-dark"
+									<span class="icon is-small" style="color:hsl(217, 71%, 53%)"
 										><i class="fas fa-pause-circle" /></span
 									>
 									<span> En attente</span>
@@ -58,11 +56,15 @@
 										><i class="fas fa-minus-circle" /></span
 									>
 									<span> Réservée</span>
+								{:else if annonce.etat === 'A'}
+									<span class="icon is-small has-text-danger-dark"
+										><i class="fas fa-times-circle" /></span
+									>
+									<span> Supprimer</span>
 								{/if}
 							</div>
 						</footer>
-					  </div>
-					
+					</div>
 				</div>
 			</div>
 		</div>
