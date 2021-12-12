@@ -16,7 +16,7 @@
 					style="font-family: 'Brush Script MT', cursive;"
 					class="is-size-1 has-text-weight-bold has-text-link "
 				>
-					Market
+					Market Vinci
 				</p>
 			</a>
 		</div>
