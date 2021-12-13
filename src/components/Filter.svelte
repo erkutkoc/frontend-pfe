@@ -20,8 +20,6 @@
 		const res = await annonceServices.findAllCategorie();
 		categories = res;
 		const resp = await annonceServices.findAllAnnonce();
-		//let filtered = resp;
-		//allAnnonces = 
 		$annonces = resp.filter(a => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
 		$filteredAnnonces = $annonces;
 	});
@@ -34,6 +32,7 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
+	
 		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
@@ -95,7 +94,6 @@
 				});
 			}
 		}
-		console.log($filteredAnnonces)
 	}
 
 	function handleResetFilter() {
@@ -115,7 +113,7 @@
 		<label class="label">Catégorie </label>
 		<div class="select">
 			<select bind:value={selectedCat} on:input={handleChange}>
-				{#each categories as categorie}
+				{#each categories as categorie }
 					<option value={categorie}>
 						{categorie.nom}
 					</option>
@@ -171,7 +169,7 @@
 		</div>
 	</div>
 </nav>
-<AnnonceList data={$filteredAnnonces}/>
+<AnnonceList annonces={$filteredAnnonces}/>
 
 <style>
 	.panel-block {
