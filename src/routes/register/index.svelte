@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import Navbar from '../../components/Navbar.svelte';
 	import UserServices from '../../services/userServices.js';
 	import AnnonceServices from '../../services/annonceServices.js';
 	import { goto } from '$app/navigation';
@@ -44,6 +45,7 @@
 </script>
 
 <main>
+	<Navbar />
 	{#if !USER}
 		<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 			<div class="max-w-md w-full space-y-8">

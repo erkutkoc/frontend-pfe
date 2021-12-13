@@ -1,9 +1,7 @@
 <script>
+	import Navbar from '../../components/Navbar.svelte';
 	import AdminAnnonceManagement from '../../components/AdminAnnonceManagement.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import 'bulma/css/bulma.css';
-
-	import '../../styles/tailwind-output.css';
 	import UsersManagement from '../../components/AdminUsersManagement.svelte';
 	let currentToogle = 'default';
 	function setToogle(value) {
@@ -12,6 +10,7 @@
 
 </script>
 
+<Navbar />
 <div id="app">
 	<section class="main-content columns is-fullheight">
 		<aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">

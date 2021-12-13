@@ -1,4 +1,6 @@
 <script>
+	import Navbar from '../../components/Navbar.svelte';
+
 	let emailSearched = '';
 	let selectedDiscussion = null;
 
@@ -29,6 +31,7 @@
 </script>
 
 <main>
+	<Navbar />
 	<div class="min-h-full flex items-center justify-center py-12 px-15 sm:px-6 lg:px-8">
 		<div class="max-w-4xl w-full space-y-8">
 			<div>

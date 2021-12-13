@@ -4,7 +4,8 @@
 	import { goto } from '$app/navigation';
 	import storage from '../../utils/storage';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-
+	import Navbar from '../../components/Navbar.svelte'
+	
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
@@ -32,6 +33,7 @@
 	};
 </script>
 
+<Navbar/>
 {#if !USER}
 	<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">

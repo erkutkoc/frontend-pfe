@@ -9,6 +9,7 @@
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
+	import Navbar from '../components/Navbar.svelte';
 	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/splide-core.min.css'; // other colors for splider
@@ -47,14 +48,14 @@
 		vendeur = fetchVendeur.data;
 	});
 </script>
-
+<Navbar/>
 {#if currentUser}
 	{#if !annonce || !annonceCategorie || !vendeur}
 		<div id="loader">
 			<Shadow size="100" color="#2c9b89" unit="px" duration="1s" />
 		</div>
 	{:else}
-		<div class="bg-white">
+		<div >
 			<div
 				class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2"
 			>

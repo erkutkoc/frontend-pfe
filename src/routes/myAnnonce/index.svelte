@@ -1,6 +1,6 @@
 <script>
+	import Navbar from '../../components/Navbar.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
 	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
@@ -34,6 +34,7 @@
 	}
 </script>
 
+<Navbar />
 {#if USER != null}
 	<Modal bind:this={modal} />
 	<main>
