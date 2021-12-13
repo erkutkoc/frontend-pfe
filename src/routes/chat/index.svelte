@@ -1,6 +1,21 @@
 <script>
 	import Navbar from '../../components/Navbar.svelte';
 	import '../../styles/tailwind-output.css';
+	import {onMount} from 'svelte';
+	import Pusher from 'pusher-js';
+
+	onMount(() => {
+        Pusher.logToConsole = true;
+        const pusher = new Pusher('93dc2573318267ee5994', {
+            cluster: 'eu'
+        });
+        
+		const channel = pusher.subscribe('chat');
+        channel.bind('message', data => {
+            messages = [...messages, data];
+        });
+    })
+
 
 	let emailSearched = '';
 	let selectedDiscussion = null;
@@ -32,6 +47,19 @@
     //requête post
     const handleSubmit = (discussion) => {
 		console.log('dans le submit');
+
+		/*
+		await fetch('http://localhost:8000/api/messages', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                username,
+                message
+            })
+        });
+        message = '';
+		*/
+
 	};
 
 </script>
@@ -43,37 +71,42 @@
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Discussions:</h2>
 			</div>
-			<div class="rounded-md shadow-sm -space-y-px">
-				<div class="max-w-sm">
-					<label for="email-address" class="sr-only">Email address</label>
-					<input
-						name="email"
-						on:input={handleInput}
-						placeholder="Rechercher un email"
-						class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-					/>
-				</div>
-			</div>
 			<div>
 				{#if selectedDiscussion == null}
-					{#each filteredDiscussions as discussion}
-                        <div class="card">
-                            <footer class="card-footer">
-                                
-                                <div 
-                                    class="card-footer-item column is-two-fifths"
-                                    on:click={(e) => handleClickDiscussion({discussion})}
-                                >
-                                    <p>{discussion.intender}</p>
-                                </div>
+					<div class="rounded-md shadow-sm -space-y-px">
+						<div class="max-w-sm">
+							<label for="email-address" class="sr-only">Email address</label>
+							<input
+								name="email"
+								on:input={handleInput}
+								placeholder="Rechercher un email"
+								class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+							/>
+						</div>
+					</div>
+					{#if filteredDiscussions.length == 0}
+						<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
 
-                                <div class="card-footer-item">
-                                    <p>{discussion.lastMessage}</p>
-                                </div>
-                    
-                            </footer>
-                        </div>
-                    {/each}
+					{:else}
+						{#each filteredDiscussions as discussion}
+						<div class="card">
+							<footer class="card-footer">
+								
+								<div 
+									class="card-footer-item column is-two-fifths pointer cursor-pointer"
+									on:click={(e) => handleClickDiscussion({discussion})}
+								>
+									<p>{discussion.intender}</p>
+								</div>
+
+								<div class="card-footer-item">
+									<p>{discussion.lastMessage}</p>
+								</div>
+					
+							</footer>
+						</div>
+					{/each}
+					{/if}
 				{:else}
 					<button
 						on:click={(e) => (selectedDiscussion = null)}
