@@ -1,8 +1,6 @@
 import axios from "axios";
-import "dotenv";
-
-// const baseUrl = "https://backend-staging-pfe.herokuapp.com"
-const baseUrl = process.env['VITE_BASE_URL']
+const baseUrl =
+    import.meta.env.VITE_BASE_URL
 
 const findAllAnnonce = async() => {
     try {

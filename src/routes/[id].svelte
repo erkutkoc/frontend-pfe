@@ -11,12 +11,10 @@
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
-	import "dotenv";
 	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/splide-core.min.css'; // other colors for splider
-	
-	const baseUrl = process.env['VITE_BASE_URL'];
+	const baseUrl = import.meta.env.VITE_BASE_URL
 
 	const idAnnonce = $page.params.id;
 	let annonce;
