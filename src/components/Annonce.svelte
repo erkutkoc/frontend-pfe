@@ -39,7 +39,6 @@
 	function onChangeState(updatedAnnonce) {
 		if (updatedAnnonce) fetchUpdate(updatedAnnonce.target[0].value);
 	}
-	$ : console.log(homePage)
 </script>
 <!-- Home screen -->
 <div class="column card is-one-third">

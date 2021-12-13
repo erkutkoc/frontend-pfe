@@ -10,7 +10,7 @@
 	let particlesConfig = {
 		background: {
 			color: {
-				value: '#c3cedf'
+				value: '#a6b8ddeb'
 			},
 			position: '50% 50%',
 			repeat: 'no-repeat',
@@ -42,7 +42,7 @@
 				},
 				distance: 500,
 				opacity: 0.4,
-				width: 2
+				width: 1
 			},
 			move: {
 				attract: {
@@ -66,7 +66,7 @@
 				density: {
 					enable: true
 				},
-				value: 400
+				value: 60
 			},
 			opacity: {
 				random: {
