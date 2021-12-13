@@ -39,6 +39,7 @@
 	function onChangeState(updatedAnnonce) {
 		if (updatedAnnonce) fetchUpdate(updatedAnnonce.target[0].value);
 	}
+	$ : console.log(homePage)
 </script>
 <!-- Home screen -->
 <div class="column card is-one-third">
@@ -56,33 +57,22 @@
 	</div>
 	<div class="card-content">
 		<h4 class="title is-4">{annonce.titre}</h4>
-		{#if annonce.prix != null}
+		{#if annonce.prix}
 			<h5 class="title is-5">{annonce.prix}</h5>
 		{:else}
 			<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 		{/if}
 		<!--Annonce State-->
-
 		{#if annonce.etat === 'E'}
-			<a> <i class="icon is-small fas fa-pause-circle" style="color:hsl(217, 71%, 53%)" /></a>
-			<span style="color:hsl(217, 71%, 53%)"> En attente</span>
-		{/if}
-		{#if annonce.etat === 'V'}
-			<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
-			<span class=" has-text-primary-dark"> Validée</span>
-		{/if}
-		{#if annonce.etat === 'T'}
-			<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
-			<span class="" style="hsl(0, 0%, 29%)"> Vendus</span>
-		{/if}
-		{#if annonce.etat === 'R'}
-			<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
-
-			<span style="color:#F98A0C"> Réservée</span>
-		{/if}
-		{#if annonce.etat === 'A'}
-			<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
-			<span class="has-text-danger-dark"> Supprimer</span>
+			<span style="color:hsl(217, 71%, 53%)"> <b>En attente</b></span>
+		{:else if annonce.etat === 'V'}
+			<span class=" has-text-primary-dark"><b>Validée</b></span>
+		{:else if annonce.etat === 'T'}
+			<span class="" style="hsl(0, 0%, 29%)"> <b>Vendus</b></span>
+		{:else if annonce.etat === 'R'}
+			<span style="color:#F98A0C"> <b>Réservée</b></span>
+		{:else if annonce.etat === 'A'}
+			<span class="has-text-danger-dark"> <b>Supprimer</b></span>
 		{/if}
 
 		{#if admin && homePage}
@@ -107,8 +97,8 @@
 				<div id="icon">
 					<form on:submit|preventDefault={onChangeState} method="POST">
 						<button type="submit" id={annonce.id} value="V">
-							<a style="color:hsl(171, 100%, 29%)" type="submit" id={annonce.id} value="V"
-								><i class="fas fa-check-circle" />
+							<a style="color:hsl(171, 100%, 29%)" type="submit" id={annonce.id} value="V">
+								<i class="fas fa-check-circle" />
 							</a>
 						</button>
 						<!-- <span>Annuler la réservation</span> -->
@@ -119,8 +109,8 @@
 				<div id="icon">
 					<form on:submit|preventDefault={onChangeState} method="POST">
 						<button type="submit" id={annonce.id} value="R">
-							<a style="color:#F98A0C" type="submit" id={annonce.id} value="R"
-								><i class="fas fa-minus-circle" /></a
+							<a style="color:#F98A0C" type="submit" id={annonce.id} value="R">
+								<i class="fas fa-minus-circle" /></a
 							>
 						</button>
 						<!-- <span style="color:#F98A0C">En résérvé</span> -->
@@ -129,7 +119,7 @@
 				<div id="icon">
 					<form on:submit|preventDefault={onChangeState} method="POST">
 						<button type="submit" id={annonce.id} value="T">
-							<a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
+							<a type="submit" id={annonce.id} value="T"> <i class="fas fa-times-circle" /></a>
 						</button>
 						<!-- <span style="hsl(0, 0%, 29%)">En vendu</span> -->
 					</form>
@@ -175,4 +165,3 @@
 		>
 	</div>
 </div>
-

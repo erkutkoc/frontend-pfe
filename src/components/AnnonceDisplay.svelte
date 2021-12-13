@@ -69,13 +69,11 @@
 
 						{#if annonce.etat === 'E'}
 							<span style="color:hsl(217, 71%, 53%)">Annonce en attente </span><a>
-								<i class="icon is-small fas fa-pause-circle" style="color:hsl(217, 71%, 53%)" /></a
-							>
+								<i class="icon is-small fas fa-pause-circle" style="color:hsl(217, 71%, 53%)" /></a>
 						{/if}
 						{#if annonce.etat === 'V'}
-							<span class=" has-text-primary-dark"> Annonce validée </span><a
-								><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a
-							>
+							<span class=" has-text-primary-dark"> Annonce validée </span>
+							<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
 						{/if}
 						{#if annonce.etat === 'T'}
 							<span class="" style="hsl(0, 0%, 29%)"> Annonce vendu</span>
@@ -99,7 +97,8 @@
 											type="submit"
 											id={annonce.id}
 											value="V"
-											><i class="fas fa-check-circle" />
+											>
+											<i class="fas fa-check-circle" />
 										</a>
 									</button>
 									<!-- <span>Annuler la réservation</span> -->
@@ -110,19 +109,22 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="R">
-										<span style="color:#F98A0C">Changer l'état en réservée </span><a style="color:#F98A0C" type="submit" id={annonce.id} value="R"
-											><i class="fas fa-minus-circle" /></a
+										<span style="color:#F98A0C">Changer l'état en réservée </span><a
+											style="color:#F98A0C"
+											type="submit"
+											id={annonce.id}
+											value="R">
+											<i class="fas fa-minus-circle" /></a
 										>
 									</button>
-									
 								</form>
 							</div>
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="T">
-										<span style="hsl(0, 0%, 29%)">Changer l'état en vendu</span> <a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
+										<span style="hsl(0, 0%, 29%)">Changer l'état en vendu</span>
+										<a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
 									</button>
-								
 								</form>
 							</div>
 						{/if}
@@ -130,14 +132,22 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="T">
-										<span class="" style="hsl(0, 0%, 29%)"> Changer l'état en vendu</span><a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
+										<span class="" style="hsl(0, 0%, 29%)"> Changer l'état en vendu</span><a
+											type="submit"
+											id={annonce.id}
+											value="T"><i class="fas fa-times-circle" /></a
+										>
 									</button>
 								</form>
 							</div>
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="V">
-										<span class=" has-text-primary-dark">Annuler la réservation</span><a style="color:hsl(171, 100%, 29%)" type="submit" id={annonce.id} value="V"
+										<span class=" has-text-primary-dark">Annuler la réservation</span><a
+											style="color:hsl(171, 100%, 29%)"
+											type="submit"
+											id={annonce.id}
+											value="V"
 											><i class="fas fa-check-circle" />
 										</a>
 									</button>
@@ -150,7 +160,11 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="A">
-										<span class="has-text-danger-dark"> Supprimer l'annonce</span><a class="has-text-danger-dark" type="submit" id={annonce.id} value="A"
+										<span class="has-text-danger-dark"> Supprimer l'annonce</span><a
+											class="has-text-danger-dark"
+											type="submit"
+											id={annonce.id}
+											value="A"
 											><i class="fas fa-times-circle" />
 										</a>
 									</button>
