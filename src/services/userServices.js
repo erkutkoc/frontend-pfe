@@ -1,7 +1,7 @@
 import axios from "axios";
+import "dotenv";
 
-const baseUrl = "https://backend-staging-pfe.herokuapp.com";
-
+const baseUrl = process.env['VITE_BASE_URL'];
 
 const login = async(payload) => {
     return axios
@@ -20,7 +20,7 @@ const getUserById = async(id, token) => {
             }
         })
 }
-const getAllUsers = async (token) => {
+const getAllUsers = async(token) => {
     return axios
         .get(baseUrl + "/Members", {
             headers: {
@@ -31,17 +31,17 @@ const getAllUsers = async (token) => {
 };
 const updateProfile = async(token, payload) => {
     return axios
-        .put(baseUrl + "/Members/UpdateMembre"),{
+        .put(baseUrl + "/Members/UpdateMembre"), {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             },
-            body : payload
+            body: payload
         }
 }
 const banUser = async(token, idMember, duree) => {
     return axios
-        .put(baseUrl + `Members/Ban/${idMember}/${duree}`),{
+        .put(baseUrl + `Members/Ban/${idMember}/${duree}`), {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'

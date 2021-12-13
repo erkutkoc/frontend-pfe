@@ -4,18 +4,19 @@
 	import UserServices from '../services/userServices';
 	import Navbar from '../components/Navbar.svelte';
 	import { onMount } from 'svelte';
-	import { each, is_empty } from 'svelte/internal';
+	import { is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
 	import ErrorPage from '../components/ErrorPage.svelte';
 	import { Shadow } from 'svelte-loading-spinners';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
+	import "dotenv";
 	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/splide-core.min.css'; // other colors for splider
-
-	const baseUrl = 'https://backend-staging-pfe.herokuapp.com';
+	
+	const baseUrl = process.env['VITE_BASE_URL'];
 
 	const idAnnonce = $page.params.id;
 	let annonce;
@@ -114,7 +115,7 @@
 							<p class="font-medium text-gray-900" id="labelCarte">Adresse(s) de retrait :</p>
 							<TabList>
 								{#each annonce.adresses as adresse}
-									<Tab>Adresse {adresse.id}</Tab>
+									<Tab>{adresse.ville}</Tab>
 								{/each}
 							</TabList>
 							{#each annonce.adresses as adresse}
@@ -166,7 +167,7 @@
 						{/each}
 					</Splide>
 				{:else}<img
-						src="../../static/noimage.png"
+						src="/noimage.png"
 						alt="imgs de l'annonce"
 						class="bg-gray-100 rounded-lg"
 					/>

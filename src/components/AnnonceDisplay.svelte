@@ -18,7 +18,7 @@
 				<div class="card column is-one-third">
 					<div class="card-image">
 						<figure class="image is-5by3">
-							<img src="https://bulma.io/images/placeholders/128x128.png" alt="annonce image" />
+							<img src="https://backend-staging-pfe.herokuapp.com/medias/photoUrl[0]" alt="annonce image" />
 						</figure>
 					</div>
 					<div class="card-content">

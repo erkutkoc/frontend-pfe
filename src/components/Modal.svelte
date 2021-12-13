@@ -8,7 +8,6 @@
 	let USER;
 	let fetchAddDataContainer;
 	$: allCampus = [];
-	$ : console.log(allCampus)
 
 	export function showModal() {
 		shown = true;
@@ -16,6 +15,8 @@
 	export function hideModal() {
 		shown = false;
 	}
+	let selectedCampus = [];
+
 	let categories = [];
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
@@ -25,6 +26,7 @@
 
 		const fetchAllCampus = await AnnonceServices.getAllCampus();
 		allCampus = fetchAllCampus.data;
+		selectedCampus.push( Number.parseInt(USER.adresse.id) );
 	});
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -36,6 +38,15 @@
 		}
 		fetchAddAnnonce(data);
 	}
+	const onCheckCampus = (event) => {
+		let idCampusSelected = event.target.value;
+		if (event.target.checked) {
+			if (!selectedCampus.includes(idCampusSelected))
+				selectedCampus.push(Number.parseInt(idCampusSelected));
+		} else {
+			selectedCampus = selectedCampus.filter((campusId) => campusId != idCampusSelected);
+		}
+	};
 	let selectedCat;
 	let selected;
 	let isLoading = false;
@@ -48,7 +59,7 @@
 		fetchAddDataContainer.append('Genre', selected.value);
 		fetchAddDataContainer.append('Vendeur_id', USER.id);
 		fetchAddDataContainer.append('Categorie_id', selectedCat.id);
-
+		fetchAddDataContainer.append('adressesToAdd', selectedCampus)
 		isLoading = true;
 		await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token).then((rep) => {
 			isLoading = false;
@@ -113,7 +124,7 @@
 					</div>
 				</div>
 				<div class="field">
-					<label class="label">Genre</label>
+					<p class="label">Genre</p>
 					<div class="select">
 						<select name="genre" bind:value={selected} required>
 							{#each genres as element}
@@ -124,9 +135,10 @@
 						</select>
 					</div>
 				</div>
-				<p class="label">Catégorie </p>
+				<p class="label">Catégorie</p>
 				<div class="select">
 					<select name="categorie" bind:value={selectedCat} required>
+						<option value="">Veuillez choisir la categorie</option>
 						{#each categories as categorie}
 							<option value={categorie}>
 								{categorie.nom}
@@ -136,7 +148,7 @@
 				</div>
 
 				<div class="field">
-					<label class="label">Etat</label>
+					<p class="label">Etat</p>
 					<div class="control">
 						<input
 							class="input"
@@ -153,7 +165,7 @@
 				</div>
 
 				<div class="field">
-					<p class="label"> Description</p>
+					<p class="label">Description</p>
 					<div class="control">
 						<textarea
 							class="textarea"
@@ -165,13 +177,27 @@
 				</div>
 
 				<div class="field">
-					<p class="label"> Adresses</p>
+					<p class="label">Adresses</p>
 					{#each allCampus as campus}
 						<div class="control">
 							<label for="adresses">Campus {campus.ville}</label>
-							<input type="checkbox" value="{campus.id}" name="adresses"/> 
-							{(USER.adresse.ville == campus.ville) ? 'checked disabled' : '/>' } 
-							
+							{#if USER.adresse.ville == campus.ville}
+								<input
+									type="checkbox"
+									value={campus.id}
+									on:change={onCheckCampus}
+									name="adresses"
+									disabled
+									checked
+								/>
+							{:else}
+								<input
+									type="checkbox"
+									value={campus.id}
+									on:change={onCheckCampus}
+									name="adresses"
+								/>
+							{/if}
 						</div>
 					{/each}
 				</div>

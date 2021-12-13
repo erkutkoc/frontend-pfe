@@ -39,7 +39,7 @@
     <div class="card">
         <footer class="card-footer">
             
-            <div class="card-footer-item column is-three-fifths">
+            <div class="card-footer-item column  is-three-fifths">
                 <p>{email}</p>
             </div>
 
@@ -59,7 +59,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,1)} 
-                            class="has-background-danger-dark relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="button is-danger relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >Bannir 1 jour
                         </button>
                     </div>
@@ -67,7 +67,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,30)} 
-                            class="has-background-grey-darker relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="button is-dark relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >Bannir 1 mois 
                         </button>
                     </div>
@@ -75,7 +75,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,-1)} 
-                            class="has-background-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="button is-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >Bannir définitivement
                         </button>
                     </div>

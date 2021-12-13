@@ -20,15 +20,6 @@
 	onMount(() => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
-		/*let data = await UserServices.getAllUsers(USER.token).data
-		baseMembers = membersArray = data
-			.filter((m) => new Date(m.banni).valueOf() < Date.now())
-			.filter((m) => m.id != USER.id)
-			.sort((a, b) => a.email.localeCompare(b.email));
-		bannedMembers = result
-			.filter((m) => new Date(m.banni).valueOf() > Date.now())
-			.sort((a, b) => a.email.localeCompare(b.email));
-		console.log(baseMembers)*/
 	});
 
 	$: {

@@ -1,8 +1,10 @@
 import axios from "axios";
+import "dotenv";
 
-const baseUrl = "https://backend-staging-pfe.herokuapp.com";
+// const baseUrl = "https://backend-staging-pfe.herokuapp.com"
+const baseUrl = process.env['VITE_BASE_URL']
 
-const findAllAnnonce = async () => {
+const findAllAnnonce = async() => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -10,18 +12,17 @@ const findAllAnnonce = async () => {
         console.error('Error fetching data');
     }
 }
-const findAllByCampus = async (name) => {
-    if (name != null) {
+const findAllByCampus = async(name) => {
+    if (name) {
         try {
             const response = await axios.get(baseUrl + '/annonces/campus/' + name);
-            console.log(response.data)
             return response.data;
         } catch (e) {
             console.error('Error fetching data');
         }
     }
 }
-const findAllCategorie = async () => {
+const findAllCategorie = async() => {
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
@@ -29,7 +30,7 @@ const findAllCategorie = async () => {
         console.error('Error fetching data');
     }
 }
-const findAllAnnonceByEmail = async (user) => {
+const findAllAnnonceByEmail = async(user) => {
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
@@ -42,7 +43,8 @@ const findAllAnnonceByEmail = async (user) => {
         console.error('Error fetching data');
     }
 }
-const findAnnonceById = async (id, token) => {
+const findAnnonceById = async(id, token) => {
+    console.log(baseUrl)
     return axios
         .get(baseUrl + "/annonces/" + id, {
             headers: {
@@ -51,7 +53,7 @@ const findAnnonceById = async (id, token) => {
             }
         });
 }
-const getAllCampus = async () => {
+const getAllCampus = async() => {
     return axios
         .get(baseUrl + "/adresses/", {
             headers: {
@@ -60,10 +62,7 @@ const getAllCampus = async () => {
 
         });
 }
-const updateAnnonce = async (data, token, admin) => {
-    //console.log(data)
-    //console.log(token)
-    //console.log(admin)
+const updateAnnonce = async(data, token, admin) => {
     if (admin) {
         return axios
             .put(baseUrl + "/annonces/admin", data, {
@@ -82,8 +81,7 @@ const updateAnnonce = async (data, token, admin) => {
             })
     }
 }
-const uploadAnnonce = async (data, token) => {
-    console.log('in upload annonce')
+const uploadAnnonce = async(data, token) => {
     return axios
         .post(baseUrl + "/annonces", data, {
             headers: {
