@@ -1,14 +1,44 @@
 <script>
-	import AnnonceState from './AnnonceState.svelte';
 	import { onMount } from 'svelte';
+	import AnnonceServices from '../services/annonceServices.js';
+	import { usersAnnonces, usersFilteredAnnonces } from '../utils/stores.js';
+
+	export let annonces;
 
 	let admin = false;
+	let USER;
+	// fetch user token high level on mount
 	onMount(async () => {
-		const USER = JSON.parse(sessionStorage.getItem('user'));
-		if (USER == null) return;
-		admin = USER.administrateur;
+		USER = JSON.parse(sessionStorage.getItem('user'));
+		if (USER) {
+			admin = USER.administrateur;
+		}
 	});
-	export let annonces;
+	//update state by annonce
+	const fetchUpdate = async (state, annonce) => {
+		let toSend = {
+			Id: annonce.id,
+			Titre: annonce.titre,
+			Description: annonce.description,
+			Prix: annonce.prix,
+			Etat: state
+		};
+		if (admin) {
+			AnnonceServices.updateAnnonce(toSend, USER.token, admin);
+			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
+			$usersAnnonces[index].etat = state;
+			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+		} else {
+			AnnonceServices.updateAnnonce(toSend, USER.token);
+			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
+			$usersAnnonces[index].etat = state;
+			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+		}
+	};
+	//click event to change state
+	function onChangeState(event, annonce) {
+		if (annonce) fetchUpdate(event.target[0].value, annonce);
+	}
 </script>
 
 <div class="container column is-fullhd">
@@ -35,8 +65,100 @@
 						{:else}
 							<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 						{/if}
-						Etat actuel :
-						<AnnonceState {annonce} homePage={false} />
+						<!--AnnonceState début-->
+
+						{#if annonce.etat === 'E'}
+							<span style="color:hsl(217, 71%, 53%)">Annonce en attente </span><a>
+								<i class="icon is-small fas fa-pause-circle" style="color:hsl(217, 71%, 53%)" /></a
+							>
+						{/if}
+						{#if annonce.etat === 'V'}
+							<span class=" has-text-primary-dark"> Annonce validée </span><a
+								><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a
+							>
+						{/if}
+						{#if annonce.etat === 'T'}
+							<span class="" style="hsl(0, 0%, 29%)"> Annonce vendu</span>
+							<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
+						{/if}
+						{#if annonce.etat === 'R'}
+							<span style="color:#F98A0C">Annonce réservée</span>
+							<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
+						{/if}
+						{#if annonce.etat === 'A'}
+							<span class="has-text-danger-dark">Annonce supprimée </span>
+							<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
+						{/if}
+
+						{#if annonce.etat === 'E' && admin}
+							<div id="icon">
+								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
+									<button type="submit" id={annonce.id} value="V">
+										En validée <a
+											style="color:hsl(171, 100%, 29%)"
+											type="submit"
+											id={annonce.id}
+											value="V"
+											><i class="fas fa-check-circle" />
+										</a>
+									</button>
+									<!-- <span>Annuler la réservation</span> -->
+								</form>
+							</div>
+						{/if}
+						{#if annonce.etat === 'V'}
+							<div id="icon">
+								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
+									<button type="submit" id={annonce.id} value="R">
+										<span style="color:#F98A0C">Changer l'état en réservée </span><a style="color:#F98A0C" type="submit" id={annonce.id} value="R"
+											><i class="fas fa-minus-circle" /></a
+										>
+									</button>
+									
+								</form>
+							</div>
+							<div id="icon">
+								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
+									<button type="submit" id={annonce.id} value="T">
+										<span style="hsl(0, 0%, 29%)">Changer l'état en vendu</span> <a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
+									</button>
+								
+								</form>
+							</div>
+						{/if}
+						{#if annonce.etat === 'R'}
+							<div id="icon">
+								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
+									<button type="submit" id={annonce.id} value="T">
+										<span class="" style="hsl(0, 0%, 29%)"> Changer l'état en vendu</span><a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
+									</button>
+								</form>
+							</div>
+							<div id="icon">
+								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
+									<button type="submit" id={annonce.id} value="V">
+										<span class=" has-text-primary-dark">Annuler la réservation</span><a style="color:hsl(171, 100%, 29%)" type="submit" id={annonce.id} value="V"
+											><i class="fas fa-check-circle" />
+										</a>
+									</button>
+									<!--  -->
+								</form>
+							</div>
+						{/if}
+
+						{#if annonce.etat !== 'T' && annonce.etat !== 'A'}
+							<div id="icon">
+								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
+									<button type="submit" id={annonce.id} value="A">
+										<span class="has-text-danger-dark"> Supprimer l'annonce</span><a class="has-text-danger-dark" type="submit" id={annonce.id} value="A"
+											><i class="fas fa-times-circle" />
+										</a>
+									</button>
+								</form>
+							</div>
+						{/if}
+
+						<!--AnnonceState fin-->
 						<a
 							class="button is-primary is-rounded is-pulled-right"
 							id={annonce.id}
@@ -48,16 +170,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	span {
-		display: none;
-		font-weight: bold;
-	}
-	a:hover + span {
-		display: block;
-	}
-	#currentState {
-		font-weight: bold;
-	}
-</style>

@@ -7,14 +7,14 @@
 	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
 	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
-	import { annonces, filteredAnnonces } from './../../utils/stores.js';
+	import { usersAnnonces, usersFilteredAnnonces } from './../../utils/stores.js';
 	let loaded = false;
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
 		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
-		$annonces = res;
+		$usersAnnonces = res;
 		loaded = true;
 	});
 
@@ -23,15 +23,15 @@
 
 	function handleFilter(filter) {
 		if (currentToogle === 'E') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'V') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'T') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'R') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'A') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		}
 	}
 </script>
@@ -102,12 +102,12 @@
 		</div>
 		<br />
 		{#if currentToogle === 'default'}
-			<AnnonceDisplay annonces={$annonces} />
+			<AnnonceDisplay annonces={$usersAnnonces} />
 		{:else}
 			{#await handleFilter(currentToogle)}
-				<p>Chargement des $annonces...</p>
+				<p>Chargement des $usersAnnonces...</p>
 			{:then}
-				<AnnonceDisplay annonces={$filteredAnnonces} />
+				<AnnonceDisplay annonces={$usersFilteredAnnonces} />
 			{/await}
 		{/if}
 	</main>

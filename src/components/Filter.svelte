@@ -20,9 +20,7 @@
 		const res = await annonceServices.findAllCategorie();
 		categories = res;
 		const resp = await annonceServices.findAllAnnonce();
-		//let filtered = resp;
-		//allAnnonces =
-		$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+		$annonces = resp.filter(a => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
 		$filteredAnnonces = $annonces;
 	});
 
@@ -34,6 +32,7 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
+	
 		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
@@ -57,12 +56,13 @@
 			dropdown = !dropdown;
 		}
 
+
 		if (selectedCamp) {
 			fetchAnnoncesByCampus();
 		}
 		if (selectedCat) {
-			let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
-			$filteredAnnonces = vals;
+			  let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			  $filteredAnnonces = vals;
 		}
 		if (selectedMin != -1) {
 			let vals = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
@@ -94,7 +94,6 @@
 				});
 			}
 		}
-		console.log($filteredAnnonces);
 	}
 
 	function handleResetFilter() {
@@ -110,19 +109,18 @@
 </script>
 
 <nav class="panel">
-	<div class="panel-block">
-		<p class="label">Catégorie</p>
+	<a class="panel-block">
+		<label class="label">Catégorie </label>
 		<div class="select">
 			<select bind:value={selectedCat} on:input={handleChange}>
-				<!-- <option value="">Choisissez une catégorie</option> -->
-				{#each categories as categorie}
+				{#each categories as categorie }
 					<option value={categorie}>
 						{categorie.nom}
 					</option>
 				{/each}
 			</select>
 		</div>
-		<p class="label">Campus</p>
+		<label class="label">Campus</label>
 		<div class="select">
 			<select bind:value={selectedCamp} on:input={handleChange}>
 				{#each campus as camp}
@@ -132,15 +130,15 @@
 				{/each}
 			</select>
 		</div>
-		<p class="label">Min</p>
+		<label class="label">Min</label>
 		<div class="control">
 			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
-		<p class="label">Max</p>
+		<label class="label">Max</label>
 		<div class="control">
 			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
-	</div>
+	</a>
 
 	<div class="panel-block">
 		<button class="button is-info" on:click={handleResetFilter}> Reset </button>
@@ -171,7 +169,7 @@
 		</div>
 	</div>
 </nav>
-<AnnonceList data={$filteredAnnonces} />
+<AnnonceList annonces={$filteredAnnonces}/>
 
 <style>
 	.panel-block {
