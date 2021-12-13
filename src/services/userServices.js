@@ -1,7 +1,7 @@
 import axios from "axios";
 import "dotenv";
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env['VITE_BASE_URL'];
 
 const login = async(payload) => {
     return axios

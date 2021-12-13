@@ -15,8 +15,8 @@
 	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
 	// import '@splidejs/splide/dist/css/splide-core.min.css'; // other colors for splider
-
-	const baseUrl = process.env.BASE_URL;
+	
+	const baseUrl = process.env['VITE_BASE_URL'];
 
 	const idAnnonce = $page.params.id;
 	let annonce;

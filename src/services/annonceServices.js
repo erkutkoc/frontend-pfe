@@ -1,7 +1,8 @@
 import axios from "axios";
 import "dotenv";
 
-const baseUrl = process.env.BASE_URL;
+// const baseUrl = "https://backend-staging-pfe.herokuapp.com"
+const baseUrl = process.env['VITE_BASE_URL']
 
 const findAllAnnonce = async() => {
     try {
@@ -12,7 +13,7 @@ const findAllAnnonce = async() => {
     }
 }
 const findAllByCampus = async(name) => {
-    if (name != null) {
+    if (name) {
         try {
             const response = await axios.get(baseUrl + '/annonces/campus/' + name);
             return response.data;
