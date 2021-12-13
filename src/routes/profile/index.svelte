@@ -1,9 +1,6 @@
 <script>
     import { onMount } from "svelte";
     import { Shadow } from 'svelte-loading-spinners';
-
-    import Navbar from "../../components/Navbar.svelte";
-    import '../../styles/tailwind.css';
     import AnnonceServices from '../../services/annonceServices.js';
 
     let campus = []
@@ -58,7 +55,6 @@
 
 
 <main>
-    <Navbar />
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>

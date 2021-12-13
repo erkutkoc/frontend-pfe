@@ -1,8 +1,6 @@
 <script>
-	import '../styles/tailwind-output.css';
 	import AnnonceServices from '../services/annonceServices';
 	import UserServices from '../services/userServices';
-	import Navbar from '../components/Navbar.svelte';
 	import { onMount } from 'svelte';
 	import { is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
@@ -49,8 +47,6 @@
 		vendeur = fetchVendeur.data;
 	});
 </script>
-
-<Navbar />
 
 {#if currentUser}
 	{#if !annonce || !annonceCategorie || !vendeur}

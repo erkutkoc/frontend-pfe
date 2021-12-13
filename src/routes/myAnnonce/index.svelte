@@ -1,6 +1,4 @@
 <script>
-	import '../../styles/tailwind-output.css';
-	import Navbar from '../../components/Navbar.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
 	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
@@ -36,7 +34,6 @@
 	}
 </script>
 
-<Navbar />
 {#if USER != null}
 	<Modal bind:this={modal} />
 	<main>

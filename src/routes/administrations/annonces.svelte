@@ -1,6 +1,4 @@
 <script>
-	import '../../styles/tailwind-output.css';
-	import Navbar from '../../components/Navbar.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
 	import 'bulma/css/bulma.css';
 	import AnnonceServices from '../../services/annonceServices.js';
@@ -25,7 +23,6 @@
 </script>
 
 <main>
-	<Navbar />
 	<br />
 	{#if admin}
 		<div class="container">

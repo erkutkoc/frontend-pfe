@@ -104,7 +104,8 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="V">
-										En validée <a
+										Valider l'annonce 
+										<a
 											style="color:hsl(171, 100%, 29%)"
 											type="submit"
 											id={annonce.id}
@@ -121,7 +122,7 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="R">
-										<span style="color:#F98A0C">Changer l'état en réservée </span><a
+										<span style="color:#F98A0C">Changer l'état en réservé </span><a
 											style="color:#F98A0C"
 											type="submit"
 											id={annonce.id}
