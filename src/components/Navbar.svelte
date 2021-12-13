@@ -5,7 +5,7 @@
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if(USER){
-		username = USER.email.split(".")[0];
+			username = USER.email.split(".")[0];
 		}
 	});
 </script>

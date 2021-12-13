@@ -1,7 +1,6 @@
 import axios from "axios";
-import "dotenv";
-
-const baseUrl = process.env['VITE_BASE_URL'];
+const baseUrl =
+    import.meta.env.VITE_BASE_URL
 
 const login = async(payload) => {
     return axios
@@ -31,13 +30,13 @@ const getAllUsers = async(token) => {
 };
 const updateProfile = async(token, payload) => {
     return axios
-        .put(baseUrl + "/Members/UpdateMembre"), {
+        .put(baseUrl + "/Members/UpdateMembre", {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: payload
-        }
+        });
 }
 const banUser = async(token, idMember, duree) => {
     return axios
