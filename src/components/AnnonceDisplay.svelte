@@ -4,7 +4,7 @@
 	import { usersAnnonces, usersFilteredAnnonces } from '../utils/stores.js';
 
 	export let annonces;
-
+	export let currentToogle;
 	let admin;
 	let USER;
 	// fetch user token high level on mount
@@ -13,12 +13,12 @@
 		if (USER) {
 			admin = USER.administrateur;
 		}
-		console.log(USER.id)
+		// console.log(USER.id)
 	});
 	//update state by annonce
 	const fetchUpdate = async (state, annonce) => {
 		console.log(state);
-		console.log(annonce)
+		console.log(annonce);
 
 		let toSend = {
 			Id: annonce.id,
@@ -28,16 +28,14 @@
 			Etat: state,
 			Vendeur_id: USER.id
 		};
-		if (admin && state == "E") {
-			console.log("je passe ici")
+		if (admin && state == 'E') {
 			AnnonceServices.updateAnnonce(toSend, USER.token, admin);
 			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
 			$usersAnnonces[index].etat = state;
 			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
 		} else {
-
 			AnnonceServices.updateAnnonce(toSend, USER.token);
-		
+
 			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
 			$usersAnnonces[index].etat = state;
 			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
@@ -74,28 +72,34 @@
 							<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 						{/if}
 						<!--AnnonceState début-->
-
-						{#if annonce.etat === 'E'}
-							<span style="color:hsl(217, 71%, 53%)">Annonce en attente </span><a>
-								<i class="icon is-small fas fa-pause-circle" style="color:hsl(217, 71%, 53%)" /></a>
+						{#if currentToogle == 'default'}
+							{#if annonce.etat === 'E'}
+								<span style="color:hsl(217, 71%, 53%) ; font-weight:bold">Annonce en attente </span>
+								<a><i
+										class="icon is-small fas fa-pause-circle"
+										style="color:hsl(217, 71%, 53%)"
+									/></a
+								>
+							{/if}
+							{#if annonce.etat === 'V'}
+								<span class=" has-text-primary-dark "> <b>Annonce validée </b></span>
+								<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
+							{/if}
+							{#if annonce.etat === 'T'}
+								<span class="" style="hsl(0, 0%, 29%)"> <b>Vendu</b></span>
+								<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
+							{/if}
+							{#if annonce.etat === 'R'}
+								<span style="color:#F98A0C ">  <b>Annonce réservée</b> </span>
+								<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
+							{/if}
+							{#if annonce.etat === 'A'}
+								<span class="has-text-danger-dark" >
+									<b>Annonce supprimée</b>
+								</span>
+								<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
+							{/if}
 						{/if}
-						{#if annonce.etat === 'V'}
-							<span class=" has-text-primary-dark"> Annonce validée </span>
-							<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
-						{/if}
-						{#if annonce.etat === 'T'}
-							<span class="" style="hsl(0, 0%, 29%); font-weight:bold"> Vendu</span>
-							<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
-						{/if}
-						{#if annonce.etat === 'R'}
-							<span style="color:#F98A0C ; font-weight:bold"> Annonce réservée </span>
-							<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
-						{/if}
-						{#if annonce.etat === 'A'}
-							<span class="has-text-danger-dark" style="font-weight:bold"> Annonce supprimée </span>
-							<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
-						{/if}
-
 						{#if annonce.etat === 'E' && admin}
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
@@ -105,7 +109,7 @@
 											type="submit"
 											id={annonce.id}
 											value="V"
-											>
+										>
 											<i class="fas fa-check-circle" />
 										</a>
 									</button>
@@ -121,7 +125,8 @@
 											style="color:#F98A0C"
 											type="submit"
 											id={annonce.id}
-											value="R">
+											value="R"
+										>
 											<i class="fas fa-minus-circle" /></a
 										>
 									</button>
@@ -130,7 +135,8 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="T">
-										<span style="hsl(0, 0%, 29%)">Changer l'état en vendu </span> <a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
+										<span style="hsl(0, 0%, 29%)">Changer l'état en vendu </span>
+										<a type="submit" id={annonce.id} value="T"><i class="fas fa-times-circle" /></a>
 									</button>
 								</form>
 							</div>
@@ -150,7 +156,11 @@
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 									<button type="submit" id={annonce.id} value="V">
-										<span class=" has-text-primary-dark">Annuler la réservation </span><a style="color:hsl(171, 100%, 29%)" type="submit" id={annonce.id} value="V"
+										<span class=" has-text-primary-dark">Annuler la réservation </span><a
+											style="color:hsl(171, 100%, 29%)"
+											type="submit"
+											id={annonce.id}
+											value="V"
 											><i class="fas fa-check-circle" />
 										</a>
 									</button>
@@ -162,8 +172,12 @@
 						{#if annonce.etat !== 'T' && annonce.etat !== 'A'}
 							<div id="icon">
 								<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
-									<button type="submit" id={annonce.id} value="A" >
-										<span class="has-text-danger-dark"> Supprimer l'annonce </span><a class="has-text-danger-dark" type="submit" id={annonce.id} value="A"
+									<button type="submit" id={annonce.id} value="A">
+										<span class="has-text-danger-dark"> Supprimer l'annonce </span><a
+											class="has-text-danger-dark"
+											type="submit"
+											id={annonce.id}
+											value="A"
 											><i class="fas fa-times-circle" />
 										</a>
 									</button>
