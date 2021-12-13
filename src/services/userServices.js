@@ -30,6 +30,7 @@ const getAllUsers = async (token) => {
         });
 };
 const updateProfile = async(token, payload) => {
+    console.log(token)
     return axios
         .put(baseUrl + "/Members/UpdateMembre"),{
             headers: {

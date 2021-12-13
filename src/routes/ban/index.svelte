@@ -20,45 +20,20 @@
 	onMount(() => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
-		/*let data = await UserServices.getAllUsers(USER.token).data
-		baseMembers = membersArray = data
-			.filter((m) => new Date(m.banni).valueOf() < Date.now())
-			.filter((m) => m.id != USER.id)
-			.sort((a, b) => a.email.localeCompare(b.email));
-		bannedMembers = result
-			.filter((m) => new Date(m.banni).valueOf() > Date.now())
-			.sort((a, b) => a.email.localeCompare(b.email));
-		console.log(baseMembers)*/
+		fetchMembers(token)
 	});
 
-	$: {
-		let promise = fetchMembers();
-		promise
-			.then((result) => {
-				baseMembers = membersArray = result
-					.filter((m) => new Date(m.banni).valueOf() < Date.now())
-                    .filter((m) => m.id != USER.id)
-					.sort((a, b) => a.email.localeCompare(b.email));
-                bannedMembers = result
-                    .filter((m) => new Date(m.banni).valueOf() > Date.now())
-                    .sort((a, b) => a.email.localeCompare(b.email));
-			})
-			.catch((err) => console.log(err));
-	}
 
-	async function fetchMembers() {
-		if (token == undefined) return [];
-		const response = await fetch('https://pfe-backend1.herokuapp.com/Members', {
-			headers: { 'Content-Type': 'application/json', Authorization: token },
-			method: 'GET'
-		});
-		const resp = await response.json();
-
-		if (response.ok) {
-			return resp;
-		} else {
-			throw new Error(text);
-		}
+	const fetchMembers = async (token) => {
+		await UserServices.getAllUsers(token).then((members) => {
+			baseMembers = membersArray = members.data
+				.filter((m) => new Date(m.banni).valueOf() < Date.now())
+				.filter((m) => m.id != USER.id)
+				.sort((a, b) => a.email.localeCompare(b.email));
+			bannedMembers = members.data
+				.filter((m) => new Date(m.banni).valueOf() > Date.now())
+				.sort((a, b) => a.email.localeCompare(b.email));
+		})
 	}
 
 	function handleInput(e) {

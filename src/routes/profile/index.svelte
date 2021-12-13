@@ -5,6 +5,7 @@
     import Navbar from "../../components/Navbar.svelte";
     import '../../styles/tailwind.css';
     import AnnonceServices from '../../services/annonceServices.js';
+    import UserServices from '../../services/userServices.js';
 
     let campus = []
     let campusUser = 1
@@ -34,9 +35,23 @@
                 const [key, value] = field;
                 data[key] = value;
             }
-            if (data) putProfile(data)
+            if (data) putProfile(token, data)
     }
-    const putProfile = async (data) => {
+    /*
+    const putProfile = async (token, data) => {
+        //console.log(token)
+        let toSend = {
+            email: USER.email,
+            motDePasse: data.password,
+            campus_id: Number.parseInt(data.campus)
+        };
+		await UserServices.updateProfile(token, toSend).then((data) => {
+			console.log(data)
+		})
+	}*/
+
+    
+    const putProfile = async (token, data) => {
         let toSend = {
             email: USER.email,
             motDePasse: data.password,

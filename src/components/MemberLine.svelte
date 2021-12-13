@@ -6,6 +6,8 @@
     export let banned;
     export let banDate;
 
+    import UserServices from '../services/userServices.js';
+
     let banDateY
     let banDateM
     let banDateD
@@ -18,14 +20,21 @@
 
     let bandDateFormat = banDateD + "/" + banDateM + "/" + banDateY
 
-    const ban = (e, duree) => {
-        if (duree == 0) e.target.innerText = "OK"
+    const ban = (e, duration) => {
+        if (duration == 0) e.target.innerText = "OK"
         else e.target.innerText = "BANNI"
-        banUser(duree)
+        banUser(duration)
+        //banUser(token, id, duration)
     }
+/*
+    const banUser = async (token, id, duration) => {
+		await UserServices.banUser(token, id, duration).then((data) => {
+			console.log(data)
+		})
+	}*/
 
-    const banUser = async (duree) => {
-        const response = fetch(`https://pfe-backend1.herokuapp.com/Members/Ban/${id}/${duree}`,{
+    const banUser = async (duration) => {
+        const response = fetch(`https://pfe-backend1.herokuapp.com/Members/Ban/${id}/${duration}`,{
             headers: {"Content-Type" :"application/json", 
                 Authorization: token },
             method:'PUT',

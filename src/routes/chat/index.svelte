@@ -43,37 +43,41 @@
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Discussions:</h2>
 			</div>
-			<div class="rounded-md shadow-sm -space-y-px">
-				<div class="max-w-sm">
-					<label for="email-address" class="sr-only">Email address</label>
-					<input
-						name="email"
-						on:input={handleInput}
-						placeholder="Rechercher un email"
-						class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-					/>
-				</div>
-			</div>
 			<div>
 				{#if selectedDiscussion == null}
-					{#each filteredDiscussions as discussion}
-                        <div class="card">
-                            <footer class="card-footer">
-                                
-                                <div 
-                                    class="card-footer-item column is-two-fifths"
-                                    on:click={(e) => handleClickDiscussion({discussion})}
-                                >
-                                    <p>{discussion.intender}</p>
-                                </div>
+					<div class="rounded-md shadow-sm -space-y-px">
+						<div class="max-w-sm">
+							<label for="email-address" class="sr-only">Email address</label>
+							<input
+								name="email"
+								on:input={handleInput}
+								placeholder="Rechercher un email"
+								class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+							/>
+						</div>
+					</div>
+					{#if filteredDiscussions.length == 0}
+						<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
+					{:else}
+						{#each filteredDiscussions as discussion}
+							<div class="card cursor-pointer">
+								<footer class="card-footer">
+									
+									<div 
+										class="card-footer-item column is-two-fifths"
+										on:click={(e) => handleClickDiscussion({discussion})}
+									>
+										<p>{discussion.intender}</p>
+									</div>
 
-                                <div class="card-footer-item">
-                                    <p>{discussion.lastMessage}</p>
-                                </div>
-                    
-                            </footer>
-                        </div>
-                    {/each}
+									<div class="card-footer-item">
+										<p>{discussion.lastMessage}</p>
+									</div>
+						
+								</footer>
+							</div>
+						{/each}
+					{/if}
 				{:else}
 					<button
 						on:click={(e) => (selectedDiscussion = null)}
