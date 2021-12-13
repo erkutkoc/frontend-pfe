@@ -18,7 +18,14 @@
 				<div class="card column is-one-third">
 					<div class="card-image">
 						<figure class="image is-5by3">
-							<img src="https://backend-staging-pfe.herokuapp.com/medias/photoUrl[0]" alt="annonce image" />
+							{#if annonce.urlPhoto[0]}
+								<img
+									src="https://backend-staging-pfe.herokuapp.com/medias/{annonce.urlPhoto[0]}"
+									alt="annonce"
+								/>
+							{:else}
+								<img src="/noimage.png" alt="pas d'image png" class="bg-gray-100 rounded-lg" />
+							{/if}
 						</figure>
 					</div>
 					<div class="card-content">
@@ -28,7 +35,7 @@
 						{:else}
 							<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 						{/if}
-						Etat actuel
+						Etat actuel :
 						<AnnonceState {annonce} homePage={false} />
 						<a
 							class="button is-primary is-rounded is-pulled-right"
@@ -36,7 +43,6 @@
 							href={'/' + annonce.id}>Voir les détails</a
 						>
 					</div>
-					
 				</div>
 			{/each}
 		</div>

@@ -2,11 +2,18 @@
 	export let annonce;
 	import AnnonceState from './AnnonceState.svelte';
 </script>
-
+<!-- Home screen -->
 <div class="column card is-one-third">
 	<div class="card-image">
 		<figure class="image is-5by3">
-			<img src="https://backend-staging-pfe.herokuapp.com/medias/photoUrl[0]" alt="Placeholder image" />
+			{#if annonce.urlPhoto[0]}
+				<img
+					src="https://backend-staging-pfe.herokuapp.com/medias/{annonce.urlPhoto[0]}"
+					alt="annonce"
+				/>
+			{:else}
+				<img src="/noimage.png" alt="pas d'image png" class="bg-gray-100 rounded-lg" />
+			{/if}
 		</figure>
 	</div>
 	<div class="card-content">
@@ -16,7 +23,7 @@
 		{:else}
 			<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 		{/if}
-		Etat actuel
+		Etat actuel :
 
 		<AnnonceState {annonce} homePage={true} />
 		<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={'/' + annonce.id}
@@ -24,6 +31,7 @@
 		>
 	</div>
 </div>
+
 <style>
 	#icon {
 		display: inline-block;

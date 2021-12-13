@@ -1,16 +1,18 @@
 <script>
 	export let annonce;
-	let admin = false;
+	export let homePage;
+
 	import CurrentState from './CurrentState.svelte';
 	import AnnonceServices from '../services/annonceServices.js';
 	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
+	let admin = false;
 	let USER;
-	export let homePage;
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
-		if(USER){
-		admin = USER.administrateur;
+		if (USER) {
+			admin = USER.administrateur;
 		}
 	});
 	function onChangeState(updatedAnnonce) {
@@ -57,7 +59,7 @@
 
 {#if !homePage}
 	{#if annonce.etat != 'T' && annonce.etat != 'A'}
-		Changer l'état
+		<br />Changer l'état :
 	{/if}
 	{#if annonce.etat === 'E' && admin}
 		<div id="icon">

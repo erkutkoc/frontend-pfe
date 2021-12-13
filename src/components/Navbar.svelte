@@ -4,8 +4,8 @@
 	let username;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
-		if(USER){
-			username = USER.email.split(".")[0];
+		if (USER) {
+			username = USER.email.split('.')[0];
 		}
 	});
 </script>
@@ -25,7 +25,7 @@
 
 		<div class="navbar-start">
 			<a class="navbar-item" href="/"> Accueil </a>
-			{#if USER != null}
+			{#if USER}
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
 				<a class="navbar-item" href="/chat"> Chat </a>
 				{#if USER.administrateur}
@@ -37,13 +37,13 @@
 			</div>
 		</div>
 		<div class="navbar-end">
-			{#if USER == null}
+			{#if !USER}
 				<a class="navbar-item" href="/login"> Connexion </a>
 
 				<a class="navbar-item" href="/register"> Inscription </a>
 			{/if}
-			{#if USER != null}
-			<a class="navbar-item has-text-primary" href="/profile">{username}</a>
+			{#if USER}
+				<a class="navbar-item has-text-primary" href="/profile">{username}</a>
 
 				<a class="navbar-item" href="/logout"> Deconnexion </a>
 			{/if}

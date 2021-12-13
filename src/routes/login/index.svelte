@@ -68,7 +68,7 @@
 					/>
 				</div>
 			</div>
-
+<!-- 
 			<div class="flex items-center justify-between">
 				<div class="flex items-center">
 					<input
@@ -79,7 +79,7 @@
 					/>
 					<label for="remember-me" class="ml-2 block text-sm text-gray-900"> Remember me </label>
 				</div>
-			</div>
+			</div> -->
 
 			<div>
 				<button

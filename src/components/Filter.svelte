@@ -21,8 +21,8 @@
 		categories = res;
 		const resp = await annonceServices.findAllAnnonce();
 		//let filtered = resp;
-		//allAnnonces = 
-		$annonces = resp.filter(a => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+		//allAnnonces =
+		$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
 		$filteredAnnonces = $annonces;
 	});
 
@@ -57,13 +57,12 @@
 			dropdown = !dropdown;
 		}
 
-
 		if (selectedCamp) {
 			fetchAnnoncesByCampus();
 		}
 		if (selectedCat) {
-			  let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
-			  $filteredAnnonces = vals;
+			let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			$filteredAnnonces = vals;
 		}
 		if (selectedMin != -1) {
 			let vals = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
@@ -95,7 +94,7 @@
 				});
 			}
 		}
-		console.log($filteredAnnonces)
+		console.log($filteredAnnonces);
 	}
 
 	function handleResetFilter() {
@@ -111,10 +110,11 @@
 </script>
 
 <nav class="panel">
-	<a class="panel-block">
-		<label class="label">Catégorie </label>
+	<div class="panel-block">
+		<p class="label">Catégorie</p>
 		<div class="select">
 			<select bind:value={selectedCat} on:input={handleChange}>
+				<!-- <option value="">Choisissez une catégorie</option> -->
 				{#each categories as categorie}
 					<option value={categorie}>
 						{categorie.nom}
@@ -122,7 +122,7 @@
 				{/each}
 			</select>
 		</div>
-		<label class="label">Campus</label>
+		<p class="label">Campus</p>
 		<div class="select">
 			<select bind:value={selectedCamp} on:input={handleChange}>
 				{#each campus as camp}
@@ -132,15 +132,15 @@
 				{/each}
 			</select>
 		</div>
-		<label class="label">Min</label>
+		<p class="label">Min</p>
 		<div class="control">
 			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
-		<label class="label">Max</label>
+		<p class="label">Max</p>
 		<div class="control">
 			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
 		</div>
-	</a>
+	</div>
 
 	<div class="panel-block">
 		<button class="button is-info" on:click={handleResetFilter}> Reset </button>
@@ -171,7 +171,7 @@
 		</div>
 	</div>
 </nav>
-<AnnonceList data={$filteredAnnonces}/>
+<AnnonceList data={$filteredAnnonces} />
 
 <style>
 	.panel-block {
