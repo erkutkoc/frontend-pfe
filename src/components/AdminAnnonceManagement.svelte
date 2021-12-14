@@ -7,7 +7,7 @@
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
-		const res = await AnnonceServices.findAllAnnonce(); // ne renvoie pas ce qui est en attente
+		const res = await AnnonceServices.findAllAnnonceStatusWaiting(USER.token); // ne renvoie pas ce qui est en attente
 		annonces = res;
 		annonces = annonces.filter((annonce) => annonce.etat === 'E');
 		admin = USER.administrateur;
