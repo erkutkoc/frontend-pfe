@@ -48,7 +48,7 @@
 
 <main>
     <div class="card max-w-max">
-        <footer class="card-footer max-w-max">
+        <footer class="card-footer max-w-8xl">
             
             <div class="card-footer-item column is-two-fifths">
                 <p>{email}</p>
@@ -67,10 +67,12 @@
                         </button>
                     </div>
 				{:else}
+
+
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,1)} 
-                            class="is-danger relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none"
+                            class="has-background-danger-dark is-danger max-w-max max-h-max relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none"
                         >Bannir 1 jour
                         </button>
                     </div>
@@ -78,7 +80,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,30)} 
-                            class="is-dark relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none "
+                            class="has-background-grey-darker is-dark relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none "
                             >Bannir 1 mois 
                         </button>
                     </div>
@@ -86,7 +88,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,-1)} 
-                            class="is-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                            class="has-background-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
                             >Bannir définitivement
                         </button>
                     </div>
@@ -94,7 +96,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => admin(e)} 
-                            class="max-w-10 has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                            class="has-background-success max-w-10 has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
                             >Rendre administrateur
                         </button>
                     </div>
