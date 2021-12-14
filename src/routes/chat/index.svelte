@@ -1,22 +1,11 @@
 <script>
 	import Navbar from '../../components/Navbar.svelte';
+	import { Shadow } from 'svelte-loading-spinners';
 	import '../../styles/tailwind-output.css';
 	import {onMount} from 'svelte';
 	import Pusher from 'pusher-js';
 	import DiscussionServices from '../../services/discussionServices.js';
 	import UserServices from '../../services/userServices';
-
-	onMount(() => {
-        Pusher.logToConsole = true;
-        const pusher = new Pusher('93dc2573318267ee5994', {
-            cluster: 'eu'
-        });
-        
-		const channel = pusher.subscribe('chat');
-        channel.bind('message', data => {
-            messages = [...messages, data];
-        });
-    })
 
 	let emailSearched = '';
 	let selectedDiscussion = null;
@@ -28,6 +17,7 @@
 	let message = ''
 	let newDiscussionEmail = ''
 	let id
+	let loading = false
 
 	let USER;
 	onMount(() => {
@@ -79,28 +69,43 @@
 	}
 
 	const postDiscussion = async (member) => {
-		//await UserServices.getUserById()
-
-		await DiscussionServices.postDiscussion(token, member, id).then((data) => {
-			console.log(data)
-			discussions = [...discussions, {id: data.id, dest: newDiscussionEmail}]
-			filteredDiscussions = [...filteredDiscussions, {id: data.id, dest: newDiscussionEmail}]
-		})
+		if (newDiscussionEmail.length > 0 && !discussions.find( (d) => d.dest.localeCompare(newDiscussionEmail) == 0)){
+			await UserServices.getUserByEmail(newDiscussionEmail, token).then(async (memberId) => {
+				await DiscussionServices.postDiscussion(token, memberId.data, id).then((data) => {
+					let newDiscussion = {id:data.data.id, dest: newDiscussionEmail}
+					discussions = [...discussions, newDiscussion]
+					filteredDiscussions = [...filteredDiscussions, newDiscussion]
+					loading = false
+				})
+				.catch(error => {
+					console.log("Bad email post")
+				})
+			})
+			.catch(error => {
+				console.log("Bad email")
+				loading = false
+			})
+		}
+		else {
+			console.log("déjà présent")
+		}
+		//loading = false
 	}
 
 	function handleInput(e) {
 		emailSearched = e.target.value;
-        filteredDiscussions = discussions.filter((d) => d.intender.toUpperCase().startsWith(emailSearched.toUpperCase()));
+        filteredDiscussions = discussions.filter((d) => d.dest.toUpperCase().startsWith(emailSearched.toUpperCase()));
 	}
 
 	const handleClickDiscussion = (discussion) => {
+		console.log(discussion)
 		selectedDiscussion = discussion.discussion;
 		fetchMessages(token, selectedDiscussion.id)
 	};
 
 	const handleClickPost = () => {
-		//postDiscussion(newDiscussionEmail)
-		postDiscussion(4)
+		postDiscussion(newDiscussionEmail)
+		loading = true
 	}
 
     const handleSubmit = () => {
@@ -148,7 +153,7 @@
 							</div>
 						{/each}
 					{/if}
-					<form on:submit|preventDefault={handleSubmit} class="mt-8 space-y-6" action="#" method="POST">
+					<form on:submit|preventDefault={handleClickPost} class="mt-8 space-y-6" action="#" method="POST">
                         
 						<input
 							id="newDiscussionEmail"
@@ -162,9 +167,16 @@
 						<button
 								type="submit"
 								class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-								on:click={(e) => handleClickPost()}
 						>
-						Ajouter une conversation
+							{#if loading}
+								<span class="absolute left-0 inset-y-0 flex items-center pl-3">
+									<!-- Heroicon name: solid/lock-closed -->
+									<span class="absolute left-0 inset-y-0 flex items-center pl-3">
+										<Shadow size="15" color="#2c9b89" unit="px" duration="1s" />
+									</span>
+								</span>
+							{/if}
+							Ajouter une conversation
 						</button>
 					</form>
 				{:else}

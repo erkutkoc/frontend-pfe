@@ -38,7 +38,7 @@
     <div class="card">
         <footer class="card-footer">
             
-            <div class="card-footer-item column  is-three-fifths">
+            <div class="card-footer-item column is-three-fifths">
                 <p>{email}</p>
             </div>
 

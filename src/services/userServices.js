@@ -34,25 +34,50 @@ const updateProfile = async(token, email, password, campus) => {
         MotDePasse: password,
         Campus_Id: campus
     }
-    return axios
+    try {
+        return axios
         .put(baseUrl + "/Members/UpdateMembre", toSend,{
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             },
         })
+    }catch(e){
+        console.log('error update profile')
+    }
 }
+
 const banUser = async(token, idMember, duree) => {
-    console.log(token)
-    return axios
+    try {
+        return axios
         .put(baseUrl + `/Members/Ban/${idMember}/${duree}`, undefined, {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }
         })
+    }catch(e){
+        console.log('error ban user')
+    }
 }
 
+const getUserByEmail = async(email, token) => {
+    let toSend = {
+        Email: email,
+    }
+    try {
+        return axios
+        .post(baseUrl + "/members/getmembre/email", toSend, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(toSend)
+        })
+    }catch(e){
+        console.log('error fetch email')
+    }
+}
 
 const UserServices = {
     login,
@@ -61,5 +86,6 @@ const UserServices = {
     getAllUsers,
     updateProfile,
     banUser,
+    getUserByEmail,
 }
 export default UserServices;
