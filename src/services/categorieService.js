@@ -31,8 +31,6 @@ const addSubCategorie = async (data, token) => {
         });
 }
 const deleteCategorie = async (token, id) => {
-    console.log(id)
-    console.log(token)
     return axios
         .put(baseUrl + "/categories/delete/" + id,{}, 
         {headers: 

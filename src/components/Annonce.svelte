@@ -56,31 +56,26 @@
 	</div>
 	<div class="card-content">
 		<h4 class="title is-4">{annonce.titre}</h4>
-		{#if annonce.prix != null}
+		{#if annonce.prix}
 			<h5 class="title is-5">{annonce.prix}</h5>
 		{:else}
 			<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 		{/if}
 		<!--Annonce State-->
-
 		{#if annonce.etat === 'E'}
 			<a> <i class="icon is-small fas fa-pause-circle" style="color:hsl(217, 71%, 53%)" /></a>
 			<span style="color:hsl(217, 71%, 53%) ;font-weight:bold"> En attente</span>
-		{/if}
-		{#if annonce.etat === 'V'}
+		{:else if annonce.etat === 'V'}
 			<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
 			<span class=" has-text-primary-dark" style="font-weight:bold"> Validée</span>
-		{/if}
-		{#if annonce.etat === 'T'}
+		{:else if annonce.etat === 'T'}
 			<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
 			<span class="" style="hsl(0, 0%, 29%) ;font-weight:bold"> Vendus</span>
-		{/if}
-		{#if annonce.etat === 'R'}
+		{:else if annonce.etat === 'R'}
 			<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
 
 			<span style="color:#F98A0C ; font-weight:bold"> Réservée</span>
-		{/if}
-		{#if annonce.etat === 'A'}
+		{:else if annonce.etat === 'A'}
 			<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
 			<span class="has-text-danger-dark ; font-weight:bold"> Supprimer</span>
 		{/if}
@@ -98,11 +93,9 @@
 			</div>
 		{/if}
 
-	
 		<!--Annonce State fin-->
 		<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={'/' + annonce.id}
 			>Voir les détails</a
 		>
 	</div>
 </div>
-

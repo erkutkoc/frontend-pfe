@@ -1,40 +1,23 @@
 <script>
-	import '../styles/tailwind-output.css';
+	import Navbar from '../components/Navbar.svelte';
 	import AnnonceServices from '../services/annonceServices';
 	import UserServices from '../services/userServices';
-	import Navbar from '../components/Navbar.svelte';
 	import { onMount } from 'svelte';
 	import { is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
 	import ErrorPage from '../components/ErrorPage.svelte';
-	import { Shadow } from 'svelte-loading-spinners';
-	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
-	import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
-	import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
+	import MapsAnnonce from '../components/MapsAnnonce.svelte';
+	import Caroussel from '../components/Caroussel.svelte';
+	import LoadingAnimation from '../components/LoadingAnimation.svelte';
+	// import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
-	// import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
-	// import '@splidejs/splide/dist/css/splide-core.min.css'; // other colors for splider
-	const baseUrl = import.meta.env.VITE_BASE_URL
+	import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
 
 	const idAnnonce = $page.params.id;
 	let annonce;
 	let currentUser = ' ';
 	let annonceCategorie;
 	let vendeur;
-	const videoTypes = [
-		'ogm',
-		'wmv',
-		'mpg',
-		'webm',
-		'ogv',
-		'mov',
-		'asx',
-		'mpeg',
-		'mp4',
-		'm4v',
-		'avi'
-	];
-	// const imgTypes = ['tiff','pjp',	'jfif','bmp','gif',	'svg','png',	'xbm','dib',	'jxl','jpeg','svgz','jpg',	'webp','ico','tif','pjpeg','avif' ];
 
 	onMount(async () => {
 		currentUser = JSON.parse(sessionStorage.getItem('user'));
@@ -51,14 +34,11 @@
 </script>
 
 <Navbar />
-
 {#if currentUser}
 	{#if !annonce || !annonceCategorie || !vendeur}
-		<div id="loader">
-			<Shadow size="100" color="#2c9b89" unit="px" duration="1s" />
-		</div>
+		<LoadingAnimation/>
 	{:else}
-		<div class="bg-white">
+		<div>
 			<div
 				class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2"
 			>
@@ -108,67 +88,16 @@
 							<dd class="mt-2 text-sm text-gray-500">{annonceCategorie.nom}</dd>
 						</div>
 					</dl>
-					<div style="width: 100%">
-						<Tabs><br /><br /><br />
-							<p class="font-medium text-gray-900" id="labelCarte">Adresse(s) de retrait :</p>
-							<TabList>
-								{#each annonce.adresses as adresse}
-									<Tab>{adresse.ville}</Tab>
-								{/each}
-							</TabList>
-							{#each annonce.adresses as adresse}
-								<TabPanel>
-									<iframe
-										id="map"
-										title="map"
-										SameSite="Strict"
-										width="400"
-										height="400"
-										frameborder="0"
-										scrolling="yes"
-										marginheight="0"
-										marginwidth="0"
-										src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q={adresse.rue} {adresse.numero} {adresse.ville} {adresse.code_postal} {adresse.ville} {adresse.pays} &amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-									/>
-								</TabPanel>
-							{/each}
-						</Tabs>
-					</div>
+					<MapsAnnonce adresses={annonce.adresses} />
 				</div>
 				{#if !is_empty(annonce.urlPhoto)}
-					<Splide
-						options={{
-							rewind: true,
-							autoplay: true,
-							pauseOnHover: true,
-							arrows: 'slider',
-							width: 450,
-							gap: '1rem',
-							type: 'slide', // slide or loop or fade -> animations
-							focus: 'center'
-						}}
-						hasSliderWrapper
-					>
-						{#each annonce.urlPhoto as photo}
-							<SplideSlide>
-								{#if videoTypes.includes(photo.split('.')[1])}
-									<!-- svelte-ignore a11y-media-has-caption -->
-									<video controls src="{baseUrl}/medias/{photo}" />
-								{:else}
-									<img
-										src="{baseUrl}/medias/{photo}"
-										alt="imgs de l'annonce"
-										class="bg-gray-100 rounded-lg"
-									/>
-								{/if}
-							</SplideSlide>
-						{/each}
-					</Splide>
-				{:else}<img
-						src="/noimage.png"
-						alt="imgs de l'annonce"
-						class="bg-gray-100 rounded-lg"
-					/>
+					<Caroussel annonce={annonce}/>
+				{:else}
+					<div class="card-image">
+						<figure class="image is-5by3">
+							<img src="/noimage.png" alt="imgs de l'annonce" class="bg-gray-100 rounded-lg" />
+						</figure>
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -184,29 +113,19 @@
 	}
 	#attente {
 		color: red;
+		font-size: large;
 	}
 	#validee {
 		color: green;
+		font-size: large;
 	}
 	#reservee {
-		color: orange;
+		color: darkorange;
+		font-size: large;
 	}
 	#vendu {
 		color: black;
-	}
-	#loader {
-		margin: 0;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		margin-right: -50%;
-		transform: translate(-50%, -50%);
-	}
-	#labelCarte {
-		text-align: center;
-	}
-	#map {
-		margin-left: auto;
-		margin-right: auto;
+		font-size: large;
+		font-size: large;
 	}
 </style>

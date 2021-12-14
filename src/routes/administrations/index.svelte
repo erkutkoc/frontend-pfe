@@ -1,12 +1,9 @@
 <script>
-	import '../../styles/tailwind-output.css';
-	import 'bulma/css/bulma.css';
 	import Navbar from '../../components/Navbar.svelte';
 	import AdminAnnonceManagement from '../../components/AdminAnnonceManagement.svelte';
 	import AdminUsersManagement from '../../components/AdminUsersManagement.svelte';
 	import AdminAnnonceCategorieManagement from '../../components/AdminAnnonceCategorieManagement.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-
 	let currentToogle = 'default';
 
 	function setToogle(value) {
@@ -53,7 +50,6 @@
 				</li>
 			</ul>
 		</aside>
-
 		{#if currentToogle == 'annonces' || currentToogle == 'default'}
 			<AdminAnnonceManagement />
 		{/if}

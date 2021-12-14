@@ -1,8 +1,6 @@
 <script>
-	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
 	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
@@ -65,7 +63,7 @@
 							<span class="icon is-small has-text-primary-dark"
 								><i class="fas fa-check-circle" /></span
 							>
-							<span>Validée</span>
+							<span>Validés</span>
 						</a>
 					</li>
 					<li class={currentToogle === 'R' ? 'is-active' : ''}>
@@ -74,7 +72,7 @@
 							<span class="icon is-small" style="color:#F98A0C"
 								><i class="fas fa-minus-circle" /></span
 							>
-							<span>Réservée</span>
+							<span>Réservés</span>
 						</a>
 					</li>
 					<li class={currentToogle === 'T' ? 'is-active' : ''}>
@@ -90,7 +88,7 @@
 							<span class="icon is-small has-text-danger-dark"
 								><i class="fas fa-times-circle" /></span
 							>
-							<span>Supprimer</span>
+							<span>Supprimés</span>
 						</a>
 					</li>
 					<button
@@ -102,12 +100,12 @@
 		</div>
 		<br />
 		{#if currentToogle === 'default'}
-			<AnnonceDisplay annonces={$usersAnnonces} />
+			<AnnonceDisplay annonces={$usersAnnonces}  {currentToogle}/>
 		{:else}
 			{#await handleFilter(currentToogle)}
-				<p>Chargement des $usersAnnonces...</p>
+				<p>Chargement des annonces...</p>
 			{:then}
-				<AnnonceDisplay annonces={$usersFilteredAnnonces} />
+				<AnnonceDisplay annonces={$usersFilteredAnnonces} {currentToogle}/>
 			{/await}
 		{/if}
 	</main>

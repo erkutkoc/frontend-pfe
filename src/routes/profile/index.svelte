@@ -3,8 +3,8 @@
     import { Shadow } from 'svelte-loading-spinners';
 
     import Navbar from "../../components/Navbar.svelte";
-    import '../../styles/tailwind.css';
     import AnnonceServices from '../../services/annonceServices.js';
+    import UserServices from '../../services/userServices.js';
 
     let campus = []
     let campusUser = 1
@@ -34,26 +34,15 @@
                 const [key, value] = field;
                 data[key] = value;
             }
-            if (data) putProfile(data)
+            if (data) putProfile(token, data)
     }
-    const putProfile = async (data) => {
-        let toSend = {
-            email: USER.email,
-            motDePasse: data.password,
-            campus_id: Number.parseInt(data.campus)
-        };
+    
+    const putProfile = async (token, data) => {
+		await UserServices.updateProfile(token, email, data.password, Number.parseInt(data.campus)).then((data) => {
+			loading = false
+		})
+	}
 
-        const response = await fetch('https://pfe-backend1.herokuapp.com/Members/UpdateMembre',{
-            headers: {"Content-Type" :"application/json", 
-                Authorization: token
-            },
-            method:'PUT',
-            body : JSON.stringify(toSend)
-        });
-        loading = false
-        return response
-        
-    }
 </script>
 
 
