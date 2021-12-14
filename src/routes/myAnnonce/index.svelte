@@ -92,7 +92,7 @@
 						</a>
 					</li>
 					<button
-						class="button is-primary has-text-weight-bold is-outlined is-rounded is-medium"
+						class="button is-info has-text-weight-bold  is-rounded "
 						on:click={() => modal.showModal()}>Ajouter un article</button
 					>
 				</ul>

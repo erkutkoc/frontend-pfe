@@ -25,7 +25,6 @@
 		subCategories = categories.filter((e) => e.sur_categorie_id != null);
 		const resp = await annonceServices.findAllAnnonce();
 		$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
-		console.log($annonces);
 		$filteredAnnonces = $annonces;
 	});
 
@@ -112,73 +111,71 @@
 	let dropdown = false;
 </script>
 
-<nav class="panel">
-	<a class="panel-block">
-		<label class="label">Catégorie </label>
-		<div class="select">
-			<select bind:value={selectedCat} on:input={handleChange}>
-				{#each highCategories as hCategorie}
-					<optgroup label={hCategorie.nom}>
-						{#each subCategories as sCategorie}
-							{#if hCategorie.id == sCategorie.sur_categorie_id}
-								<option  value={sCategorie}>
-									{sCategorie.nom}
-								</option>
-							{/if}
-						{/each}
-					</optgroup>
-				{/each}
-			</select>
-		</div>
-		<label class="label">Campus</label>
-		<div class="select">
-			<select bind:value={selectedCamp} on:input={handleChange}>
-				{#each campus as camp}
-					<option value={camp}>
-						{camp.campus}
-					</option>
-				{/each}
-			</select>
-		</div>
-		<label class="label">Min</label>
-		<div class="control">
-			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
-		</div>
-		<label class="label">Max</label>
-		<div class="control">
-			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
-		</div>
-	</a>
+<div class="panel-block">
+	<label class="label">Catégorie </label>
+	<div class="select">
+		<select bind:value={selectedCat} on:input={handleChange}>
+			{#each highCategories as hCategorie}
+				<optgroup label={hCategorie.nom}>
+					{#each subCategories as sCategorie}
+						{#if hCategorie.id == sCategorie.sur_categorie_id}
+							<option value={sCategorie}>
+								{sCategorie.nom}
+							</option>
+						{/if}
+					{/each}
+				</optgroup>
+			{/each}
+		</select>
+	</div>
+	<label class="label">Campus</label>
+	<div class="select">
+		<select bind:value={selectedCamp} on:input={handleChange}>
+			{#each campus as camp}
+				<option value={camp}>
+					{camp.campus}
+				</option>
+			{/each}
+		</select>
+	</div>
+	<label class="label">Min</label>
+	<div class="control">
+		<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
+	</div>
+	<label class="label">Max</label>
+	<div class="control">
+		<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
+	</div>
+</div>
 
-	<div class="panel-block">
-		<button class="button is-info" on:click={handleResetFilter}> Reset </button>
+<div class="panel-block">
+	<button class="button is-info" on:click={handleResetFilter}> Reset </button>
 
-		<div class={dropdown ? 'dropdown is-left is-active' : 'dropdown is-left'}>
-			<div class="dropdown-trigger">
-				<button
-					class="button"
-					aria-haspopup="true"
-					aria-controls="dropdown-menu"
-					on:click={() => (dropdown = !dropdown)}
-				>
-					<span>Trier</span>
-					<span class="icon is-small">
-						<i class="fas fa-angle-down" aria-hidden="true" />
-					</span>
-				</button>
-			</div>
-			<div class="dropdown-menu" id="dropdown-menu" role="menu">
-				<div class="dropdown-content" on:click={handleChange}>
-					<a href="#" class="dropdown-item" id="prixCroissant"> Prix Croissant </a>
-					<a class="dropdown-item" id="prixDecroissant"> Prix Decroissant </a>
-					<hr class="dropdown-divider" />
-					<a href="#" class="dropdown-item" id="titreAZ"> A -> Z </a>
-					<a href="#" class="dropdown-item" id="titreZA"> Z -> A </a>
-				</div>
+	<div class={dropdown ? 'dropdown is-left is-active' : 'dropdown is-left'}>
+		<div class="dropdown-trigger">
+			<button
+				class="button"
+				aria-haspopup="true"
+				aria-controls="dropdown-menu"
+				on:click={() => (dropdown = !dropdown)}
+			>
+				<span>Trier</span>
+				<span class="icon is-small">
+					<i class="fas fa-angle-down" aria-hidden="true" />
+				</span>
+			</button>
+		</div>
+		<div class="dropdown-menu" id="dropdown-menu" role="menu">
+			<div class="dropdown-content" on:click={handleChange}>
+				<a href="#" class="dropdown-item" id="prixCroissant"> Prix Croissant </a>
+				<a class="dropdown-item" id="prixDecroissant"> Prix Decroissant </a>
+				<hr class="dropdown-divider" />
+				<a href="#" class="dropdown-item" id="titreAZ"> A -> Z </a>
+				<a href="#" class="dropdown-item" id="titreZA"> Z -> A </a>
 			</div>
 		</div>
 	</div>
-</nav>
+</div>
 <AnnonceList annonces={$filteredAnnonces} />
 
 <style>

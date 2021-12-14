@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import AnnonceServices from '../services/annonceServices';
-	import { Shadow } from 'svelte-loading-spinners';
+	import LoadingAnimation from './LoadingAnimation.svelte';
 
 	let shown = false;
 	let USER;
@@ -26,7 +26,7 @@
 
 		const fetchAllCampus = await AnnonceServices.getAllCampus();
 		allCampus = fetchAllCampus.data;
-		selectedCampus.push( Number.parseInt(USER.adresse.id) );
+		selectedCampus.push(Number.parseInt(USER.adresse.id));
 	});
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -59,7 +59,7 @@
 		fetchAddDataContainer.append('Genre', selected.value);
 		fetchAddDataContainer.append('Vendeur_id', USER.id);
 		fetchAddDataContainer.append('Categorie_id', selectedCat.id);
-		fetchAddDataContainer.append('adressesToAdd', selectedCampus)
+		fetchAddDataContainer.append('adressesToAdd', selectedCampus);
 		isLoading = true;
 		await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token).then((rep) => {
 			isLoading = false;
@@ -88,9 +88,7 @@
 </script>
 
 {#if isLoading}
-	<div id="loader">
-		<Shadow size="100" color="#2c9b89" unit="px" duration="1s" />
-	</div>
+	<LoadingAnimation />
 {/if}
 <div class={shown ? 'modal is-active' : 'modal'}>
 	<div class="modal-background " />
@@ -182,21 +180,25 @@
 						<div class="control">
 							<label for="adresses">Campus {campus.ville}</label>
 							{#if USER.adresse.ville == campus.ville}
-								<input
-									type="checkbox"
-									value={campus.id}
-									on:change={onCheckCampus}
-									name="adresses"
-									disabled
-									checked
-								/>
+								<label class="checkbox">
+									<input
+										type="checkbox"
+										value={campus.id}
+										on:change={onCheckCampus}
+										name="adresses"
+										disabled
+										checked
+									/>
+								</label>
 							{:else}
-								<input
-									type="checkbox"
-									value={campus.id}
-									on:change={onCheckCampus}
-									name="adresses"
-								/>
+								<label class="checkbox">
+									<input
+										type="checkbox"
+										value={campus.id}
+										on:change={onCheckCampus}
+										name="adresses"
+									/>
+								</label>
 							{/if}
 						</div>
 					{/each}
@@ -239,15 +241,3 @@
 		</section>
 	</div>
 </div>
-
-<style>
-	#loader {
-		margin: 0;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		margin-right: -50%;
-		transform: translate(-50%, -50%);
-		z-index: 100;
-	}
-</style>

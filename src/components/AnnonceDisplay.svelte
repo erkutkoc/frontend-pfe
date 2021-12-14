@@ -44,7 +44,7 @@
 
 <div class="container column is-fullhd">
 	<div class="section">
-		<div class="columns is-desktop is-multiline ">
+		<div class="columns is-multiline ">
 			{#each annonces as annonce (annonce.id)}
 				<div class="card column is-one-third">
 					<div class="card-image">

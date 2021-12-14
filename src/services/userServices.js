@@ -11,14 +11,14 @@ const login = async(payload) => {
 }
 const register = async(payload) => {
     try {
-        return axios.post(baseUrl + "/login/register", payload);
+        return await axios.post(baseUrl + "/login/register", payload);
     } catch (error) {
         throw error.response.data;
     }
 }
 const getUserById = async(id, token) => {
     try {
-        return axios
+        return await axios
             .get(baseUrl + "/members/getmembre/" + id, {
                 headers: {
                     'Authorization': token,
@@ -31,7 +31,7 @@ const getUserById = async(id, token) => {
 }
 const getAllUsers = async(token) => {
     try {
-        return axios
+        return await axios
             .get(baseUrl + "/Members", {
                 headers: {
                     'Authorization': token,
@@ -50,7 +50,7 @@ const updateProfile = async(token, email, password, campus) => {
         Campus_Id: campus
     }
     try {
-        return axios
+        return await axios
             .put(baseUrl + "/Members/UpdateMembre", toSend, {
                 headers: {
                     'Authorization': token,
@@ -64,7 +64,7 @@ const updateProfile = async(token, email, password, campus) => {
 }
 const banUser = async(token, idMember, duree) => {
     try {
-        return axios
+        return await axios
             .put(baseUrl + `/Members/Ban/${idMember}/${duree}`, undefined, {
                 headers: {
                     'Authorization': token,
