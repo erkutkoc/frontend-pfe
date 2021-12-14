@@ -63,6 +63,11 @@
 				filteredDiscussions = [...filteredDiscussions, {id: d.id, dest: emailDest}]
 			})
 		})
+		.catch(error => {
+			console.log(error)
+			errorNotification = "Cette discussion n'existe pas"
+			snackbar = true
+		})
 	}
 
 	const postMessage = async (token, message, discussionId) => {
@@ -83,7 +88,9 @@
 						loading = false
 					})
 					.catch(error => {
-						console.log("Bad email post")
+						console.log(error)
+						errorNotification = "Vous ne faites pas partie de cette discussion"
+						snackbar = true
 					})
 				})
 				.catch(error => {
