@@ -1,13 +1,14 @@
 <script>
 	import Navbar from '../../components/Navbar.svelte';
 	import AdminAnnonceManagement from '../../components/AdminAnnonceManagement.svelte';
+	import AdminUsersManagement from '../../components/AdminUsersManagement.svelte';
+	import AdminAnnonceCategorieManagement from '../../components/AdminAnnonceCategorieManagement.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import UsersManagement from '../../components/AdminUsersManagement.svelte';
 	let currentToogle = 'default';
+
 	function setToogle(value) {
 		currentToogle = value;
 	}
-
 </script>
 
 <Navbar />
@@ -22,27 +23,39 @@
 						class={currentToogle == 'annonces' ? 'has-text-info has-background-success-light' : ''}
 						on:click|preventDefault={() => setToogle('annonces')}
 					>
-						<span class="icon"><i class="fas fa-th-list"></i></span> Annonces
+						<span class="icon"><i class="fas fa-th-list" /></span> Annonces
 					</a>
 				</li>
 				<li>
 					<a
 						href="#"
-						class={currentToogle == 'utilisateurs' ? 'has-text-info has-background-success-light' : ''}
+						class={currentToogle == 'utilisateurs'
+							? 'has-text-info has-background-success-light'
+							: ''}
 						on:click|preventDefault={() => setToogle('utilisateurs')}
 					>
-						<span class="icon"><i class="fas fa-users-cog"></i></span> Utilisateurs
+						<span class="icon"><i class="fas fa-users-cog" /></span> Utilisateurs
+					</a>
+				</li>
+				<li>
+					<a
+						href="#"
+						class={currentToogle == 'categories'
+							? 'has-text-info has-background-success-light'
+							: ''}
+						on:click|preventDefault={() => setToogle('categories')}
+					>
+						<span class="icon"><i class="fas fa-users-cog" /></span> Catégories
 					</a>
 				</li>
 			</ul>
 		</aside>
-
 		{#if currentToogle == 'annonces' || currentToogle == 'default'}
 			<AdminAnnonceManagement />
 		{/if}
 		{#if currentToogle == 'utilisateurs'}
-			<UsersManagement />{/if}
-
+			<AdminUsersManagement />{/if}
+		{#if currentToogle == 'categories'}<AdminAnnonceCategorieManagement />{/if}
 	</section>
 </div>
 

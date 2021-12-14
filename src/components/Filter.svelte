@@ -4,6 +4,8 @@
 	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
 	let categories = [];
+	let highCategories = [];
+	let subCategories = [];
 	let selectedCat = null;
 	let selectedCamp = null;
 	let selectedMin = -1;
@@ -19,8 +21,11 @@
 	onMount(async () => {
 		const res = await annonceServices.findAllCategorie();
 		categories = res;
+		highCategories = categories.filter((e) => e.sur_categorie_id == null);
+		subCategories = categories.filter((e) => e.sur_categorie_id != null);
 		const resp = await annonceServices.findAllAnnonce();
-		$annonces = resp.filter(a => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+		$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+		console.log($annonces);
 		$filteredAnnonces = $annonces;
 	});
 
@@ -32,7 +37,7 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
-	
+
 		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
@@ -56,13 +61,12 @@
 			dropdown = !dropdown;
 		}
 
-
 		if (selectedCamp) {
 			fetchAnnoncesByCampus();
 		}
 		if (selectedCat) {
-			  let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
-			  $filteredAnnonces = vals;
+			let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			$filteredAnnonces = vals;
 		}
 		if (selectedMin != -1) {
 			let vals = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
@@ -113,10 +117,16 @@
 		<label class="label">Catégorie </label>
 		<div class="select">
 			<select bind:value={selectedCat} on:input={handleChange}>
-				{#each categories as categorie }
-					<option value={categorie}>
-						{categorie.nom}
-					</option>
+				{#each highCategories as hCategorie}
+					<optgroup label={hCategorie.nom}>
+						{#each subCategories as sCategorie}
+							{#if hCategorie.id == sCategorie.sur_categorie_id}
+								<option  value={sCategorie}>
+									{sCategorie.nom}
+								</option>
+							{/if}
+						{/each}
+					</optgroup>
 				{/each}
 			</select>
 		</div>
@@ -169,7 +179,7 @@
 		</div>
 	</div>
 </nav>
-<AnnonceList annonces={$filteredAnnonces}/>
+<AnnonceList annonces={$filteredAnnonces} />
 
 <style>
 	.panel-block {

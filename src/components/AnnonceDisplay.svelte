@@ -13,13 +13,9 @@
 		if (USER) {
 			admin = USER.administrateur;
 		}
-		// console.log(USER.id)
 	});
 	//update state by annonce
 	const fetchUpdate = async (state, annonce) => {
-		console.log(state);
-		console.log(annonce);
-
 		let toSend = {
 			Id: annonce.id,
 			Titre: annonce.titre,
@@ -35,7 +31,6 @@
 			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
 		} else {
 			AnnonceServices.updateAnnonce(toSend, USER.token);
-
 			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
 			$usersAnnonces[index].etat = state;
 			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
