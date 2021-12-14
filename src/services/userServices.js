@@ -90,7 +90,7 @@ const getUserByEmail = async(email, token) => {
             body: JSON.stringify(toSend)
         })
     }catch(e){
-        console.log('error fetch email')
+        throw error.response.data;
     }
 }
 

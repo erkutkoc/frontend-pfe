@@ -6,6 +6,7 @@
 	import '../../styles/tailwind-output.css';
 	import DiscussionServices from '../../services/discussionServices.js';
 	import UserServices from '../../services/userServices';
+	import { Snackbar } from 'svelte-materialify';
 
 	let emailSearched = '';
 	let selectedDiscussion = null;
@@ -18,6 +19,8 @@
 	let newDiscussionEmail = ''
 	let id
 	let loading = false
+	let snackbar = false
+	let errorNotification 
 
 	let USER;
 	onMount(() => {
@@ -69,27 +72,32 @@
 	}
 
 	const postDiscussion = async (member) => {
-		if (newDiscussionEmail.length > 0 && !discussions.find( (d) => d.dest.localeCompare(newDiscussionEmail) == 0)){
-			await UserServices.getUserByEmail(newDiscussionEmail, token).then(async (memberId) => {
-				await DiscussionServices.postDiscussion(token, memberId.data, id).then((data) => {
-					let newDiscussion = {id:data.data.id, dest: newDiscussionEmail}
-					discussions = [...discussions, newDiscussion]
-					filteredDiscussions = [...filteredDiscussions, newDiscussion]
-					loading = false
+		if (newDiscussionEmail.length > 0 && 
+			newDiscussionEmail.localeCompare(USER.email) &&
+			!discussions.find( (d) => d.dest.localeCompare(newDiscussionEmail) == 0)){
+				await UserServices.getUserByEmail(newDiscussionEmail, token).then(async (memberId) => {
+					await DiscussionServices.postDiscussion(token, memberId.data, id).then((data) => {
+						let newDiscussion = {id:data.data.id, dest: newDiscussionEmail}
+						discussions = [...discussions, newDiscussion]
+						filteredDiscussions = [...filteredDiscussions, newDiscussion]
+						loading = false
+					})
+					.catch(error => {
+						console.log("Bad email post")
+					})
 				})
 				.catch(error => {
-					console.log("Bad email post")
+					console.log("Bad email")
+					loading = false
+					errorNotification = "L'email ne correspond à personne"
+					snackbar = true
 				})
-			})
-			.catch(error => {
-				console.log("Bad email")
-				loading = false
-			})
 		}
 		else {
-			console.log("déjà présent")
+			errorNotification = "Il y a déjà une conversation avec cette personne"
+			snackbar = true
+			loading = false
 		}
-		//loading = false
 	}
 
 	function handleInput(e) {
@@ -117,6 +125,9 @@
 
 <main>
 	<Navbar />
+	<Snackbar top center rounded bind:active={snackbar} timeout={1000} style="background-color:red">
+		{errorNotification}
+	</Snackbar>
 	<div class="min-h-full flex items-center justify-center py-12 px-15 sm:px-6 lg:px-8">
 		<div class="max-w-4xl w-full space-y-8">
 			<div>
@@ -143,7 +154,7 @@
 								<footer class="card-footer">
 									
 									<div 
-										class="card-footer-item column is-two-fifths"
+										class="card-footer-item"
 										on:click={(e) => handleClickDiscussion({discussion})}
 									>
 										<p>{discussion.dest}</p>
