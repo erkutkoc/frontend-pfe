@@ -52,7 +52,7 @@
             banned = false
         }
         filteredMembers = baseMembers
-        if (emailSearched != "") filteredMembers = baseMembers.filter((m) => m.email.startsWith(emailSearched));
+        if (emailSearched != "") filteredMembers = baseMembers.filter((m) => m.email.toUpperCase().startsWith(emailSearched.toUpperCase()));
 	}
 </script>
 

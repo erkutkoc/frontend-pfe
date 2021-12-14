@@ -23,24 +23,14 @@
     const ban = (e, duration) => {
         if (duration == 0) e.target.innerText = "OK"
         else e.target.innerText = "BANNI"
-        banUser(duration)
-        //banUser(token, id, duration)
+        banUser(token, id, duration)
     }
-/*
+
     const banUser = async (token, id, duration) => {
 		await UserServices.banUser(token, id, duration).then((data) => {
 			console.log(data)
 		})
-	}*/
-
-    const banUser = async (duration) => {
-        const response = fetch(`https://pfe-backend1.herokuapp.com/Members/Ban/${id}/${duration}`,{
-            headers: {"Content-Type" :"application/json", 
-                Authorization: token },
-            method:'PUT',
-        });
-        return response;
-    }
+	}
 
 </script>
 

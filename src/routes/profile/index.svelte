@@ -37,38 +37,13 @@
             }
             if (data) putProfile(token, data)
     }
-    /*
-    const putProfile = async (token, data) => {
-        //console.log(token)
-        let toSend = {
-            email: USER.email,
-            motDePasse: data.password,
-            campus_id: Number.parseInt(data.campus)
-        };
-		await UserServices.updateProfile(token, toSend).then((data) => {
-			console.log(data)
-		})
-	}*/
-
     
     const putProfile = async (token, data) => {
-        let toSend = {
-            email: USER.email,
-            motDePasse: data.password,
-            campus_id: Number.parseInt(data.campus)
-        };
+		await UserServices.updateProfile(token, email, data.password, Number.parseInt(data.campus)).then((data) => {
+			loading = false
+		})
+	}
 
-        const response = await fetch('https://pfe-backend1.herokuapp.com/Members/UpdateMembre',{
-            headers: {"Content-Type" :"application/json", 
-                Authorization: token
-            },
-            method:'PUT',
-            body : JSON.stringify(toSend)
-        });
-        loading = false
-        return response
-        
-    }
 </script>
 
 
