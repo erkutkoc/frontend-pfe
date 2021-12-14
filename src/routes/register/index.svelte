@@ -128,5 +128,6 @@
 <style>
 	#registerform{
 		margin-top: 200px;
+		z-index: 100;
 	}
 </style>

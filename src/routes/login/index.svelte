@@ -44,7 +44,7 @@
 </script>
 
 <Navbar />
-<Snackbar top center rounded bind:active={snackbar} timeout={1000} style="background-color:red">
+<Snackbar top center rounded bind:active={snackbar} timeout={2000} style="background-color:red">
 	{errorNotification}
 </Snackbar>
 

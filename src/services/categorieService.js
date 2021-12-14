@@ -3,8 +3,8 @@ const baseUrl =
     import.meta.env.VITE_BASE_URL
 
 
-const updateCategorie = async (data, token, admin, id) => {
-    return axios
+const updateCategorie = async(data, token, admin, id) => {
+    return await axios
         .put(baseUrl + "/categories/" + id, data, {
             headers: {
                 'Authorization': token,
@@ -12,8 +12,8 @@ const updateCategorie = async (data, token, admin, id) => {
             }
         })
 }
-const addCategorie = async (data, token) => {
-    return axios
+const addCategorie = async(data, token) => {
+    return await axios
         .post(baseUrl + "/categories", data, {
             headers: {
                 'Authorization': token,
@@ -21,8 +21,8 @@ const addCategorie = async (data, token) => {
             }
         });
 }
-const addSubCategorie = async (data, token) => {
-    return axios
+const addSubCategorie = async(data, token) => {
+    return await axios
         .post(baseUrl + "/categories", data, {
             headers: {
                 'Authorization': token,
@@ -30,11 +30,10 @@ const addSubCategorie = async (data, token) => {
             }
         });
 }
-const deleteCategorie = async (token, id) => {
-    return axios
-        .put(baseUrl + "/categories/delete/" + id,{}, 
-        {headers: 
-            {
+const deleteCategorie = async(token, id) => {
+    return await axios
+        .put(baseUrl + "/categories/delete/" + id, {}, {
+            headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }

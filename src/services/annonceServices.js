@@ -43,7 +43,7 @@ const findAllAnnonceByEmail = async(user) => {
 }
 const findAnnonceById = async(id, token) => {
     try {
-        return axios
+        return await axios
             .get(baseUrl + "/annonces/" + id, {
                 headers: {
                     'Authorization': token,
@@ -56,7 +56,7 @@ const findAnnonceById = async(id, token) => {
 }
 const getAllCampus = async() => {
     try {
-        return axios
+        return await axios
             .get(baseUrl + "/adresses/", {
                 headers: {
                     'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ const getAllCampus = async() => {
 const updateAnnonce = async(data, token, admin) => {
     try {
         if (admin) {
-            return axios
+            return await axios
                 .put(baseUrl + "/annonces/admin", data, {
                     headers: {
                         'Authorization': token,
@@ -79,7 +79,7 @@ const updateAnnonce = async(data, token, admin) => {
                     }
                 })
         } else {
-            return axios
+            return await axios
                 .put(baseUrl + "/annonces", data, {
                     headers: {
                         'Authorization': token,
@@ -94,7 +94,7 @@ const updateAnnonce = async(data, token, admin) => {
 }
 const uploadAnnonce = async(data, token) => {
     try {
-        return axios
+        return await axios
             .post(baseUrl + "/annonces", data, {
                 headers: {
                     'Authorization': token,

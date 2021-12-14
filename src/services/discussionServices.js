@@ -24,7 +24,7 @@ const postMessage = async(token, message, discussionId) => {
         Texte: message
     }
     try{
-        return axios
+        return await axios
         .post(baseUrl + "/discussions/messages", toSend, {
             headers: {
                 'Authorization': token,
@@ -53,7 +53,7 @@ const getDiscussions = async(token, memberId) => {
 
 const postDiscussion = async (token, member, id) => {
     try {
-        return axios
+        return await axios
         .post(baseUrl + `/discussions/membres/${member}/${id}`, undefined,{
             headers: {
                 'Authorization': token,
