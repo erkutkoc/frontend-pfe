@@ -1,7 +1,7 @@
 <script>
 	import annonceServices from '../services/annonceServices';
 	import AnnonceList from './AnnonceList.svelte';
-	import { annonces, filteredAnnonces } from '../utils/stores.js';
+	import { annonces, filteredAnnonces, annoncesByCampus } from '../utils/stores.js';
 	import { onMount } from 'svelte';
 	let categories = [];
 	let highCategories = [];
@@ -11,7 +11,7 @@
 	let selectedMin = -1;
 	let selectedMax = -1;
 	let sort = 'default';
-	let annoncesByCampus = [];
+
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
 		{ id: 1, campus: `Ixelles`, value: `Ixelles` },
@@ -29,9 +29,14 @@
 	});
 
 	const fetchAnnoncesByCampus = async () => {
+
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
-		annoncesByCampus = resp;
-		$filteredAnnonces = annoncesByCampus;
+		let temp = resp;
+
+		$annoncesByCampus = temp;
+
+		$filteredAnnonces = $annoncesByCampus;
+
 	};
 
 	function handleChange(e) {

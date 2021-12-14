@@ -45,7 +45,7 @@
 							: ''}
 						on:click|preventDefault={() => setToogle('categories')}
 					>
-						<span class="icon"><i class="fas fa-users-cog" /></span> Catégories
+						<span class="icon" ><i class="fab fa-cuttlefish"></i></span> Catégories
 					</a>
 				</li>
 			</ul>
