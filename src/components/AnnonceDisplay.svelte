@@ -13,13 +13,11 @@
 		if (USER) {
 			admin = USER.administrateur;
 		}
-		console.log(USER.id)
 	});
 	//update state by annonce
 	const fetchUpdate = async (state, annonce) => {
 		console.log(state);
 		console.log(annonce)
-
 		let toSend = {
 			Id: annonce.id,
 			Titre: annonce.titre,
