@@ -6,7 +6,7 @@
 	import storage from '../../utils/storage';
 	import ErrorPage from '../../components/ErrorPage.svelte';
 	import { fade, scale } from 'svelte/transition';
-	import { Snackbar, MaterialApp } from 'svelte-materialify';
+	import { Snackbar } from 'svelte-materialify';
 
 	let snackbar = false;
 	let USER;
