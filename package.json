@@ -37,7 +37,8 @@
         "prettier-plugin-svelte": "^2.4.0",
         "svelte": "^3.44.2",
         "svelte-loading-spinners": "^0.1.7",
-        "svelte-preprocess": "^4.7.3",
+        "svelte-materialify": "^0.3.11",
+        "svelte-preprocess": "^4.10.0",
         "tailwindcss": "^2.2.19"
     },
     "type": "module",
@@ -46,6 +47,7 @@
         "@tailwindcss/forms": "^0.3.4",
         "axios": "^0.24.0",
         "bulma": "^0.9.3",
+        "node-sass": "^7.0.0",
         "pusher-js": "^7.0.3",
         "sapper-environment": "^1.0.1",
         "svelte-particles": "^1.20.5",

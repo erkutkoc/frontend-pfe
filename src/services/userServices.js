@@ -3,34 +3,49 @@ const baseUrl =
     import.meta.env.VITE_BASE_URL
 
 const login = async(payload) => {
-    return axios
-        .post(baseUrl + "/login/login", payload);
+    try {
+        return await axios.post(baseUrl + "/login/login", payload);
+    } catch (error) {
+        throw error.response.data;
+    }
 }
 const register = async(payload) => {
-    return axios
-        .post(baseUrl + "/login/register", payload);
+    try {
+        return axios.post(baseUrl + "/login/register", payload);
+    } catch (error) {
+        throw error.response.data;
+    }
 }
 const getUserById = async(id, token) => {
-    return axios
-        .get(baseUrl + "/members/getmembre/" + id, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        })
+    try {
+        return axios
+            .get(baseUrl + "/members/getmembre/" + id, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+    } catch (error) {
+        throw error.response.data;
+    }
 }
 const getAllUsers = async(token) => {
-    return axios
-        .get(baseUrl + "/Members", {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        });
+    try {
+        return axios
+            .get(baseUrl + "/Members", {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+    } catch (error) {
+        throw error.response.data;
+    }
+
 };
 const updateProfile = async(token, email, password, campus) => {
     let toSend = {
-        Email: email, 
+        Email: email,
         MotDePasse: password,
         Campus_Id: campus
     }
@@ -42,8 +57,8 @@ const updateProfile = async(token, email, password, campus) => {
                 'Content-Type': 'application/json'
             },
         })
-    }catch(e){
-        console.log('error update profile')
+    }catch(error){
+        throw error.response.data;
     }
 }
 
@@ -56,8 +71,8 @@ const banUser = async(token, idMember, duree) => {
                 'Content-Type': 'application/json'
             }
         })
-    }catch(e){
-        console.log('error ban user')
+    }catch(error){
+        throw error.response.data;
     }
 }
 

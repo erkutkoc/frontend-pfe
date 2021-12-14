@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const baseUrl = "https://backend-staging-pfe.herokuapp.com";
+const baseUrl =
+    import.meta.env.VITE_BASE_URL
 
-const getMessagesByDiscussion = async (token, discussionId) => {
+const getMessagesByDiscussion = async(token, discussionId) => {
     try {
         const response = await axios
             .get(baseUrl + `/discussions/messages/${discussionId}`, {
@@ -13,13 +14,13 @@ const getMessagesByDiscussion = async (token, discussionId) => {
             });
         return response.data;
     } catch (e) {
-        console.error('Error fetching messages');
+        throw e.response.data;
     }
 }
 
-const postMessage = async (token, message, discussionId) => {
+const postMessage = async(token, message, discussionId) => {
     let toSend = {
-        Discussion_id: discussionId, 
+        Discussion_id: discussionId,
         Texte: message
     }
     try{
@@ -35,7 +36,7 @@ const postMessage = async (token, message, discussionId) => {
     }
 }
 
-const getDiscussions = async (token, memberId) => {
+const getDiscussions = async(token, memberId) => {
     try {
         const response = await axios
             .get(baseUrl + `/discussions/membres/${memberId}`, {
@@ -46,7 +47,7 @@ const getDiscussions = async (token, memberId) => {
             });
         return response.data;
     } catch (e) {
-        console.error('Error fetching discussion');
+        throw e.response.data;
     }
 }
 

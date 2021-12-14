@@ -28,9 +28,6 @@
 			{#if USER}
 				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
 				<a class="navbar-item" href="/chat"> Chat </a>
-				{#if USER.administrateur}
-					<a class="navbar-item has-text-info" href="/administrations"> Administration </a>
-				{/if}
 			{/if}
 			<div class="navbar-item has-dropdown is-hoverable">
 				<div class="navbar-dropdown is-boxed" />
@@ -43,6 +40,9 @@
 				<a class="navbar-item" href="/register"> Inscription </a>
 			{/if}
 			{#if USER}
+				{#if USER.administrateur}
+					<a class="navbar-item has-text-info" href="/administrations"> Administration </a>
+				{/if}
 				<a class="navbar-item has-text-primary" href="/profile">{username}</a>
 
 				<a class="navbar-item" href="/logout"> Deconnexion </a>

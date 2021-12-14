@@ -1,12 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
-	import UserServices from '../../services/userServices.js';
 	import { goto } from '$app/navigation';
+	import Navbar from '../../components/Navbar.svelte';
+	import UserServices from '../../services/userServices.js';
 	import storage from '../../utils/storage';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import Navbar from '../../components/Navbar.svelte'
-	
+	import { fade, scale } from 'svelte/transition';
+	import { Snackbar } from 'svelte-materialify';
+
+	let snackbar = false;
 	let USER;
+	let errorNotification;
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 	});
@@ -25,17 +30,29 @@
 			Email: data.email,
 			MotDePasse: data.password
 		};
-		await UserServices.login(toSend).then((connectedUser) => {
-			connectedUser.data.token = 'Bearer ' + connectedUser.data.token;
-			storage('user', connectedUser.data);
-			goto('/');
-		});
+		try {
+			await UserServices.login(toSend).then((connectedUser) => {
+				connectedUser.data.token = 'Bearer ' + connectedUser.data.token;
+				storage('user', connectedUser.data);
+				goto('/');
+			});
+		} catch (err) {
+			snackbar = true;
+			errorNotification = err;
+		}
 	};
 </script>
 
-<Navbar/>
+<Navbar />
+<Snackbar top center rounded bind:active={snackbar} timeout={1000} style="background-color:red">
+	{errorNotification}
+</Snackbar>
+
 {#if !USER}
-	<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+	<div
+		class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+		id="loginform"
+	>
 		<div class="max-w-md w-full space-y-8">
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Connexion</h2>
@@ -112,3 +129,9 @@
 {:else}
 	<ErrorPage message="Vous êtes déjà connecté" link="/" />
 {/if}
+
+<style>
+	#loginform {
+		margin-top: 200px;
+	}
+</style>

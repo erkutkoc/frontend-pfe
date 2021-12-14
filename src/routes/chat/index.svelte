@@ -1,9 +1,9 @@
 <script>
 	import Navbar from '../../components/Navbar.svelte';
-	import { Shadow } from 'svelte-loading-spinners';
-	import '../../styles/tailwind-output.css';
 	import {onMount} from 'svelte';
 	import Pusher from 'pusher-js';
+	import { Shadow } from 'svelte-loading-spinners';
+	import '../../styles/tailwind-output.css';
 	import DiscussionServices from '../../services/discussionServices.js';
 	import UserServices from '../../services/userServices';
 
