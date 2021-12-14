@@ -16,7 +16,6 @@
         });
     })
 
-
 	let emailSearched = '';
 	let selectedDiscussion = null;
 

@@ -1,12 +1,7 @@
 <script>
-	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
-
 	import AdminAnnonceManagement from '../../components/AdminAnnonceManagement.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import 'bulma/css/bulma.css';
-
-	import '../../styles/tailwind-output.css';
 	import UsersManagement from '../../components/AdminUsersManagement.svelte';
 	let currentToogle = 'default';
 	function setToogle(value) {

@@ -1,20 +1,18 @@
 <script>
-	import '../../styles/tailwind-output.css';
 	import Navbar from '../../components/Navbar.svelte';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import 'bulma/css/bulma.css';
 	import Modal from '../../components/Modal.svelte';
 	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
 	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
-	import { annonces, filteredAnnonces } from './../../utils/stores.js';
+	import { usersAnnonces, usersFilteredAnnonces } from './../../utils/stores.js';
 	let loaded = false;
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
 		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
-		$annonces = res;
+		$usersAnnonces = res;
 		loaded = true;
 	});
 
@@ -23,15 +21,15 @@
 
 	function handleFilter(filter) {
 		if (currentToogle === 'E') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'V') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'T') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'R') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		} else if (currentToogle === 'A') {
-			$filteredAnnonces = $annonces.filter((e) => e.etat == filter);
+			$usersFilteredAnnonces = $usersAnnonces.filter((e) => e.etat == filter);
 		}
 	}
 </script>
@@ -65,7 +63,7 @@
 							<span class="icon is-small has-text-primary-dark"
 								><i class="fas fa-check-circle" /></span
 							>
-							<span>Validée</span>
+							<span>Validés</span>
 						</a>
 					</li>
 					<li class={currentToogle === 'R' ? 'is-active' : ''}>
@@ -74,7 +72,7 @@
 							<span class="icon is-small" style="color:#F98A0C"
 								><i class="fas fa-minus-circle" /></span
 							>
-							<span>Réservée</span>
+							<span>Réservés</span>
 						</a>
 					</li>
 					<li class={currentToogle === 'T' ? 'is-active' : ''}>
@@ -90,7 +88,7 @@
 							<span class="icon is-small has-text-danger-dark"
 								><i class="fas fa-times-circle" /></span
 							>
-							<span>Supprimer</span>
+							<span>Supprimés</span>
 						</a>
 					</li>
 					<button
@@ -102,12 +100,12 @@
 		</div>
 		<br />
 		{#if currentToogle === 'default'}
-			<AnnonceDisplay annonces={$annonces} />
+			<AnnonceDisplay annonces={$usersAnnonces}  {currentToogle}/>
 		{:else}
 			{#await handleFilter(currentToogle)}
-				<p>Chargement des $annonces...</p>
+				<p>Chargement des annonces...</p>
 			{:then}
-				<AnnonceDisplay annonces={$filteredAnnonces} />
+				<AnnonceDisplay annonces={$usersFilteredAnnonces} {currentToogle}/>
 			{/await}
 		{/if}
 	</main>

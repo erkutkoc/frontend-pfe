@@ -61,7 +61,11 @@ const getAllCampus = async() => {
         });
 }
 const updateAnnonce = async(data, token, admin) => {
+    console.log(data)
+    console.log(token)
+    console.log(admin)
     if (admin) {
+        console.log("je passe ici")
         return axios
             .put(baseUrl + "/annonces/admin", data, {
                 headers: {
@@ -70,6 +74,7 @@ const updateAnnonce = async(data, token, admin) => {
                 }
             })
     } else {
+        console.log("je passe en non admin")
         return axios
             .put(baseUrl + "/annonces", data, {
                 headers: {

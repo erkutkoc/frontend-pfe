@@ -1,5 +1,4 @@
 <script>
-	import '../../styles/tailwind-output.css';
 	import { onMount } from 'svelte';
 	import Navbar from '../../components/Navbar.svelte';
 	import UserServices from '../../services/userServices.js';
@@ -122,6 +121,6 @@
 			</div>
 		</div>
 		{:else}
-		<ErrorPage message="Vous êtes déjà connectées! Vous ne pouvez pas vous enregistrer !" link="/"/>
+		<ErrorPage message="Vous êtes déjà connecté! Vous ne pouvez pas vous enregistrer !" link="/"/>
 		{/if}
 </main>

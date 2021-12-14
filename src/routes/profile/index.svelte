@@ -3,7 +3,6 @@
     import { Shadow } from 'svelte-loading-spinners';
 
     import Navbar from "../../components/Navbar.svelte";
-    import '../../styles/tailwind.css';
     import AnnonceServices from '../../services/annonceServices.js';
 
     let campus = []

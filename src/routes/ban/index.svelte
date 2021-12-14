@@ -1,5 +1,4 @@
 <script>
-	import '../../styles/tailwind-output.css';
 	import Member from '../../components/MemberLine.svelte';
 	import Navbar from '../../components/Navbar.svelte';
 	import { onMount } from 'svelte';
