@@ -9,6 +9,8 @@
 	import MapsAnnonce from '../components/MapsAnnonce.svelte';
 	import Caroussel from '../components/Caroussel.svelte';
 	import LoadingAnimation from '../components/LoadingAnimation.svelte';
+	import { Snackbar } from 'svelte-materialify';
+	import { goto } from '$app/navigation';
 	// import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
 	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
 	import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
@@ -18,13 +20,24 @@
 	let currentUser = ' ';
 	let annonceCategorie;
 	let vendeur;
+	let snackbar = false;
+	let notifMsg, colorNotif;
 
 	onMount(async () => {
 		currentUser = JSON.parse(sessionStorage.getItem('user'));
 		if (!currentUser) return;
-		let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
-		annonce = fetchAnnonce.data;
-
+		try {
+			let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
+			annonce = fetchAnnonce.data;
+		} catch (error) {
+			notifMsg = error;
+			colorNotif = 'red';
+			snackbar = true;
+			setTimeout(() => {
+				goto('/');
+			}, 2500);
+			return;
+		}
 		let fetchCategories = await AnnonceServices.findAllCategorie();
 		annonceCategorie = fetchCategories.filter((c) => c.id == annonce.categorie_id)[0];
 
@@ -34,9 +47,19 @@
 </script>
 
 <Navbar />
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={2000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
 {#if currentUser}
 	{#if !annonce || !annonceCategorie || !vendeur}
-		<LoadingAnimation/>
+		<LoadingAnimation />
 	{:else}
 		<div>
 			<div
@@ -91,7 +114,7 @@
 					<MapsAnnonce adresses={annonce.adresses} />
 				</div>
 				{#if !is_empty(annonce.urlPhoto)}
-					<Caroussel annonce={annonce}/>
+					<Caroussel {annonce} />
 				{:else}
 					<div class="card-image">
 						<figure class="image is-5by3">
