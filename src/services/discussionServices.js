@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const baseUrl = "https://backend-staging-pfe.herokuapp.com";
+const baseUrl =
+    import.meta.env.VITE_BASE_URL
 
-const getMessagesByDiscussion = async (token, discussionId) => {
+const getMessagesByDiscussion = async(token, discussionId) => {
     try {
         const response = await axios
             .get(baseUrl + `/discussions/messages/${discussionId}`, {
@@ -13,13 +14,13 @@ const getMessagesByDiscussion = async (token, discussionId) => {
             });
         return response.data;
     } catch (e) {
-        console.error('Error fetching data');
+        throw e.response.data;
     }
 }
 
-const postMessage = async (token, message, discussionId) => {
+const postMessage = async(token, message, discussionId) => {
     let toSend = {
-        Discussion_id: discussionId, 
+        Discussion_id: discussionId,
         Texte: message
     }
     return axios
@@ -31,7 +32,7 @@ const postMessage = async (token, message, discussionId) => {
         });
 }
 
-const getDiscussions = async (token, memberId) => {
+const getDiscussions = async(token, memberId) => {
     try {
         const response = await axios
             .get(baseUrl + `/discussions/membres/${memberId}`, {
@@ -42,13 +43,13 @@ const getDiscussions = async (token, memberId) => {
             });
         return response.data;
     } catch (e) {
-        console.error('Error fetching data');
+        throw e.response.data;
     }
 }
 
-const postDiscussion = async (token, member, id) => {
+const postDiscussion = async(token, member, id) => {
     return axios
-        .post(baseUrl + `/discussions/membres/${member}/${id}`, undefined,{
+        .post(baseUrl + `/discussions/membres/${member}/${id}`, undefined, {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'

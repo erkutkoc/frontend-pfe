@@ -1,6 +1,5 @@
 <script>
 	import Navbar from '../../components/Navbar.svelte';
-	import '../../styles/tailwind-output.css';
 	import {onMount} from 'svelte';
 	import Pusher from 'pusher-js';
 	import DiscussionServices from '../../services/discussionServices.js';

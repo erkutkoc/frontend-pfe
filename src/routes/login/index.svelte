@@ -5,9 +5,12 @@
 	import UserServices from '../../services/userServices.js';
 	import storage from '../../utils/storage';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
+	import { fade, scale } from 'svelte/transition';
+	import { Snackbar, MaterialApp } from 'svelte-materialify';
 
-	let USER, errorNotification;
+	let snackbar = false;
+	let USER;
+	let errorNotification;
 
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
@@ -34,24 +37,26 @@
 				goto('/');
 			});
 		} catch (err) {
-			console.log('err dans le controller::'+err)
+			snackbar = true;
 			errorNotification = err;
-			notifier.danger(err)
 		}
 	};
 </script>
 
 <Navbar />
+<Snackbar top center rounded bind:active={snackbar} timeout={1000} style="background-color:red">
+	{errorNotification}
+</Snackbar>
+
 {#if !USER}
-	<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+	<div
+		class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+		id="loginform"
+	>
 		<div class="max-w-md w-full space-y-8">
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Connexion</h2>
 			</div>
-			{#if errorNotification}
-				<p id="notification" />
-				<NotificationDisplay />
-			{/if}
 			<form on:submit|preventDefault={onSubmit} class="mt-8 space-y-6" action="#" method="POST">
 				<input type="hidden" name="remember" value="true" />
 				<div class="rounded-md shadow-sm -space-y-px">
@@ -126,10 +131,7 @@
 {/if}
 
 <style>
-	#notification {
-		color: red;
-		font-weight: bold;
-		font-style: italic;
-		text-decoration: underline;
+	#loginform {
+		margin-top: 200px;
 	}
 </style>

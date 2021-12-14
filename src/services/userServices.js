@@ -1,6 +1,6 @@
 import axios from "axios";
-const baseUrl = "http://5e47-2a02-a03f-6603-9b00-e42e-c2a0-e62f-731a.ngrok.io";
-// import.meta.env.VITE_BASE_URL
+const baseUrl =
+    import.meta.env.VITE_BASE_URL
 
 const login = async(payload) => {
     try {

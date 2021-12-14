@@ -47,7 +47,7 @@
 <main>
 	<Navbar />
 	{#if !USER}
-		<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+		<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" id="registerform">
 			<div class="max-w-md w-full space-y-8">
 				<div>
 					<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Inscription</h2>
@@ -124,3 +124,9 @@
 		<ErrorPage message="Vous êtes déjà connecté! Vous ne pouvez pas vous enregistrer !" link="/"/>
 		{/if}
 </main>
+
+<style>
+	#registerform{
+		margin-top: 200px;
+	}
+</style>
