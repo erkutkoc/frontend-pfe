@@ -28,6 +28,16 @@
 
     const banUser = async (token, id, duration) => {
 		await UserServices.banUser(token, id, duration).then((data) => {
+		})
+	}
+
+    const admin = (e) => {
+        e.target.innerText = "ADMIN"
+        adminUser(token, id)
+    }
+
+    const adminUser = async (token, id) => {
+		await UserServices.adminUser(token, id).then((data) => {
 			console.log(data)
 		})
 	}
@@ -76,6 +86,14 @@
                             on:click={(e) => ban(e,-1)} 
                             class="button is-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >Bannir définitivement
+                        </button>
+                    </div>
+
+                    <div class="card-footer-item">
+                        <button 
+                            on:click={(e) => admin(e)} 
+                            class="button has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >Rendre administrateur
                         </button>
                     </div>
 				{/if}
