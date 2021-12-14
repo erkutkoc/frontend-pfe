@@ -1,31 +1,111 @@
 <script>
 	import Navbar from '../../components/Navbar.svelte';
+	import '../../styles/tailwind-output.css';
+	import {onMount} from 'svelte';
+	import Pusher from 'pusher-js';
+	import DiscussionServices from '../../services/discussionServices.js';
+	import UserServices from '../../services/userServices';
+
+	onMount(() => {
+        Pusher.logToConsole = true;
+        const pusher = new Pusher('93dc2573318267ee5994', {
+            cluster: 'eu'
+        });
+        
+		const channel = pusher.subscribe('chat');
+        channel.bind('message', data => {
+            messages = [...messages, data];
+        });
+    })
 
 	let emailSearched = '';
 	let selectedDiscussion = null;
+	let token
 
-	let discussions = [];
+	let discussions = []
 	let filteredDiscussions = [];
-
 	let messages = [];
+	let message = ''
+	let newDiscussionEmail = ''
+	let id
 
-	//j'imagine qu'il faudra ajouter au moins une table en db dont on récupère les données ici
-	//on met un champ dernier message direct dans la conversation ?
+	let USER;
+	onMount(() => {
+		USER = JSON.parse(sessionStorage.getItem('user'));
+		token = USER.token;
+		id = USER.id
+		fetchDiscussions(token)
+/*
+		Pusher.logToConsole = true;
 
-	//sert pour la recherche d'une discussion
-	function handleInput(e) {
-		emailSearched = e.target.value;
-        filteredDiscussions = discussions.filter((d) => d.email.startsWith(emailSearched));
+		var pusher = new Pusher('93dc2573318267ee5994', {
+		cluster: 'eu'
+    	});
+
+		var channel = pusher.subscribe('chat');
+		channel.bind('message', function(data) {
+		alert(JSON.stringify(data));
+		});*/
+	});
+
+	const fetchMessages = async (token, discussionId) => {
+		await DiscussionServices.getMessagesByDiscussion(token, discussionId).then((discussion) => {
+			messages = discussion
+		})
 	}
 
-	//probablement plus opti de charger les messages de la conv ici
-	//je sais pas si c'est mieux de les trier par date en back ou en front
+	const fetchDiscussions = async (token) => {
+		let memberId = USER.id
+		await DiscussionServices.getDiscussions(token, memberId).then((data) => {
+			let idToFetch
+			data.map(async d =>  {
+				if (d.membre1_id == id) idToFetch = d.membre2_id
+				else idToFetch = d.membre1_id
+
+				let emailDest
+				await UserServices.getUserById(idToFetch, token).then((member) => {
+					emailDest = member.data.email
+				})
+				discussions = [...discussions, {id: d.id, dest: emailDest}]
+				filteredDiscussions = [...filteredDiscussions, {id: d.id, dest: emailDest}]
+			})
+		})
+	}
+
+	const postMessage = async (token, message, discussionId) => {
+		await DiscussionServices.postMessage(token, message, discussionId).then((data) => {
+			console.log(data)
+		})
+	}
+
+	const postDiscussion = async (member) => {
+		//await UserServices.getUserById()
+
+		await DiscussionServices.postDiscussion(token, member, id).then((data) => {
+			console.log(data)
+			discussions = [...discussions, {id: data.id, dest: newDiscussionEmail}]
+			filteredDiscussions = [...filteredDiscussions, {id: data.id, dest: newDiscussionEmail}]
+		})
+	}
+
+	function handleInput(e) {
+		emailSearched = e.target.value;
+        filteredDiscussions = discussions.filter((d) => d.intender.toUpperCase().startsWith(emailSearched.toUpperCase()));
+	}
+
 	const handleClickDiscussion = (discussion) => {
-		selectedDiscussion = discussion;
+		selectedDiscussion = discussion.discussion;
+		fetchMessages(token, selectedDiscussion.id)
 	};
 
-    //requête post
-    const handleSubmit = (discussion) => {
+	const handleClickPost = () => {
+		//postDiscussion(newDiscussionEmail)
+		postDiscussion(4)
+	}
+
+    const handleSubmit = () => {
+		if (message.length > 0) postMessage(token, message, selectedDiscussion.id)
+		message = ''
 	};
 
 </script>
@@ -37,85 +117,103 @@
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Discussions:</h2>
 			</div>
-			<div class="rounded-md shadow-sm -space-y-px">
-				<div class="max-w-sm">
-					<label for="email-address" class="sr-only">Email address</label>
-					<input
-						name="email"
-						on:input={handleInput}
-						placeholder="Rechercher un email"
-						class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-					/>
-				</div>
-			</div>
 			<div>
 				{#if selectedDiscussion == null}
-					<!--{#each filteredDiscussions as discussion}
-                        <div class="card">
-                            <footer class="card-footer">
-                                
-                                <div 
-                                    class="card-footer-item column is-two-fifths"
-                                    on:click={(e) => handleClickDiscussion({discussion})}
-                                >
-                                    <p>Nom</p>
-                                </div>
-
-                                <div class="card-footer-item">
-                                    <p>Dernier message</p>
-                                </div>
-                    
-                            </footer>
-                        </div>
-                    {/each}-->
-
-					<div class="card" on:click={(e) => handleClickDiscussion(1)}>
-						<footer class="card-footer">
-							<div class="card-footer-item column is-two-fifths">
-								<p>Xavier</p>
-							</div>
-
-							<div class="card-footer-item">
-								<p>Dernier message</p>
-							</div>
-						</footer>
+					<div class="rounded-md shadow-sm -space-y-px">
+						<div class="max-w-sm">
+							<label for="email-address" class="sr-only">Email address</label>
+							<input
+								name="email"
+								on:input={handleInput}
+								placeholder="Rechercher un email"
+								class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+							/>
+						</div>
 					</div>
-
-					<div class="card" on:click={(e) => handleClickDiscussion(2)}>
-						<footer class="card-footer">
-							<div class="card-footer-item column is-two-fifths">
-								<p>Linet</p>
+					{#if filteredDiscussions.length == 0}
+						<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
+					{:else}
+						{#each filteredDiscussions as discussion}
+							<div class="card cursor-pointer">
+								<footer class="card-footer">
+									
+									<div 
+										class="card-footer-item column is-two-fifths"
+										on:click={(e) => handleClickDiscussion({discussion})}
+									>
+										<p>{discussion.dest}</p>
+									</div>
+						
+								</footer>
 							</div>
-
-							<div class="card-footer-item">
-								<p>Dernier message</p>
-							</div>
-						</footer>
-					</div>
+						{/each}
+					{/if}
+					<form on:submit|preventDefault={handleSubmit} class="mt-8 space-y-6" action="#" method="POST">
+                        
+						<input
+							id="newDiscussionEmail"
+							name="newDiscussionEmail"
+							bind:value={newDiscussionEmail}
+							type="text"
+							required
+							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+							placeholder="Ecrivez l'email de votre destinataire"
+						/>
+						<button
+								type="submit"
+								class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+								on:click={(e) => handleClickPost()}
+						>
+						Ajouter une conversation
+						</button>
+					</form>
 				{:else}
 					<button
-						on:click={(e) => (selectedDiscussion = null)}
+						on:click={(e) => {
+							selectedDiscussion = null
+							messages = []
+							}}
 						class="relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 						>Retour
 					</button>
 
-					<!--{#each messages as message}
-                        <div class="card">
-                            <footer class="card-footer">  
-                                <div class="card-footer-item">
-                                    <p>{message.texte}</p>
-                                </div>
-                            </footer>
-                        </div>
-                    {/each}-->
+					<div>
+						{#each messages as message}
+							<!--<div class="card">
+								<footer class="card-footer"> 
+									{#if message.envoyeur_id == id} 
+										<div class="card-footer-item">
+											<p class="absolute left-0 inset-y-0 flex items-center pl-3 has-background-primary-light">{message.texte}</p>
+										</div>
+									{:else}
+										<div class="card-footer-item">
+											<p class="absolute right-0 inset-y-0 flex items-center pl-3 has-background-info-dark">{message.texte}</p>
+										</div>
+									{/if}
+									
+								</footer>
+							</div>-->
+							{#if message.envoyeur_id == id} 
+								<div class="card">
+									<footer class="card-footer relative max-w-xs has-background-primary-light"> 
+										<div class="card-footer-item inset-y-0 left-0">
+											<p class="">{message.texte}</p>
+										</div>
+									</footer>
+								</div>
+							{:else}
+								<div class="card">
+									<footer class="card-footer relative max-w-xs has-background-info-dark"> 
+										<div class="card-footer-item inset-y-0 right-0">
+											<p class="">{message.texte}</p>
+										</div>
+									</footer>
+								</div>
 
-					<div class="card">
-						<footer class="card-footer">
-							<div class="card-footer-item">
-								<p>Message</p>
-							</div>
-						</footer>
+							{/if}
+						{/each}
 					</div>
+
                     <form on:submit|preventDefault={handleSubmit} class="mt-8 space-y-6" action="#" method="POST">
                         <input type="hidden" name="remember" value="true" />
                         <div class="rounded-md shadow-sm -space-y-px">
@@ -124,6 +222,7 @@
                                 <input
                                     id="message"
                                     name="message"
+									bind:value={message}
                                     type="text"
                                     required
                                     class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"

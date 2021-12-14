@@ -43,16 +43,20 @@ const getAllUsers = async(token) => {
     }
 
 };
-const updateProfile = async(token, payload) => {
+const updateProfile = async(token, email, password, campus) => {
+    let toSend = {
+        Email: email,
+        MotDePasse: password,
+        Campus_Id: campus
+    }
     try {
         return axios
-            .put(baseUrl + "/Members/UpdateMembre", {
+            .put(baseUrl + "/Members/UpdateMembre", toSend, {
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
                 },
-                body: payload
-            });
+            })
     } catch (error) {
         throw error.response.data;
     }
@@ -61,7 +65,7 @@ const updateProfile = async(token, payload) => {
 const banUser = async(token, idMember, duree) => {
     try {
         return axios
-            .put(baseUrl + `Members/Ban/${idMember}/${duree}`, {}, {
+            .put(baseUrl + `/Members/Ban/${idMember}/${duree}`, undefined, {
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
@@ -70,7 +74,6 @@ const banUser = async(token, idMember, duree) => {
     } catch (error) {
         throw error.response.data;
     }
-
 }
 
 
