@@ -76,6 +76,20 @@ const banUser = async(token, idMember, duree) => {
     }
 }
 
+const adminUser = async(token, idMember) => {
+    try {
+        return await axios
+        .put(baseUrl + `/members/admin/${idMember}`, undefined, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
 const getUserByEmail = async(email, token) => {
     let toSend = {
         Email: email,
@@ -102,5 +116,6 @@ const UserServices = {
     updateProfile,
     banUser,
     getUserByEmail,
+    adminUser,
 }
 export default UserServices;
