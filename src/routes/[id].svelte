@@ -128,4 +128,7 @@
 		font-size: large;
 		font-size: large;
 	}
+	.card-image {
+		margin-bottom: 500px;
+	}
 </style>

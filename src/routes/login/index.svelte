@@ -1,12 +1,14 @@
 <script>
 	import { onMount } from 'svelte';
-	import UserServices from '../../services/userServices.js';
 	import { goto } from '$app/navigation';
+	import Navbar from '../../components/Navbar.svelte';
+	import UserServices from '../../services/userServices.js';
 	import storage from '../../utils/storage';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import Navbar from '../../components/Navbar.svelte'
-	
-	let USER;
+	import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
+
+	let USER, errorNotification;
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 	});
@@ -25,21 +27,31 @@
 			Email: data.email,
 			MotDePasse: data.password
 		};
-		await UserServices.login(toSend).then((connectedUser) => {
-			connectedUser.data.token = 'Bearer ' + connectedUser.data.token;
-			storage('user', connectedUser.data);
-			goto('/');
-		});
+		try {
+			await UserServices.login(toSend).then((connectedUser) => {
+				connectedUser.data.token = 'Bearer ' + connectedUser.data.token;
+				storage('user', connectedUser.data);
+				goto('/');
+			});
+		} catch (err) {
+			console.log('err dans le controller::'+err)
+			errorNotification = err;
+			notifier.danger(err)
+		}
 	};
 </script>
 
-<Navbar/>
+<Navbar />
 {#if !USER}
 	<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Connexion</h2>
 			</div>
+			{#if errorNotification}
+				<p id="notification" />
+				<NotificationDisplay />
+			{/if}
 			<form on:submit|preventDefault={onSubmit} class="mt-8 space-y-6" action="#" method="POST">
 				<input type="hidden" name="remember" value="true" />
 				<div class="rounded-md shadow-sm -space-y-px">
@@ -112,3 +124,12 @@
 {:else}
 	<ErrorPage message="Vous êtes déjà connecté" link="/" />
 {/if}
+
+<style>
+	#notification {
+		color: red;
+		font-weight: bold;
+		font-style: italic;
+		text-decoration: underline;
+	}
+</style>

@@ -7,7 +7,7 @@ const findAllAnnonce = async() => {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
     } catch (e) {
-        console.error('Error fetching data');
+        throw e.response.data;
     }
 }
 const findAllByCampus = async(name) => {
@@ -16,7 +16,7 @@ const findAllByCampus = async(name) => {
             const response = await axios.get(baseUrl + '/annonces/campus/' + name);
             return response.data;
         } catch (e) {
-            console.error('Error fetching data');
+            throw e.response.data;
         }
     }
 }
@@ -25,7 +25,7 @@ const findAllCategorie = async() => {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
     } catch (e) {
-        console.error('Error fetching data');
+        throw e.response.data;
     }
 }
 const findAllAnnonceByEmail = async(user) => {
@@ -38,60 +38,72 @@ const findAllAnnonceByEmail = async(user) => {
         });
         return response.data;
     } catch (e) {
-        console.error('Error fetching data');
+        throw e.response.data;
     }
 }
 const findAnnonceById = async(id, token) => {
-    console.log(baseUrl)
-    return axios
-        .get(baseUrl + "/annonces/" + id, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        });
-}
-const getAllCampus = async() => {
-    return axios
-        .get(baseUrl + "/adresses/", {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-
-        });
-}
-const updateAnnonce = async(data, token, admin) => {
-    console.log(data)
-    console.log(token)
-    console.log(admin)
-    if (admin) {
-        console.log("je passe ici")
+    try {
         return axios
-            .put(baseUrl + "/annonces/admin", data, {
+            .get(baseUrl + "/annonces/" + id, {
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
                 }
-            })
-    } else {
-        console.log("je passe en non admin")
-        return axios
-            .put(baseUrl + "/annonces", data, {
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                }
-            })
+            });
+    } catch (error) {
+        throw e.response.data;
     }
 }
+const getAllCampus = async() => {
+    try {
+        return axios
+            .get(baseUrl + "/adresses/", {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+    } catch (error) {
+        throw e.response.data;
+    }
+
+}
+const updateAnnonce = async(data, token, admin) => {
+    try {
+        if (admin) {
+            return axios
+                .put(baseUrl + "/annonces/admin", data, {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                })
+        } else {
+            return axios
+                .put(baseUrl + "/annonces", data, {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                })
+        }
+    } catch (error) {
+        throw e.response.data;
+    }
+
+}
 const uploadAnnonce = async(data, token) => {
-    return axios
-        .post(baseUrl + "/annonces", data, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        });
+    try {
+        return axios
+            .post(baseUrl + "/annonces", data, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+    } catch (error) {
+        throw e.response.data;
+    }
 }
 
 const AnnonceServices = {
