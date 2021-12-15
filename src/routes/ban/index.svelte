@@ -20,7 +20,6 @@
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
 		fetchMembers(token)
-		console.log("Hallo?")
 	});
 
 
@@ -43,7 +42,6 @@
 	}
 
 	function handleCheck(e) {
-		console.log(filteredMembers)
 		if (e.target.checked) {
             baseMembers = bannedMembers
             banned = true

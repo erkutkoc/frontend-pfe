@@ -56,12 +56,10 @@
 		updateAnnonce(data);
 	}
 	async function updateAnnonce(data) {
-		// console.log(data);
 		dataContainer.append('Id', $currentAnnonce.id);
 		dataContainer.append('Titre', data.title);
 		dataContainer.append('Description', data.description);
 		dataContainer.append('Prix', Number.parseFloat(data.price));
-		// dataContainer.append('Genre', selectedGenre.value);
 		dataContainer.append('Categorie_id', selectedCat.id); // marchepas
 		dataContainer.append('adressesToAdd', selectedCampus);
 

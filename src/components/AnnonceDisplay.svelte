@@ -3,11 +3,16 @@
 	import AnnonceServices from '../services/annonceServices.js';
 	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from '../utils/stores.js';
 	import LoadingAnimation from './LoadingAnimation.svelte';
+	import CurrentState from './CurrentState.svelte';
+	import { Snackbar } from 'svelte-materialify';
+	import { FontAwesomeIcon } from 'fontawesome-svelte';
 
 	export let annonces;
 	export let currentToogle;
 	let admin;
 	let USER;
+	let notifMsg, colorNotif;
+	let snackbar = false;
 	// fetch user token high level on mount
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
@@ -18,24 +23,34 @@
 	});
 	//update state by annonce
 	const fetchUpdate = async (state, annonce) => {
-		let toSend = {
-			Id: annonce.id,
-			Titre: annonce.titre,
-			Description: annonce.description,
-			Prix: annonce.prix,
-			Etat: state,
-			Vendeur_id: USER.id
-		};
-		if (admin && state == 'E') {
-			AnnonceServices.updateAnnonce(toSend, USER.token, admin);
-			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
-			$usersAnnonces[index].etat = state;
-			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
-		} else {
-			AnnonceServices.updateAnnonce(toSend, USER.token);
-			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
-			$usersAnnonces[index].etat = state;
-			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+		try {
+			let toSend = {
+				Id: annonce.id,
+				Titre: annonce.titre,
+				Description: annonce.description,
+				Prix: annonce.prix,
+				Etat: state,
+				Vendeur_id: USER.id
+			};
+			if (admin && state == 'E') {
+				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
+				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
+				$usersAnnonces[index].etat = state;
+				$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+			} else {
+				AnnonceServices.updateAnnonce(toSend, USER.token);
+				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
+				$usersAnnonces[index].etat = state;
+				$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+			}
+			notifMsg = "L'état de l'annonce a été mis à jour !";
+			colorNotif = '#5bc0de';
+			snackbar = true;
+		} catch (error) {
+			console.log(error);
+			notifMsg = "L'état de l'annonce n'a pas été mis à jour !";
+			colorNotif = 'red';
+			snackbar = true;
 		}
 	};
 	//click event to change state
@@ -44,6 +59,16 @@
 	}
 </script>
 
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={5000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
 {#if !$isLoadingMyAnnonce}
 	{#if annonces.length != 0}
 		<div class="container column is-fullhd">
@@ -72,48 +97,20 @@
 								{/if}
 								<!--AnnonceState début-->
 								{#if currentToogle == 'default'}
-									{#if annonce.etat === 'E'}
-										<span style="color:hsl(217, 71%, 53%) ; font-weight:bold"
-											>Annonce en attente
-										</span>
-										<a
-											><i
-												class="icon is-small fas fa-pause-circle"
-												style="color:hsl(217, 71%, 53%)"
-											/></a
-										>
-									{/if}
-									{#if annonce.etat === 'V'}
-										<span class=" has-text-primary-dark "> <b>Annonce validée </b></span>
-										<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
-									{/if}
-									{#if annonce.etat === 'T'}
-										<span class="" style="hsl(0, 0%, 29%)"> <b>Vendu</b></span>
-										<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
-									{/if}
-									{#if annonce.etat === 'R'}
-										<span style="color:#F98A0C "> <b>Annonce réservée</b> </span>
-										<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
-									{/if}
-									{#if annonce.etat === 'A'}
-										<span class="has-text-danger-dark">
-											<b>Annonce supprimée</b>
-										</span>
-										<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
-									{/if}
+									<CurrentState {annonce} />
 								{/if}
 								{#if annonce.etat === 'E' && admin}
 									<div id="icon">
 										<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 											<button type="submit" id={annonce.id} value="V">
-												Valider l'annonce
+												<span>Valider l'annonce</span>
 												<a
 													style="color:hsl(171, 100%, 29%)"
 													type="submit"
 													id={annonce.id}
 													value="V"
 												>
-													<i class="fas fa-check-circle" />
+													<FontAwesomeIcon icon="check-circle" />
 												</a>
 											</button>
 											<!-- <span>Annuler la réservation</span> -->
@@ -130,7 +127,7 @@
 													id={annonce.id}
 													value="R"
 												>
-													<i class="fas fa-minus-circle" /></a
+													<FontAwesomeIcon icon="minus-circle" /></a
 												>
 											</button>
 										</form>
@@ -140,7 +137,7 @@
 											<button type="submit" id={annonce.id} value="T">
 												<span style="hsl(0, 0%, 29%)">Changer l'état en vendu </span>
 												<a type="submit" id={annonce.id} value="T"
-													><i class="fas fa-times-circle" /></a
+													><FontAwesomeIcon icon="times-circle" /></a
 												>
 											</button>
 										</form>
@@ -153,7 +150,7 @@
 												<span class="" style="hsl(0, 0%, 29%)"> Changer l'état en vendu</span><a
 													type="submit"
 													id={annonce.id}
-													value="T"><i class="fas fa-times-circle" /></a
+													value="T"><FontAwesomeIcon icon="times-circle" /></a
 												>
 											</button>
 										</form>
@@ -166,7 +163,7 @@
 													type="submit"
 													id={annonce.id}
 													value="V"
-													><i class="fas fa-check-circle" />
+													><FontAwesomeIcon icon="check-circle" />
 												</a>
 											</button>
 											<!--  -->
@@ -183,7 +180,7 @@
 													type="submit"
 													id={annonce.id}
 													value="A"
-													><i class="fas fa-times-circle" />
+													><FontAwesomeIcon icon="times-circle" />
 												</a>
 											</button>
 										</form>
@@ -221,5 +218,15 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+	}
+	button {
+		border: solid;
+		border-width: 0.3px;
+		border-radius: 5px;
+		border-color: blueviolet;
+		background-color: rgba(138, 43, 226, 0.2);
+	}
+	span {
+		margin: 5px;
 	}
 </style>
