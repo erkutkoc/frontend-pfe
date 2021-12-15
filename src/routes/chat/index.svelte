@@ -159,8 +159,8 @@ texte: "Bonjour"
 							<input
 								name="email"
 								on:input={handleInput}
-								placeholder="Rechercher un email"
-								class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+								placeholder="Rechercher un email"										
+								class="appearance-none mb-5 bg-white rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md sm:text-sm"
 							/>
 						</div>
 					</div>
@@ -191,29 +191,31 @@ texte: "Bonjour"
 								<div>
 									<label for="message" class="sr-only">Email</label>
 									<input
-									id="newDiscussionEmail"
-									name="newDiscussionEmail"
-									bind:value={newDiscussionEmail}
-									type="text"
-									required
-									class="appearance-none max-w-lg float-left rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-									placeholder="Ecrivez l'email de votre destinataire"
-								/>
-								<button
-									type="submit"
-									style="color:white"
-									class="group relative max-w-xs float-right w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-								>
-									{#if loading}
-										<span class="absolute left-0 inset-y-0 flex items-center pl-3">
-											<!-- Heroicon name: solid/lock-closed -->
+										id="newDiscussionEmail"
+										name="newDiscussionEmail"
+										bind:value={newDiscussionEmail}
+										type="text"
+										required
+										class="appearance-none max-w-lg float-left rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+										placeholder="Ecrivez l'email de votre destinataire"
+									/>
+									<button
+										type="submit"
+										style="color:white"
+										class="group relative max-w-xs float-right w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+									>
+										{#if loading}
 											<span class="absolute left-0 inset-y-0 flex items-center pl-3">
-												<LoadingAnimation />
+												<!-- Heroicon name: solid/lock-closed -->
+												<span class="absolute left-0 inset-y-0 flex items-center pl-3">
+													<LoadingAnimation />
+												</span>
 											</span>
-										</span>
-									{/if}
-									Ajouter une conversation
-								</button>
+										{/if}
+										Ajouter une conversation
+									</button>
+								</div>
+							</div>
 						</form>
 				{:else}
 					<button
