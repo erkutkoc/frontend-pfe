@@ -6,12 +6,12 @@
 	let bannedMembers = [];
 	let filteredMembers = [];
 	let baseMembers = [];
-	let token;
+	let token, USER;
 	let emailSearched = '';
 	let filtered = false;
 	let banned = false;
 	let isLoadingAnnonces = true;
-	let USER;
+
 	onMount(() => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;

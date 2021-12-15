@@ -5,28 +5,44 @@
 	import { Snackbar } from 'svelte-materialify';
 	import CurrentState from './CurrentState.svelte';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
+
 	export let annonce;
 
 	let admin = false;
-	let USER;
-	let notifMsg, colorNotif;
 	let snackbar = false;
+	let USER, notifMsg, colorNotif;
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER) {
 			admin = USER.administrateur;
 		}
 	});
-
+	const createObjectToSend = () => {
+		return admin
+			? {
+					Id: annonce.id,
+					Titre: annonce.titre,
+					Description: annonce.description,
+					Prix: annonce.prix,
+					Etat: state,
+					Vendeur_id: USER.id
+			  }
+			: {
+					Id: annonce.id,
+					Titre: annonce.titre,
+					Description: annonce.description,
+					Prix: annonce.prix,
+					Etat: state,
+					Vendeur_id: USER.id,
+					addressesToAdd: annonce.addressesToAdd,
+					Genre: annonce.genre,
+					Categorie_id: annonce.categorie_id
+			  };
+	};
 	const fetchUpdate = async (state) => {
 		try {
-			let toSend = {
-				Id: annonce.id,
-				Titre: annonce.titre,
-				Description: annonce.description,
-				Prix: annonce.prix,
-				Etat: state
-			};
+			let toSend = createObjectToSend();
 			if (admin) {
 				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
 				let index = $annonces.findIndex((element) => element.id == annonce.id);
@@ -89,9 +105,8 @@
 		{:else}
 			<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 		{/if}
-		<!--Annonce CurrentState-->
+		<!--Annonce State-->
 		<CurrentState {annonce} />
-
 		{#if admin}
 			<div id="icon">
 				<form on:submit|preventDefault={onChangeState} method="POST">
@@ -104,8 +119,7 @@
 				</form>
 			</div>
 		{/if}
-
-		<!--Annonce CurrentState fin-->
+		<!--Annonce State fin-->
 		<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={'/' + annonce.id}
 			>Voir les détails</a
 		>

@@ -69,7 +69,7 @@
 		<div class="container column is-10">
 			<div class="section">
 				{#each annonces as annonce (annonce.id)}
-					<div class="card card-shadow has-background-white-bis">
+					<div class="card" style="">
 						<div class="card-content">
 							<span class="tag  is-medium is-info" style="float:left">
 								<a href={'/' + annonce.id} id="numero" style="color:white">Annonce n°{annonce.id}</a

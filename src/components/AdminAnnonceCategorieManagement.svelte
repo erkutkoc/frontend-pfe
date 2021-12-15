@@ -3,29 +3,24 @@
 	import annonceServices from '../services/annonceServices';
 	import categorieService from '../services/categorieService';
 	import { Snackbar, Button, Icon } from 'svelte-materialify';
-	let USER;
+	let searchInput, categorieInput, subCategorieInput, admin;
+
 	let categories = [];
 	let highCategories = [];
 	let subCategories = [];
-	let admin;
 	let isSubCategorie = false;
 	let isCategorie = false;
-	let searchInput;
-	let categorieInput;
-	let subCategorieInput;
 	let isManagement = false;
 	let isCreateCat = false;
 	let isCreateSubCat = false;
-	let inputCategorieName;
-	let inputSubCategorieName;
-	let selectedCat = null;
-	let updateId;
 	let showUpdateInput = false;
+	let displayAll = false;
+	let snackbar = false;
+	let USER, inputCategorieName, inputSubCategorieName, updateId, notifMsg, colorNotif;
+	let selectedCat = null;
 	let categorieNameValue = null;
 	let selectedAddSubmitSubCat = null;
-	let displayAll = false;
-	let notifMsg, colorNotif;
-	let snackbar = false;
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
@@ -38,6 +33,7 @@
 			subCategories = categories.filter((e) => e.sur_categorie_id != null);
 		}
 	});
+	//Reset all filter input
 	const resetFilter = () => {
 		highCategories = categories.filter((e) => e.sur_categorie_id == null);
 		subCategories = categories.filter((e) => e.sur_categorie_id != null);
@@ -49,6 +45,7 @@
 		colorNotif = '#5bc0de';
 		snackbar = true;
 	};
+	//Detect input
 	function handleInput(e) {
 		searchInput = e.target.value;
 		if (e.target.id == 'categorie') {
