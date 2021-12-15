@@ -1,5 +1,6 @@
 <script>
 	import Annonce from './Annonce.svelte';
+
 	export let annonces;
 </script>
 
@@ -8,8 +9,7 @@
 		<!--Annonce-->
 		<div class="columns is-desktop is-multiline ">
 			{#each annonces as annonce (annonce.id)}
-				<Annonce {annonce} />
-				
+				<Annonce {annonce} />		
 			{/each}
 		</div>
 	</div>

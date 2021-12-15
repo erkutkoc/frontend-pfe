@@ -37,8 +37,9 @@
 		{#each annonces as annonce (annonce.id)}
 			<div class="card card-shadow has-background-white-bis">
 				<div class="card-content">
-					<span class="tag  is-medium" style="float:left">
-						<a href={'/' + annonce.id} id="numero">Annonce n°{annonce.id}</a></span
+					<span class="tag  is-medium is-info" style="float:left">
+						<a href={'/' + annonce.id} id="numero" style="color:white">Annonce n°{annonce.id}</a
+						></span
 					>
 					<div style="float:right">
 						<form
@@ -61,7 +62,10 @@
 						</form>
 					</div>
 
-					<span class="tag is-large" style="float:right">
+					<span
+						class="tag is-large"
+						style="float:right; border: solid  rgba(170, 50, 220, .6);   border-width: 0.3px "
+					>
 						<a href={'/' + annonce.id}>Voir les détails de l'annonce</a>
 					</span>
 				</div>
@@ -69,14 +73,14 @@
 					<p class="title has-text-centered ">{annonce.titre}</p>
 					<div class="content">
 						<p class="has-text-centered">{annonce.description}</p>
+						<p class="has-text-right" style="font-size:large;font-weight: bold;color: darkgreen;">
+							{annonce.prix} €
+						</p>
 					</div>
 					<div class="content">
-						<div class="has-text-right" style="display:inline-block; float:right">
-							<span>{annonce.prix} €</span>
-						</div>
-						<div class="has-text-left" style="display:inline-block; float:left">
+						<div class="has-text-right" style="display:inline-block">
 							{#if annonce.etat === 'E'}
-								<span class="icon is-small" style="color:hsl(217, 71%, 53%)"
+								<span class="icon is-small has-text-right" style="color:hsl(217, 71%, 53%)"
 									><i class="fas fa-pause-circle" /></span
 								>
 								<span> En attente</span>
