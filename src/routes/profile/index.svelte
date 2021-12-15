@@ -87,7 +87,7 @@
 					</div>
 					<div>
 						<label for="campus" class="sr-only">Campus</label>
-						<select name="campus" id="campus" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+					<select name="campus" id="campus" style="background-color:rgb(232, 240, 254);" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
                             {#each campus as c}
                                 {#if c.id == campusUser}
                                     <option value={c.id} selected>{c.ville}</option>

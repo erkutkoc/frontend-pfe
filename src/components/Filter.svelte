@@ -52,12 +52,12 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
-		/*if (e.target.id == 'min') {
+		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
 		if (e.target.id == 'max') {
 			selectedMax = e.target.value;
-		}*/
+		}
 		if (e.target.id == 'prixCroissant') {
 			sort = 'prixCroissant';
 			dropdown = !dropdown;
@@ -72,9 +72,9 @@
 			dropdown = !dropdown;
 		}
 
-		if (selectedCamp) {
+		/*if (selectedCamp) {
 			fetchAnnoncesByCampus();
-		}
+		}*/
 		if (selectedCat) {
 			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
 		}
@@ -109,8 +109,8 @@
 		$filteredAnnonces = $annonces;
 		selectedCat = null;
 		selectedCamp = null;
-		selectedMin = -1;
-		selectedMax = -1;
+		document.getElementById("min").value = "";
+		document.getElementById("max").value = "";
 		sort = 'default';
 	}
 
@@ -160,7 +160,6 @@
 
 <div class="panel-block">
 	<button class="button is-info" on:click={handleResetFilter}> Reset </button>
-
 	<div class={dropdown ? 'dropdown is-left is-active' : 'dropdown is-left'}>
 		<div class="dropdown-trigger">
 			<button

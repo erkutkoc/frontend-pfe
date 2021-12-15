@@ -3,7 +3,7 @@
 	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
 	import { Snackbar } from 'svelte-materialify';
-	import State from './CurrentState.svelte';
+	import CurrentState from './CurrentState.svelte';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
 	export let annonce;
 
@@ -89,8 +89,8 @@
 		{:else}
 			<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 		{/if}
-		<!--Annonce State-->
-		<State {annonce} />
+		<!--Annonce CurrentState-->
+		<CurrentState {annonce} />
 
 		{#if admin}
 			<div id="icon">
@@ -105,7 +105,7 @@
 			</div>
 		{/if}
 
-		<!--Annonce State fin-->
+		<!--Annonce CurrentState fin-->
 		<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={'/' + annonce.id}
 			>Voir les détails</a
 		>

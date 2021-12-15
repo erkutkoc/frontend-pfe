@@ -3,7 +3,7 @@
 	import AnnonceServices from '../services/annonceServices.js';
 	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from '../utils/stores.js';
 	import LoadingAnimation from './LoadingAnimation.svelte';
-	import State from './CurrentState.svelte';
+	import CurrentState from './CurrentState.svelte';
 	import { Snackbar } from 'svelte-materialify';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
 
@@ -97,7 +97,7 @@
 								{/if}
 								<!--AnnonceState début-->
 								{#if currentToogle == 'default'}
-									<State {annonce} />
+									<CurrentState {annonce} />
 								{/if}
 								{#if annonce.etat === 'E' && admin}
 									<div id="icon">

@@ -96,10 +96,6 @@
 				<p class="subtitle" />
 				<div class="content">
 					<table>
-						<tr>
-							<th>Company</th>
-							<th />
-						</tr>
 						{#if filteredMembers.length != 0}
 							{#each filteredMembers as member}
 								<Member
