@@ -37,8 +37,9 @@
 
 		var channel = pusher.subscribe('chat');
 		channel.bind('message', function(data) {
-			alert(JSON.stringify(data));
-			console.log("hello chat")
+			console.log(data)
+			let msg = {id: data.Id, discussion_id: data.discussion_id, envoyeur_id: data.Envoyeur_id, texte: data.Texte, date_envoi: data.Date_envoi}
+			messages = [...messages, msg];
 		});
 	});
 
@@ -75,7 +76,7 @@
 	const postMessage = async (token, message, discussionId) => {
 		await DiscussionServices.postMessage(token, message, discussionId).then((data) => {
 			let newMessage = { id: data.data.id, date_envoi: data.data.date_envoi, discussion_id: data.data.discussion_id, envoyeur_id: data.data.envoyeur_id, texte: data.data.texte }
-			messages = [...messages, newMessage];
+			//messages = [...messages, newMessage];
 		});
 	};
 
