@@ -247,7 +247,7 @@ texte: "Bonjour"
 								</div>
 							{:else}
 								<div class="card">
-									<footer class="card-footer relative max-w-xs has-background-info-dark">
+									<footer class="card-footer relative max-w-xs has-background-info-dark has-text-white">
 										<div class="card-footer-item inset-y-0 right-0">
 											<p class="">{message.texte}</p>
 										</div>
