@@ -6,7 +6,7 @@
 	import UserServices from '../../services/userServices';
 	import { Snackbar } from 'svelte-materialify';
 	import LoadingAnimation from '../../components/LoadingAnimation.svelte';
-	//
+	//import Design from '/design.svelte';
 
 	let emailSearched = '';
 	let selectedDiscussion = null;
@@ -18,6 +18,7 @@
 	let message = '';
 	let newDiscussionEmail = '';
 	let id;
+	let otherName = ''
 	let loading = false;
 	let snackbar = false;
 	let errorNotification;
@@ -74,10 +75,7 @@
 	};
 
 	const postMessage = async (token, message, discussionId) => {
-		await DiscussionServices.postMessage(token, message, discussionId).then((data) => {
-			let newMessage = { id: data.data.id, date_envoi: data.data.date_envoi, discussion_id: data.data.discussion_id, envoyeur_id: data.data.envoyeur_id, texte: data.data.texte }
-			//messages = [...messages, newMessage];
-		});
+		await DiscussionServices.postMessage(token, message, discussionId).then((data) => {});
 	};
 
 	const postDiscussion = async (member) => {
@@ -138,161 +136,76 @@
 
 <main>
 	<script src="https://js.pusher.com/7.0.3/pusher.min.js"></script>
-	<Navbar />
 	<Snackbar top center rounded bind:active={snackbar} timeout={1000} style="background-color:red">
 		{errorNotification}
 	</Snackbar>
-	<div class="min-h-full flex items-center justify-center py-12 px-15 sm:px-6 lg:px-8">
-		<div class="max-w-4xl w-full space-y-8">
-			<div>
-				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Discussions:</h2>
-			</div>
-			<div>
-				{#if selectedDiscussion == null}
-					<div class="rounded-md shadow-sm -space-y-px">
-						<div class="max-w-sm">
-							<label for="email-address" class="sr-only">Email address</label>
-							<input
-								name="email"
-								on:input={handleInput}
-								placeholder="Rechercher un email"										
-								class="appearance-none mb-5 bg-white rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md sm:text-sm"
-							/>
-						</div>
-					</div>
-					{#if filteredDiscussions.length == 0}
-						<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
-					{:else}
-						{#each filteredDiscussions as discussion}
-							<div class="card cursor-pointer">
-								<footer class="card-footer">
-									<div
-										class="card-footer-item"
-										on:click={(e) => handleClickDiscussion({ discussion })}
-									>
-										<p>{discussion.dest}</p>
-									</div>
-								</footer>
-							</div>
-						{/each}
-					{/if}
-			
-						<form
-							on:submit|preventDefault={handleClickPost}
-							class="mt-8 space-y-6 float-root"
-							action="#"
-							method="POST"
-						>
-							<div class="rounded-md shadow-sm -space-y-px">
-								<div>
-									<label for="message" class="sr-only">Email</label>
-									<input
-										id="newDiscussionEmail"
-										name="newDiscussionEmail"
-										bind:value={newDiscussionEmail}
-										type="text"
-										required
-										class="appearance-none max-w-lg float-left rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-										placeholder="Ecrivez l'email de votre destinataire"
-									/>
-									<button
-										type="submit"
-										style="color:white"
-										class="group relative max-w-xs float-right w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-									>
-										{#if loading}
-											<span class="absolute left-0 inset-y-0 flex items-center pl-3">
-												<!-- Heroicon name: solid/lock-closed -->
-												<span class="absolute left-0 inset-y-0 flex items-center pl-3">
-													<LoadingAnimation />
-												</span>
-											</span>
+	<Navbar />
+
+	<section class="main-content columns is-fullheight">
+		<aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
+			<p class="menu-label is-hidden-touch">Discussion</p>
+			<ul class="menu-list">
+				{#each filteredDiscussions as discussion}
+					<li>
+						<a href="#" class="has-text-info has-background-success-light" on:click={(e) => handleClickDiscussion({ discussion })}>
+							{discussion.dest}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</aside>
+		<!-- Code css/html inspirée par : https://codepen.io/christylaguardia/pen/mxPmbg?editors=0010 
+			Modifié et adapter à notre design-->
+		<div class="container column is-10">
+			<div class="section">
+				<section class="hero" style="background-color: rgba(32,156,238, 0.15);">
+					<div class="hero-body">
+						<div class="card" style="heigth: 100%; width: 100%">
+							<div class="card-content" style="; opacity : 0.7">
+								<div class="content">
+									<!--Message-->
+									{#each messages as message}
+										{#if message.envoyeur_id != id} 
+											<div style="heigth: 100%; width: 100%">
+												<p style="padding: .26em; text-align:left; overflow-wrap: normal">
+													<span class="tag is-medium is-success">{message.texte}</span><br /><span
+														id="otherName">{selectedDiscussion.dest}</span
+													>
+												</p>
+											</div>
+										{:else}
+											<div style="heigth: 100%, width: 100%">
+												<p style="padding:.25em; text-align:right; overflow-wrap: normal">
+													<span class="tag is-medium is-info">{message.texte}</span><br /><span
+														id="name">Moi</span
+													>
+												</p>
+											</div>
 										{/if}
-										Ajouter une conversation
-									</button>
+									{/each}
+									<!--Fin message-->
 								</div>
-							</div>
-						</form>
-				{:else}
-					<button
-						on:click={(e) => {
-							selectedDiscussion = null;
-							messages = [];
-						}}
-						class="relative mb-10 justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-						>Retour
-					</button>
-					<br />
-
-					<div>
-						{#each messages as message}
-							<!--<div class="card">
-								<footer class="card-footer"> 
-									{#if message.envoyeur_id == id} 
-										<div class="card-footer-item">
-											<p class="absolute left-0 inset-y-0 flex items-center pl-3 has-background-primary-light">{message.texte}</p>
-										</div>
-									{:else}
-										<div class="card-footer-item">
-											<p class="absolute right-0 inset-y-0 flex items-center pl-3 has-background-info-dark">{message.texte}</p>
-										</div>
-									{/if}
-									
-								</footer>
-							</div>-->
-							{#if message.envoyeur_id == id}
-								<div class="card border-none">
-									<footer class="card-footer relative max-w-xs has-background-primary-light float-root">
-										<div class="card-footer-item float-left">
-											<p class="">{message.texte}</p>
-										</div>
-									</footer>
-								</div>
-							{:else}
-								<div class="card">
-									<footer class="card-footer relative max-w-xs has-background-info-dark has-text-white">
-										<div class="card-footer-item float-right">
-											<p class="">{message.texte}</p>
-										</div>
-									</footer>
-								</div>
-							{/if}
-						{/each}
-					</div>
-
-					<form
-						on:submit|preventDefault={handleSubmit}
-						class="mt-8 space-y-6 float-root"
-						action="#"
-						method="POST"
-					>
-						<div class="rounded-md shadow-sm -space-y-px">
-							<div>
-								<label for="message" class="sr-only">Ecrivez votre message</label>
-								<input
-									id="message"
-									name="message"
-									bind:value={message}
-									type="text"
-									required
-									class="appearance-none max-w-3xl float-left rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-									placeholder="Ecrivez votre message"
-								/>
-							</div>
-
-							<div>
-								<button
-									type="submit"
-									class="group relative max-w-min float-right w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-									style="color:white"
-								>
-									Envoyer
-								</button>
 							</div>
 						</div>
-					</form>
-				{/if}
+					</div>
+
+					<div class="hero-foot">
+						<footer class="section is-small">
+							<form on:submit|preventDefault={handleSubmit} action="#" method="POST">
+								<div class="field has-addons">
+									<div class="control is-expanded">
+										<input class="input" name="userInput" type="text" placeholder="Votre message" bind:value={message} />
+									</div>
+									<div class="control">
+										<button class="button is-info"> Envoyer </button>
+									</div>
+								</div>
+							</form>
+						</footer>
+					</div>
+				</section>
 			</div>
 		</div>
-	</div>
+	</section>
+
 </main>
