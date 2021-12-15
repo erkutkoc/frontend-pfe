@@ -3,12 +3,14 @@
 	import { onMount } from 'svelte';
 	import AnnonceServices from '../services/annonceServices';
 	import LoadingAnimation from './LoadingAnimation.svelte';
-
+	import { Snackbar } from 'svelte-materialify';
 	let shown = false;
 	let USER;
 	let fetchAddDataContainer;
 	let highCategories = [];
 	let subCategories = [];
+	let snackbar = false;
+	let notifMsg, colorNotif;
 	$: allCampus = [];
 
 	export function showModal() {
@@ -65,10 +67,18 @@
 		fetchAddDataContainer.append('Categorie_id', selectedCat.id);
 		fetchAddDataContainer.append('adressesToAdd', selectedCampus);
 		isLoading = true;
-		await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token).then((rep) => {
+		try {
+			await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token).then((rep) => {
 			isLoading = false;
 			goto('/' + rep.data);
 		});
+		} catch (error) {
+			console.log(error);
+			notifMsg = "L'annonce n'a pas été ajouter !";
+			colorNotif = 'red';
+			snackbar = true;
+		}
+
 	}
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
@@ -90,7 +100,16 @@
 		fetchAddDataContainer = formData;
 	};
 </script>
-
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={5000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
 {#if isLoading}
 	<LoadingAnimation />
 {/if}

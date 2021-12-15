@@ -1,7 +1,8 @@
 <script>
 	import annonceServices from '../services/annonceServices';
 	import LoadingAnimation from './LoadingAnimation.svelte';
-	import AnnonceList from './AnnonceList.svelte';
+	//import AnnonceList from './AnnonceList.svelte';
+	import Annonce from './Annonce.svelte';
 	import { annonces, filteredAnnonces, annoncesByCampus } from '../utils/stores.js';
 	import { onMount } from 'svelte';
 	let categories = [];
@@ -40,7 +41,7 @@
 			return;
 		}
 	});
-
+	$: console.log($filteredAnnonces)
 	const fetchAnnoncesByCampus = async () => {
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
 		let temp = resp;
@@ -52,7 +53,6 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
-
 		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
@@ -62,16 +62,13 @@
 		if (e.target.id == 'prixCroissant') {
 			sort = 'prixCroissant';
 			dropdown = !dropdown;
-		}
-		if (e.target.id == 'prixDecroissant') {
+		} else if (e.target.id == 'prixDecroissant') {
 			sort = 'prixDecroissant';
 			dropdown = !dropdown;
-		}
-		if (e.target.id == 'titreAZ') {
+		} else if (e.target.id == 'titreAZ') {
 			sort = 'titreAZ';
 			dropdown = !dropdown;
-		}
-		if (e.target.id == 'titreZA') {
+		} else if (e.target.id == 'titreZA') {
 			sort = 'titreZA';
 			dropdown = !dropdown;
 		}
@@ -80,35 +77,29 @@
 			fetchAnnoncesByCampus();
 		}
 		if (selectedCat) {
-			let vals = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
-			$filteredAnnonces = vals;
+			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
 		}
 		if (selectedMin != -1) {
-			let vals = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
-			$filteredAnnonces = vals;
+			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
 		}
 		if (selectedMax != -1) {
-			let vals = $filteredAnnonces.filter((a) => a.prix <= selectedMax);
-			$filteredAnnonces = vals;
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.prix <= selectedMax);
 		}
 		if (sort != 'default') {
 			if (sort == 'prixCroissant') {
-				$filteredAnnonces.sort(function (a, b) {
+				$filteredAnnonces = $filteredAnnonces.sort(function (a, b) {
 					return a.prix - b.prix;
 				});
-			}
-			if (sort == 'prixDecroissant') {
-				$filteredAnnonces.sort(function (a, b) {
+			} else if (sort == 'prixDecroissant') {
+				$filteredAnnonces = $filteredAnnonces.sort(function (a, b) {
 					return b.prix - a.prix;
 				});
-			}
-			if (sort == 'titreAZ') {
-				$filteredAnnonces.sort(function (a, b) {
+			} else if (sort == 'titreAZ') {
+				$filteredAnnonces = $filteredAnnonces.sort(function (a, b) {
 					if (a.titre < b.titre) return -1;
 				});
-			}
-			if (sort == 'titreZA') {
-				$filteredAnnonces.sort(function (a, b) {
+			} else if (sort == 'titreZA') {
+				$filteredAnnonces = $filteredAnnonces.sort(function (a, b) {
 					if (a.titre > b.titre) return -1;
 				});
 			}
@@ -127,40 +118,44 @@
 	let dropdown = false;
 </script>
 
-<div class="panel-block">
-	<label class="label">Catégorie </label>
-	<div class="select">
-		<select bind:value={selectedCat} on:input={handleChange}>
-			{#each highCategories as hCategorie}
-				<optgroup label={hCategorie.nom}>
-					{#each subCategories as sCategorie}
-						{#if hCategorie.id == sCategorie.sur_categorie_id}
-							<option value={sCategorie}>
-								{sCategorie.nom}
-							</option>
-						{/if}
-					{/each}
-				</optgroup>
-			{/each}
-		</select>
-	</div>
-	<label class="label">Campus</label>
-	<div class="select">
-		<select bind:value={selectedCamp} on:input={handleChange}>
-			{#each campus as camp}
-				<option value={camp}>
-					{camp.campus}
-				</option>
-			{/each}
-		</select>
-	</div>
-	<label class="label">Min</label>
-	<div class="control">
-		<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
-	</div>
-	<label class="label">Max</label>
-	<div class="control">
-		<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
+<div>
+	<div class="panel-block">
+		<label class="label">Catégorie </label>
+		<div class="select">
+			<select bind:value={selectedCat} on:click={handleChange}>
+				{#each highCategories as hCategorie}
+					<optgroup label={hCategorie.nom}>
+						{#each subCategories as sCategorie}
+							{#if hCategorie.id == sCategorie.sur_categorie_id}
+								<option value={sCategorie}>
+									{sCategorie.nom}
+								</option>
+							{/if}
+						{/each}
+					</optgroup>
+				{/each}
+			</select>
+		</div>
+
+		<label class="label">Min</label>
+		<div class="control">
+			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
+		</div>
+		<label class="label">Max</label>
+		<div class="control">
+			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
+		</div>
+		<label class="label">Campus</label>
+		<div class="select">
+			<select bind:value={selectedCamp} on:click={handleChange} disabled>
+				{#each campus as camp}
+					<option value={camp}>
+						{camp.campus}
+					</option>
+				{/each}
+			</select>
+			<p class="has-text-link" style="text-align:center;">Future fonctionnalité</p>
+		</div>
 	</div>
 </div>
 
@@ -193,7 +188,16 @@
 	</div>
 </div>
 {#if !isLoading}
-	<AnnonceList annonces={$filteredAnnonces} />
+<div class="container column is-10">
+	<div class="section">
+		<!--Annonce-->
+		<div class="columns is-desktop is-multiline ">
+			{#each $filteredAnnonces as annonce (annonce.id)}
+				<Annonce {annonce} />		
+			{/each}
+		</div>
+	</div>
+</div>
 {:else}
 	<LoadingAnimation />
 {/if}
