@@ -37,8 +37,8 @@
 				goto('/');
 			});
 		} catch (err) {
-			snackbar = true;
 			errorNotification = err;
+			snackbar = true;
 		}
 	};
 </script>
@@ -102,6 +102,7 @@
 					<button
 						type="submit"
 						class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						style="color:white"
 					>
 						<span class="absolute left-0 inset-y-0 flex items-center pl-3">
 							<!-- Heroicon name: solid/lock-closed -->
@@ -121,7 +122,7 @@
 						</span>
 						Se connecter
 					</button>
-					<a class="has-text-primary" href="/register">Vous n'avez pas de compte ? </a>
+					<a class="has-text-warning-dark" href="/register" style="text-decoration: underline;font-style: italic;">Vous n'avez pas de compte ? </a>
 				</div>
 			</form>
 		</div>

@@ -3,7 +3,7 @@ const baseUrl =
     import.meta.env.VITE_BASE_URL
 
 
-const updateCategorie = async(data, token, admin, id) => {
+const updateCategorie = async (data, token, admin, id) => {
     return await axios
         .put(baseUrl + "/categories/" + id, data, {
             headers: {
@@ -12,7 +12,7 @@ const updateCategorie = async(data, token, admin, id) => {
             }
         })
 }
-const addCategorie = async(data, token) => {
+const addCategorie = async (data, token) => {
     return await axios
         .post(baseUrl + "/categories", data, {
             headers: {
@@ -21,27 +21,22 @@ const addCategorie = async(data, token) => {
             }
         });
 }
-const addSubCategorie = async(data, token) => {
-    return await axios
-        .post(baseUrl + "/categories", data, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        });
-}
-const deleteCategorie = async(token, id) => {
-    return await axios
-        .put(baseUrl + "/categories/delete/" + id, {}, {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
-        });
+
+const deleteCategorie = async (token, id) => {
+    try {
+        return await axios
+            .put(baseUrl + "/categories/delete/" + id, {}, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+    } catch (error) {
+        throw error.data;
+    }
 }
 const AnnonceServices = {
     addCategorie,
-    addSubCategorie,
     updateCategorie,
     deleteCategorie
 

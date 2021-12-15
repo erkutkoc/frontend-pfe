@@ -13,7 +13,8 @@
 	let selectedMax = -1;
 	let sort = 'default';
 	let isLoading = true;
-
+	let notifMsg, colorNotif;
+	let snackbar = false;
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
 		{ id: 1, campus: `Ixelles`, value: `Ixelles` },
@@ -25,12 +26,19 @@
 		categories = res;
 		highCategories = categories.filter((e) => e.sur_categorie_id == null);
 		subCategories = categories.filter((e) => e.sur_categorie_id != null);
-		const resp = await annonceServices.findAllAnnonce().then((r) => {
-			isLoading = false;
-			return r;
-		});
-		$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
-		$filteredAnnonces = $annonces;
+		try {
+			const resp = await annonceServices.findAllAnnonce().then((r) => {
+				isLoading = false;
+				return r;
+			});
+			$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
+			$filteredAnnonces = $annonces;
+		} catch (error) {
+			notifMsg = result.data;
+			colorNotif = 'red';
+			snackbar = true;
+			return;
+		}
 	});
 
 	const fetchAnnoncesByCampus = async () => {

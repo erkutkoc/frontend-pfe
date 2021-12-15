@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { isLoadingMyAnnonce } from '../../utils/stores.js';
-	import Navbar from '../../components/Navbar.svelte';
 
 	onMount(async () => {
 		$isLoadingMyAnnonce = true;
@@ -10,5 +9,3 @@
 		goto('/login');
 	});
 </script>
-
-<Navbar />

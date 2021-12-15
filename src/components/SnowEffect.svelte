@@ -17,7 +17,7 @@
 			size: 'cover'
 		},
 		fullScreen: {
-			zIndex: -1
+			zIndex: -10
 		},
 		interactivity: {
 			modes: {

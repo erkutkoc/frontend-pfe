@@ -64,7 +64,8 @@ const findAnnonceById = async (id, token) => {
                     'Content-Type': 'application/json'
                 }
             });
-    } catch (error) {
+    } catch (e) {
+        console.log(e)
         throw e.response.data;
     }
 }
@@ -77,7 +78,7 @@ const getAllCampus = async () => {
                 }
 
             });
-    } catch (error) {
+    } catch (e) {
         throw e.response.data;
     }
 
@@ -101,7 +102,7 @@ const updateAnnonce = async (data, token, admin) => {
                     }
                 })
         }
-    } catch (error) {
+    } catch (e) {
         throw e.response.data;
     }
 
@@ -115,7 +116,7 @@ const uploadAnnonce = async (data, token) => {
                     'Content-Type': 'application/json'
                 }
             });
-    } catch (error) {
+    } catch (e) {
         throw e.response.data;
     }
 }

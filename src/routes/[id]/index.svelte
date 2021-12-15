@@ -1,32 +1,56 @@
 <script>
-	import Navbar from '../components/Navbar.svelte';
-	import AnnonceServices from '../services/annonceServices';
-	import UserServices from '../services/userServices';
+	import Navbar from '../../components/Navbar.svelte';
+	import AnnonceServices from '../../services/annonceServices';
+	import UserServices from '../../services/userServices';
 	import { onMount } from 'svelte';
 	import { is_empty } from 'svelte/internal';
 	import { page } from '$app/stores';
-	import ErrorPage from '../components/ErrorPage.svelte';
-	import MapsAnnonce from '../components/MapsAnnonce.svelte';
-	import Caroussel from '../components/Caroussel.svelte';
-	import LoadingAnimation from '../components/LoadingAnimation.svelte';
-	// import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
-	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
-	import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splider
+	import ErrorPage from '../../components/ErrorPage.svelte';
+	import MapsAnnonce from '../../components/MapsAnnonce.svelte';
+	import Caroussel from '../../components/Caroussel.svelte';
+	import LoadingAnimation from '../../components/LoadingAnimation.svelte';
+	import { Snackbar, Button, Icon } from 'svelte-materialify';
+	import { goto } from '$app/navigation';
+	import { mdiPen } from '@mdi/js';
+	import { currentAnnonce } from '../../utils/stores';
 
 	const idAnnonce = $page.params.id;
+	$ : console.log(annonce)
 	let annonce;
 	let currentUser = ' ';
 	let annonceCategorie;
 	let vendeur;
+	let snackbar = false;
+	let notifMsg, colorNotif;
 
+	const updateAnnonce = () => {
+		$currentAnnonce = annonce;
+		$currentAnnonce.vendeur_email = vendeur.email;
+		$currentAnnonce.categorie_nom = annonceCategorie;
+		goto('/' + idAnnonce + '/edit');
+	};
 	onMount(async () => {
 		currentUser = JSON.parse(sessionStorage.getItem('user'));
 		if (!currentUser) return;
-		let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
-		annonce = fetchAnnonce.data;
-
-		let fetchCategories = await AnnonceServices.findAllCategorie();
-		annonceCategorie = fetchCategories.filter((c) => c.id == annonce.categorie_id)[0];
+		try {
+			let fetchAnnonce = await AnnonceServices.findAnnonceById(idAnnonce, currentUser.token);
+			annonce = fetchAnnonce.data;
+		} catch (error) {
+			notifMsg = error;
+			colorNotif = 'red';
+			snackbar = true;
+			setTimeout(() => {
+				goto('/');
+			}, 2500);
+			return;
+		}
+		//Case where categorie is deleted == null
+		if (annonce.categorie_id) {
+			let fetchCategories = await AnnonceServices.findAllCategorie();
+			annonceCategorie = fetchCategories.filter((c) => c.id == annonce.categorie_id)[0].nom;
+		} else {
+			annonceCategorie = '/';
+		}
 
 		let fetchVendeur = await UserServices.getUserById(annonce.vendeur_id, currentUser.token);
 		vendeur = fetchVendeur.data;
@@ -34,9 +58,20 @@
 </script>
 
 <Navbar />
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={2000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
+
 {#if currentUser}
 	{#if !annonce || !annonceCategorie || !vendeur}
-		<LoadingAnimation/>
+		<LoadingAnimation />
 	{:else}
 		<div>
 			<div
@@ -45,7 +80,18 @@
 				<div>
 					<h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
 						{annonce.titre}
+
+						<Button
+							fab
+							size="small"
+							class="blue darken-2 white-text"
+							on:click={updateAnnonce}
+							style="float: right;"
+						>
+							<Icon path={mdiPen} />
+						</Button>
 					</h2>
+
 					<p class="mt-4 text-gray-500">
 						{#if annonce.etat == 'E'}
 							<b><i id="attente">En attente</i></b>
@@ -85,13 +131,13 @@
 						</div>
 						<div class="border-t border-gray-200 pt-4">
 							<dt class="font-medium text-gray-900">Categorie</dt>
-							<dd class="mt-2 text-sm text-gray-500">{annonceCategorie.nom}</dd>
+							<dd class="mt-2 text-sm text-gray-500">{annonceCategorie}</dd>
 						</div>
 					</dl>
 					<MapsAnnonce adresses={annonce.adresses} />
 				</div>
 				{#if !is_empty(annonce.urlPhoto)}
-					<Caroussel annonce={annonce}/>
+					<Caroussel {annonce} />
 				{:else}
 					<div class="card-image">
 						<figure class="image is-5by3">

@@ -1,15 +1,28 @@
 <script>
 	import AnnonceServices from '../services/annonceServices.js';
 	import { onMount } from 'svelte';
+	import { Snackbar, Button, Icon } from 'svelte-materialify';
 	let USER;
 	let annonces = [];
 	let admin;
+	let snackbar = false;
+	let notifMsg, colorNotif;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
-		const res = await AnnonceServices.findAllAnnonceStatusWaiting(USER.token); // ne renvoie pas ce qui est en attente
-		annonces = res;
-		annonces = annonces.filter((annonce) => annonce.etat === 'E');
+		try {
+			const res = await AnnonceServices.findAllAnnonceStatusWaiting(USER.token); // ne renvoie pas ce qui est en attente
+			annonces = res;
+			annonces = annonces.filter((annonce) => annonce.etat === 'E');
+		} catch (error) {
+			notifMsg = error;
+			colorNotif = 'red';
+			snackbar = true;
+			setTimeout(() => {
+				goto('/');
+			}, 2500);
+			return;
+		}
 		admin = USER.administrateur;
 	});
 	function handleUpdate(annonce, updatedState) {
@@ -31,7 +44,16 @@
 		}
 	};
 </script>
-
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={2000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
 <div class="container column is-10">
 	<div class="section">
 		{#each annonces as annonce (annonce.id)}
