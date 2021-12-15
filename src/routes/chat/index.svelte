@@ -22,6 +22,7 @@
 	let loading = false;
 	let snackbar = false;
 	let errorNotification;
+	let isActive = false
 
 	let USER;
 	onMount(() => {
@@ -147,7 +148,7 @@
 			<ul class="menu-list">
 				{#each filteredDiscussions as discussion}
 					<li>
-						<a href="#" class="has-text-info has-background-success-light" on:click={(e) => handleClickDiscussion({ discussion })}>
+						<a style="overflow-wrap: normal" href="#" class="" on:click={(e) =>{ handleClickDiscussion({ discussion }); isActive = true; e.target.className =  "is-active"}}>
 							{discussion.dest}
 						</a>
 					</li>
@@ -159,35 +160,38 @@
 		<div class="container column is-10">
 			<div class="section">
 				<section class="hero" style="background-color: rgba(32,156,238, 0.15);">
+					{#if isActive}
 					<div class="hero-body">
 						<div class="card" style="heigth: 100%; width: 100%">
-							<div class="card-content" style="; opacity : 0.7">
-								<div class="content">
-									<!--Message-->
-									{#each messages as message}
-										{#if message.envoyeur_id != id} 
-											<div style="heigth: 100%; width: 100%">
-												<p style="padding: .26em; text-align:left; overflow-wrap: normal">
-													<span class="tag is-medium is-success">{message.texte}</span><br /><span
-														id="otherName">{selectedDiscussion.dest}</span
-													>
-												</p>
-											</div>
-										{:else}
-											<div style="heigth: 100%, width: 100%">
-												<p style="padding:.25em; text-align:right; overflow-wrap: normal">
-													<span class="tag is-medium is-info">{message.texte}</span><br /><span
-														id="name">Moi</span
-													>
-												</p>
-											</div>
-										{/if}
-									{/each}
-									<!--Fin message-->
+							
+								<div class="card-content" style="; opacity : 0.7">
+									<div class="content">
+										<!--Message-->
+										{#each messages as message}
+											{#if message.envoyeur_id != id} 
+												<div style="heigth: 100%; width: 100%">
+													<p style="padding: .26em; text-align:left; overflow-wrap: normal">
+														<span class="tag is-medium is-success">{message.texte}</span><br /><span
+															id="otherName">{selectedDiscussion.dest}</span
+														>
+													</p>
+												</div>
+											{:else}
+												<div style="heigth: 100%, width: 100%">
+													<p style="padding:.25em; text-align:right; overflow-wrap: normal">
+														<span class="tag is-medium is-info">{message.texte}</span><br /><span
+															id="name">Moi</span
+														>
+													</p>
+												</div>
+											{/if}
+										{/each}
+										<!--Fin message-->
+									</div>
 								</div>
-							</div>
 						</div>
 					</div>
+
 
 					<div class="hero-foot">
 						<footer class="section is-small">
@@ -203,9 +207,40 @@
 							</form>
 						</footer>
 					</div>
+					{:else}
+								<div id="center"><p>Bienvenue dans le chat</p></div>
+							{/if}
 				</section>
 			</div>
 		</div>
 	</section>
 
 </main>
+
+<style>
+    #name{
+        color:hsl(204, 86%, 53%);
+        font-weight: bold;
+        font-size: xx-small;
+        font-style: italic;
+    }
+    #otherName{
+        color: hsl(171, 100%, 41%);
+        font-weight: bold;
+        font-size: xx-small;
+        font-style: italic;
+    }
+	#center {
+        text-align: center;
+        font-size: xx-large;
+        font-style: italic;
+        font-weight: bolder;
+        position: absolute;
+        margin: auto;
+        top: 50%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+</style>
+
