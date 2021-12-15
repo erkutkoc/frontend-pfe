@@ -96,6 +96,7 @@
 									{token}
 									{banned}
 									banDate={member.banni ? member.banni.substring(0, 10) : null}
+									admin={member.administrateur}
 								/>
 							{/each}
 						{:else if filtered}
@@ -108,6 +109,7 @@
 									{token}
 									{banned}
 									banDate={member.banni}
+									admin={member.administrateur}
 								/>
 							{/each}
 						{/if}
