@@ -2,7 +2,7 @@ import axios from "axios";
 const baseUrl =
     import.meta.env.VITE_BASE_URL
 
-const findAllAnnonce = async() => {
+const findAllAnnonce = async () => {
     try {
         const response = await axios.get(baseUrl + '/annonces');
         return response.data;
@@ -10,7 +10,20 @@ const findAllAnnonce = async() => {
         throw e.response.data;
     }
 }
-const findAllByCampus = async(name) => {
+const findAllAnnonceStatusWaiting = async (token) => {
+    try {
+        const response = await axios.get(baseUrl + '/annonces/getallannoncesstatuse', {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data;
+    } catch (e) {
+        throw e.response.data;
+    }
+}
+const findAllByCampus = async (name) => {
     if (name) {
         try {
             const response = await axios.get(baseUrl + '/annonces/campus/' + name);
@@ -20,7 +33,7 @@ const findAllByCampus = async(name) => {
         }
     }
 }
-const findAllCategorie = async() => {
+const findAllCategorie = async () => {
     try {
         const response = await axios.get(baseUrl + '/categories');
         return response.data;
@@ -28,7 +41,8 @@ const findAllCategorie = async() => {
         throw e.response.data;
     }
 }
-const findAllAnnonceByEmail = async(user) => {
+
+const findAllAnnonceByEmail = async (user) => {
     try {
         const response = await axios.get(baseUrl + '/annonces/email', {
             headers: {
@@ -41,7 +55,7 @@ const findAllAnnonceByEmail = async(user) => {
         throw e.response.data;
     }
 }
-const findAnnonceById = async(id, token) => {
+const findAnnonceById = async (id, token) => {
     try {
         return await axios
             .get(baseUrl + "/annonces/" + id, {
@@ -55,7 +69,7 @@ const findAnnonceById = async(id, token) => {
         throw e.response.data;
     }
 }
-const getAllCampus = async() => {
+const getAllCampus = async () => {
     try {
         return await axios
             .get(baseUrl + "/adresses/", {
@@ -69,7 +83,7 @@ const getAllCampus = async() => {
     }
 
 }
-const updateAnnonce = async(data, token, admin) => {
+const updateAnnonce = async (data, token, admin) => {
     try {
         if (admin) {
             return await axios
@@ -93,7 +107,7 @@ const updateAnnonce = async(data, token, admin) => {
     }
 
 }
-const uploadAnnonce = async(data, token) => {
+const uploadAnnonce = async (data, token) => {
     try {
         return await axios
             .post(baseUrl + "/annonces", data, {
@@ -110,6 +124,7 @@ const uploadAnnonce = async(data, token) => {
 const AnnonceServices = {
     findAllAnnonce,
     findAllAnnonceByEmail,
+    findAllAnnonceStatusWaiting,
     findAnnonceById,
     findAllCategorie,
     getAllCampus,

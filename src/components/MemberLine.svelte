@@ -7,6 +7,8 @@
     export let banDate;
 
     import UserServices from '../services/userServices.js';
+    import '../styles/tailwind-output.css';
+    //import 'bootstrap/dist/css/bootstrap.min.css';
 
     let banDateY
     let banDateM
@@ -28,6 +30,16 @@
 
     const banUser = async (token, id, duration) => {
 		await UserServices.banUser(token, id, duration).then((data) => {
+		})
+	}
+
+    const admin = (e) => {
+        e.target.innerText = "ADMIN"
+        adminUser(token, id)
+    }
+
+    const adminUser = async (token, id) => {
+		await UserServices.adminUser(token, id).then((data) => {
 			console.log(data)
 		})
 	}
@@ -35,10 +47,10 @@
 </script>
 
 <main>
-    <div class="card">
-        <footer class="card-footer">
+    <div class="card max-w-max">
+        <footer class="card-footer max-w-8xl">
             
-            <div class="card-footer-item column  is-three-fifths">
+            <div class="card-footer-item column is-two-fifths">
                 <p>{email}</p>
             </div>
 
@@ -55,10 +67,12 @@
                         </button>
                     </div>
 				{:else}
+
+
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,1)} 
-                            class="button is-danger relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="has-background-danger-dark is-danger max-w-max max-h-max relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none"
                         >Bannir 1 jour
                         </button>
                     </div>
@@ -66,7 +80,7 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,30)} 
-                            class="button is-dark relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="has-background-grey-darker is-dark relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none "
                             >Bannir 1 mois 
                         </button>
                     </div>
@@ -74,8 +88,16 @@
                     <div class="card-footer-item">
                         <button 
                             on:click={(e) => ban(e,-1)} 
-                            class="button is-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="has-background-black relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
                             >Bannir définitivement
+                        </button>
+                    </div>
+
+                    <div class="card-footer-item">
+                        <button 
+                            on:click={(e) => admin(e)} 
+                            class="has-background-success max-w-10 has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                            >Rendre administrateur
                         </button>
                     </div>
 				{/if}

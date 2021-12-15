@@ -1,5 +1,8 @@
 <script>
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
+	// import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
+	// import '@splidejs/splide/dist/css/splide.min.css'; // other colors for splider
+	import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css'; // other colors for splide
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	export let annonce;
 

@@ -51,31 +51,62 @@ const updateProfile = async(token, email, password, campus) => {
     }
     try {
         return await axios
-            .put(baseUrl + "/Members/UpdateMembre", toSend, {
+            .put(baseUrl + "/Members/UpdateMembre", toSend,{
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
                 },
             })
-    } catch (error) {
+    }catch(error){
         throw error.response.data;
     }
-
 }
+
 const banUser = async(token, idMember, duree) => {
     try {
         return await axios
-            .put(baseUrl + `/Members/Ban/${idMember}/${duree}`, undefined, {
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                }
-            })
-    } catch (error) {
+        .put(baseUrl + `/Members/Ban/${idMember}/${duree}`, undefined, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+    }catch(error){
         throw error.response.data;
     }
 }
 
+const adminUser = async(token, idMember) => {
+    try {
+        return await axios
+        .put(baseUrl + `/members/admin/${idMember}`, undefined, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+const getUserByEmail = async(email, token) => {
+    let toSend = {
+        Email: email,
+    }
+    try {
+        return axios
+        .post(baseUrl + "/members/getmembre/email", toSend, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(toSend)
+        })
+    }catch(e){
+        throw error.response.data;
+    }
+}
 
 const UserServices = {
     login,
@@ -84,5 +115,7 @@ const UserServices = {
     getAllUsers,
     updateProfile,
     banUser,
+    getUserByEmail,
+    adminUser,
 }
 export default UserServices;

@@ -57,8 +57,8 @@
 
 <main>
 	<Navbar />
-	<div class="min-h-full flex items-center justify-center py-12 px-15 sm:px-6 lg:px-8">
-		<div class="max-w-4xl w-full space-y-8">
+	<div class="min-h-full  max-w-max flex items-center justify-center py-12 px-15 sm:px-6 lg:px-8">
+		<div class="max-w-max w-full space-y-8">
 			<div>
 				<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
 					Voici l'ensemble des utilisateurs:
@@ -73,8 +73,10 @@
 						placeholder="Rechercher un email"
 						class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 					/>
-					<input type="checkbox" name="seeBan" on:change={handleCheck} />
-					<span>Cliquez pour voir les bannis</span>
+					<div>
+						<input type="checkbox" name="seeBan" on:change={handleCheck} />
+						<span>Cliquez pour voir les bannis</span>
+					</div>
 				</div>
 			</div>
 			<div>

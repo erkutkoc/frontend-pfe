@@ -70,8 +70,8 @@
 </script>
 
 <main>
-	<div class="container column is-10">
-		<div class="section max-w-4xl w-full">
+	<div class="container column max-w-max">
+		<div class="section w-full">
 					<div class="rounded-md shadow-sm -space-y-px">
 						<div class="max-w-sm">
 							<label for="email-address" class="sr-only">Email address</label>

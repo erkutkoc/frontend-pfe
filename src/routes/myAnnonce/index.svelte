@@ -5,13 +5,16 @@
 	import AnnonceServices from '../../services/annonceServices';
 	import { onMount } from 'svelte';
 	import AnnonceDisplay from '../../components/AnnonceDisplay.svelte';
-	import { usersAnnonces, usersFilteredAnnonces } from './../../utils/stores.js';
+	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from './../../utils/stores.js';
 	let loaded = false;
 	let USER;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
-		const res = await AnnonceServices.findAllAnnonceByEmail(USER);
+		const res = await AnnonceServices.findAllAnnonceByEmail(USER).then((rep) => {
+			$isLoadingMyAnnonce = false;
+			return rep;
+		});
 		$usersAnnonces = res;
 		loaded = true;
 	});
