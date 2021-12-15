@@ -46,19 +46,18 @@
 		categorieInput = '';
 		subCategorieInput = '';
 		notifMsg = 'Filtre réinitialiser';
-			colorNotif = '#5bc0de';
-			snackbar = true;
-
+		colorNotif = '#5bc0de';
+		snackbar = true;
 	};
 	function handleInput(e) {
 		searchInput = e.target.value;
 		if (e.target.id == 'categorie') {
 			isCategorie = true;
-			$:highCategories = highCategories.filter((c) => c.nom.startsWith(searchInput));
+			$: highCategories = highCategories.filter((c) => c.nom.startsWith(searchInput));
 		}
 		if (e.target.id == 'sous-categorie') {
 			isSubCategorie = true;
-			$:subCategories = subCategories.filter((c) => c.nom.startsWith(searchInput));
+			$: subCategories = subCategories.filter((c) => c.nom.startsWith(searchInput));
 		}
 	}
 	function handleShow(e) {
@@ -73,61 +72,88 @@
 		}
 	}
 	async function handleDelete(e) {
-		try {
-			categorieService.deleteCategorie(USER.token, e.target.id).then(function (result) {
-				notifMsg = result.data;
-				colorNotif = '#5bc0de';
+		if (!e.target || e.target.id <= 0) {
+			notifMsg = "La catégorie n'a pas été supprimée !";
+			colorNotif = 'red';
+			snackbar = true;
+		} else {
+			try {
+				categorieService.deleteCategorie(USER.token, e.target.id).then(function (result) {
+					notifMsg = result.data;
+					colorNotif = '#5bc0de';
+					snackbar = true;
+				});
+				let deleteList = [];
+				deleteList = categories.filter(
+					(c) => c.id == e.target.id || c.sur_categorie_id == e.target.id
+				);
+				deleteList.forEach((element) => {
+					categories = categories.filter((e) => e.id != element.id);
+				});
+				highCategories = categories.filter((e) => e.sur_categorie_id == null);
+				subCategories = categories.filter((e) => e.sur_categorie_id != null);
+			} catch (error) {
+				console.log(error);
+				notifMsg = "La catégorie n'a pas été supprimée !";
+				colorNotif = 'red';
 				snackbar = true;
-			});
-			let deleteList = [];
-			deleteList = categories.filter(
-				(c) => c.id == e.target.id || c.sur_categorie_id == e.target.id
-			);
-			deleteList.forEach((element) => {
-				categories = categories.filter((e) => e.id != element.id);
-			});
-			highCategories = categories.filter((e) => e.sur_categorie_id == null);
-			subCategories = categories.filter((e) => e.sur_categorie_id != null);
-		} catch (error) {
-			console.log(error);
+			}
 		}
 	}
 	async function submitCategorie(e) {
-		try {
-			let toSend = {
-				Nom: inputCategorieName
-			};
-			let data = await categorieService.addCategorie(toSend, USER.token).then(function (result) {
-				return result.data;
-			});
-			categories.push(data);
-			highCategories = categories.filter((e) => e.sur_categorie_id == null);
-			subCategories = categories.filter((e) => e.sur_categorie_id != null);
-			notifMsg = 'La catégorie à été ajouté !';
-			colorNotif = '#5bc0de';
+		if (!inputCategorieName) {
+			notifMsg = 'Les champs ne peuvent pas être vide ! ';
+			colorNotif = 'red';
 			snackbar = true;
-		} catch (error) {
-			console.log(error);
+		} else {
+			try {
+				let toSend = {
+					Nom: inputCategorieName
+				};
+				let data = await categorieService.addCategorie(toSend, USER.token).then(function (result) {
+					return result.data;
+				});
+				categories.push(data);
+				highCategories = categories.filter((e) => e.sur_categorie_id == null);
+				subCategories = categories.filter((e) => e.sur_categorie_id != null);
+				notifMsg = 'La catégorie à été ajouté !';
+				colorNotif = '#5bc0de';
+				snackbar = true;
+			} catch (error) {
+				console.log(error);
+				notifMsg = "La catégorie n'a pas été ajouter ! ";
+				colorNotif = 'red';
+				snackbar = true;
+			}
 		}
 	}
 	async function submitSubCategorie(e) {
-		try {
-			let toSend = {
-				Nom: inputSubCategorieName,
-				Sur_categorie_id: selectedAddSubmitSubCat.id
-			};
-
-			let data = await categorieService.addCategorie(toSend, USER.token).then(function (result) {
-				return result.data;
-			});
-			categories[categories.length] = data;
-			highCategories = categories.filter((e) => e.sur_categorie_id == null);
-			subCategories = categories.filter((e) => e.sur_categorie_id != null);
-			notifMsg = 'La sous catégorie à été ajouté ! ';
-			colorNotif = '#5bc0de';
+		if (!inputSubCategorieName || !selectedAddSubmitSubCat) {
+			notifMsg = 'Les champs ne peuvent pas être vide ! ';
+			colorNotif = 'red';
 			snackbar = true;
-		} catch (error) {
-			console.log(error);
+		} else {
+			try {
+				let toSend = {
+					Nom: inputSubCategorieName,
+					Sur_categorie_id: selectedAddSubmitSubCat.id
+				};
+
+				let data = await categorieService.addCategorie(toSend, USER.token).then(function (result) {
+					return result.data;
+				});
+				categories[categories.length] = data;
+				highCategories = categories.filter((e) => e.sur_categorie_id == null);
+				subCategories = categories.filter((e) => e.sur_categorie_id != null);
+				notifMsg = 'La sous catégorie à été ajouté ! ';
+				colorNotif = '#5bc0de';
+				snackbar = true;
+			} catch (error) {
+				console.log(error);
+				notifMsg = "La sous catégorie n'a pas été ajouter ! ";
+				colorNotif = 'red';
+				snackbar = true;
+			}
 		}
 	}
 	async function submitUpdate(e, categorie) {
@@ -217,8 +243,7 @@
 			<header class="card-header">
 				<p class="card-header-title">Ajouter une catégorie</p>
 				<button class="card-header-icon" value="createCat" id="create" on:click={handleShow}>
-					<i class="fas fa-angle-down" 
-					style="pointer-events:none" />
+					<i class="fas fa-angle-down" style="pointer-events:none" />
 				</button>
 			</header>
 			{#if isCreateCat}
@@ -280,7 +305,7 @@
 			<header class="card-header">
 				<p class="card-header-title">Gérer les catégories</p>
 				<button class="card-header-icon" value="management" id="management" on:click={handleShow}>
-					<i class="fas fa-angle-down"  style="pointer-events:none"/>
+					<i class="fas fa-angle-down" style="pointer-events:none" />
 				</button>
 			</header>
 			{#if isManagement}
