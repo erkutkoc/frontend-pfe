@@ -15,7 +15,6 @@
 	import { currentAnnonce } from '../../utils/stores';
 
 	const idAnnonce = $page.params.id;
-	$ : console.log(annonce)
 	let annonce;
 	let currentUser = ' ';
 	let annonceCategorie;

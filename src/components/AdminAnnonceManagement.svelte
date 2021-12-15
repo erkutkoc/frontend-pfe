@@ -26,7 +26,7 @@
 	}
 	const fetchUpdate = async (annonce, updatedState) => {
 		if (admin) {
-			try {
+		
 				let toSend = {
 					Id: annonce.id,
 					Titre: annonce.titre,
@@ -47,11 +47,7 @@
 					colorNotif = '#5bc0de';
 					snackbar = true;
 				}
-			} catch (error) {
-				notifMsg = "La requête n'a pas abouti !";
-				colorNotif = 'red';
-				snackbar = true;
-			}
+
 		}
 	};
 </script>

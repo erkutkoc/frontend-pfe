@@ -8,8 +8,6 @@
 
 	import UserServices from '../services/userServices.js';
 	import '../styles/tailwind-output.css';
-	import colors from 'svelte-materialify/src/utils/colors';
-	//import 'bootstrap/dist/css/bootstrap.min.css';
 
 	let banDateY;
 	let banDateM;
@@ -44,7 +42,6 @@
 
 	const adminUser = async (token, id) => {
 		await UserServices.adminUser(token, id).then((data) => {
-			console.log(data);
 		});
 	};
 </script>

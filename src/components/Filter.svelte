@@ -41,7 +41,6 @@
 			return;
 		}
 	});
-	$: console.log($filteredAnnonces)
 	const fetchAnnoncesByCampus = async () => {
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
 		let temp = resp;

@@ -20,7 +20,6 @@
 		USER = JSON.parse(sessionStorage.getItem('user'))
         email = USER.email
         campusUser = USER.campus_Id
-		console.log(campusUser)
         token = USER.token;
 	});
     
@@ -42,13 +41,9 @@
 		await UserServices.updateProfile(token, email, data.password, Number.parseInt(data.campus)).then((data) => {
 			let user = data.data
 			user.motDePasse = ''
-			console.log(user)
-			console.log(USER)
 			USER.campus_Id = user.campus_Id
-			console.log(USER)
 			storage('user', USER);
 			USER = JSON.parse(sessionStorage.getItem('user'))
-			console.log(USER)
 			loading = false
 		})
 	}

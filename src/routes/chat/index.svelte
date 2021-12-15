@@ -105,7 +105,6 @@ texte: "Bonjour"
 						});
 				})
 				.catch((error) => {
-					console.log('Bad email');
 					loading = false;
 					errorNotification = "L'email ne correspond à personne";
 					snackbar = true;
@@ -125,7 +124,6 @@ texte: "Bonjour"
 	}
 
 	const handleClickDiscussion = (discussion) => {
-		console.log(discussion);
 		selectedDiscussion = discussion.discussion;
 		fetchMessages(token, selectedDiscussion.id);
 	};
