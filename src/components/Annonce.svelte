@@ -3,7 +3,7 @@
 	import { annonces, filteredAnnonces } from '../utils/stores.js';
 	import { onMount } from 'svelte';
 	import { Snackbar } from 'svelte-materialify';
-	import State from './State.svelte';
+	import State from './CurrentState.svelte';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
 	export let annonce;
 
@@ -111,16 +111,16 @@
 		>
 	</div>
 </div>
+
 <style>
-		button{
-		border:solid;
+	button {
+		border: solid;
 		border-width: 0.3px;
 		border-radius: 5px;
-		border-color:blueviolet;
-		background-color: rgba(138,43, 226, 0.2);
-
+		border-color: blueviolet;
+		background-color: rgba(138, 43, 226, 0.2);
 	}
-	span{
-		margin:5px;
+	span {
+		margin: 5px;
 	}
 </style>

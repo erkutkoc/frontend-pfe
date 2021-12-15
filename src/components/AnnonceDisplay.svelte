@@ -3,7 +3,7 @@
 	import AnnonceServices from '../services/annonceServices.js';
 	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from '../utils/stores.js';
 	import LoadingAnimation from './LoadingAnimation.svelte';
-	import State from './State.svelte';
+	import State from './CurrentState.svelte';
 	import { Snackbar } from 'svelte-materialify';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
 
