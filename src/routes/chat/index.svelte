@@ -180,46 +180,51 @@ texte: "Bonjour"
 							</div>
 						{/each}
 					{/if}
-					<form
-						on:submit|preventDefault={handleClickPost}
-						class="mt-8 space-y-6"
-						action="#"
-						method="POST"
-					>
-						<input
-							id="newDiscussionEmail"
-							name="newDiscussionEmail"
-							bind:value={newDiscussionEmail}
-							type="text"
-							required
-							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-							placeholder="Ecrivez l'email de votre destinataire"
-						/>
-						<button
-							type="submit"
-							style="color:white"
-							class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+			
+						<form
+							on:submit|preventDefault={handleClickPost}
+							class="mt-8 space-y-6 float-root"
+							action="#"
+							method="POST"
 						>
-							{#if loading}
-								<span class="absolute left-0 inset-y-0 flex items-center pl-3">
-									<!-- Heroicon name: solid/lock-closed -->
-									<span class="absolute left-0 inset-y-0 flex items-center pl-3">
-										<LoadingAnimation />
-									</span>
-								</span>
-							{/if}
-							Ajouter une conversation
-						</button>
-					</form>
+							<div class="rounded-md shadow-sm -space-y-px">
+								<div>
+									<label for="message" class="sr-only">Email</label>
+									<input
+									id="newDiscussionEmail"
+									name="newDiscussionEmail"
+									bind:value={newDiscussionEmail}
+									type="text"
+									required
+									class="appearance-none max-w-lg float-left rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+									placeholder="Ecrivez l'email de votre destinataire"
+								/>
+								<button
+									type="submit"
+									style="color:white"
+									class="group relative max-w-xs float-right w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+								>
+									{#if loading}
+										<span class="absolute left-0 inset-y-0 flex items-center pl-3">
+											<!-- Heroicon name: solid/lock-closed -->
+											<span class="absolute left-0 inset-y-0 flex items-center pl-3">
+												<LoadingAnimation />
+											</span>
+										</span>
+									{/if}
+									Ajouter une conversation
+								</button>
+						</form>
 				{:else}
 					<button
 						on:click={(e) => {
 							selectedDiscussion = null;
 							messages = [];
 						}}
-						class="relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						class="relative mb-10 justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 						>Retour
 					</button>
+					<br />
 
 					<div>
 						{#each messages as message}
@@ -238,9 +243,9 @@ texte: "Bonjour"
 								</footer>
 							</div>-->
 							{#if message.envoyeur_id == id}
-								<div class="card">
-									<footer class="card-footer relative max-w-xs has-background-primary-light">
-										<div class="card-footer-item inset-y-0 left-0">
+								<div class="card border-none">
+									<footer class="card-footer relative max-w-xs has-background-primary-light float-root">
+										<div class="card-footer-item float-left">
 											<p class="">{message.texte}</p>
 										</div>
 									</footer>
@@ -248,7 +253,7 @@ texte: "Bonjour"
 							{:else}
 								<div class="card">
 									<footer class="card-footer relative max-w-xs has-background-info-dark has-text-white">
-										<div class="card-footer-item inset-y-0 right-0">
+										<div class="card-footer-item float-right">
 											<p class="">{message.texte}</p>
 										</div>
 									</footer>
@@ -259,11 +264,10 @@ texte: "Bonjour"
 
 					<form
 						on:submit|preventDefault={handleSubmit}
-						class="mt-8 space-y-6"
+						class="mt-8 space-y-6 float-root"
 						action="#"
 						method="POST"
 					>
-						<input type="hidden" name="remember" value="true" />
 						<div class="rounded-md shadow-sm -space-y-px">
 							<div>
 								<label for="message" class="sr-only">Ecrivez votre message</label>
@@ -273,7 +277,7 @@ texte: "Bonjour"
 									bind:value={message}
 									type="text"
 									required
-									class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+									class="appearance-none max-w-3xl float-left rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 									placeholder="Ecrivez votre message"
 								/>
 							</div>
@@ -281,7 +285,7 @@ texte: "Bonjour"
 							<div>
 								<button
 									type="submit"
-									class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+									class="group relative max-w-min float-right w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 									style="color:white"
 								>
 									Envoyer
