@@ -30,8 +30,6 @@
 		let fetchCategories = await AnnonceServices.findAllCategorie();
 		allCategories = fetchCategories;
 	});
-	// $: console.log(currentUser);
-	// $: console.log($currentAnnonce);
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
 		{ id: 2, genre: `Service`, value: 'S' }
@@ -59,7 +57,7 @@
 	}
 	async function updateAnnonce(data) {
 		// console.log(data);
-        dataContainer.append("Id",$currentAnnonce.id)
+		dataContainer.append('Id', $currentAnnonce.id);
 		dataContainer.append('Titre', data.title);
 		dataContainer.append('Description', data.description);
 		dataContainer.append('Prix', Number.parseFloat(data.price));
@@ -68,10 +66,21 @@
 		dataContainer.append('adressesToAdd', selectedCampus);
 
 		isLoading = true;
-		await AnnonceServices.updateAnnonce(dataContainer, currentUser.token).then((rep) => {
-			isLoading = false;
-			goto('/' + $currentAnnonce.id);
-		});
+		try {
+			await AnnonceServices.updateAnnonce(dataContainer, currentUser.token).then((resp) => {
+				notifMsg = resp.data;
+				colorNotif = '#5bc0de'; //info, blue
+				snackbar = true;
+				isLoading = false;
+				setTimeout(() => {
+					goto('/' + $currentAnnonce.id);
+				}, 2500);
+			});
+		} catch (error) {
+			notifMsg = error;
+			colorNotif = 'red';
+			snackbar = true;
+		}
 	}
 </script>
 
@@ -92,9 +101,15 @@
 		<LoadingAnimation />
 	{:else}
 		<form on:submit|preventDefault={onSubmit} method="POST">
-			<div>
+			<div style="margin-left: 30%;margin-right: 30%;">
+				<h2
+					class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl"
+					style="text-align: center; margin-top: 5%;text-decoration: underline;"
+				>
+					Modification de l'annonce
+				</h2>
 				<div
-					class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2"
+					class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-1"
 				>
 					<div>
 						<h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
@@ -103,6 +118,7 @@
 								type="text"
 								name="title"
 								value={$currentAnnonce.titre}
+								required
 							/>
 						</h2>
 
@@ -113,6 +129,7 @@
 								min="0"
 								name="price"
 								value={$currentAnnonce.prix}
+								required
 							/>
 						</h2>
 						<dl
@@ -126,12 +143,13 @@
 										type="text"
 										name="description"
 										value={$currentAnnonce.description}
+										required
 									/>
 								</dd>
 							</div>
 							<div class="border-t border-gray-200 pt-4">
 								<dt class="font-medium text-gray-900">Genre</dt>
-								<dd class="mt-2 text-sm text-gray-500">
+								<div class="select">
 									<select name="genre" bind:value={selectedGenre} required>
 										{#each genres as element}
 											{#if $currentAnnonce.genre == element.value}
@@ -145,7 +163,7 @@
 											{/if}
 										{/each}
 									</select>
-								</dd>
+								</div>
 							</div>
 							<div class="border-t border-gray-200 pt-4">
 								<dt class="font-medium text-gray-900">Vendeur</dt>
@@ -154,11 +172,15 @@
 							<div class="border-t border-gray-200 pt-4">
 								<dt class="font-medium text-gray-900">Categorie</dt>
 								<div class="select">
-									<select name="categorie" bind:value={selectedCat}>
+									<select name="categorie" bind:value={selectedCat} required>
 										{#each allCategories as categorie}
 											{#if oldCat != '/'}
 												{#if oldCat == categorie.nom}
 													<option value={categorie} selected>
+														{categorie.nom}
+													</option>
+												{:else}
+													<option value={categorie}>
 														{categorie.nom}
 													</option>
 												{/if}
