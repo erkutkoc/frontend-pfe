@@ -112,7 +112,7 @@
 					class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-1"
 				>
 					<div>
-                        <dt class="font-medium text-gray-900">Titre</dt>
+						<dt class="font-medium text-gray-900">Titre</dt>
 						<h2 class="text-3xl  tracking-tight text-gray-900 sm:text-4xl">
 							<input
 								class="input is-normal"
@@ -122,8 +122,8 @@
 								required
 							/>
 						</h2>
-                        <dt class="font-medium text-gray-900">Prix</dt>
-						<h2 class="text-3xl  tracking-tight text-gray-900 sm:text-4xl" >
+						<dt class="font-medium text-gray-900">Prix</dt>
+						<h2 class="text-3xl  tracking-tight text-gray-900 sm:text-4xl">
 							<input
 								class="input is-normal"
 								type="number"
@@ -177,11 +177,11 @@
 										{#each allCategories as categorie}
 											{#if oldCat != '/'}
 												{#if oldCat == categorie.nom}
-													<option value={categorie} selected>
+													<option value={categorie.nom} selected>
 														{categorie.nom}
 													</option>
 												{:else}
-													<option value={categorie}>
+													<option value={categorie.nom}>
 														{categorie.nom}
 													</option>
 												{/if}
