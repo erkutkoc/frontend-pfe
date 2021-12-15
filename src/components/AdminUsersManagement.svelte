@@ -56,7 +56,7 @@
 	}
 
 	function handleCheck(e) {
-		if (e.target.checked) {
+		if (e.target.name == 'seeBan' && banned == false) {
 			baseMembers = bannedMembers;
 			banned = true;
 		} else {
@@ -69,25 +69,37 @@
 	}
 </script>
 
-<main>
-	<div class="container column max-w-max">
-		<div class="section w-full">
-					<div class="rounded-md shadow-sm -space-y-px">
-						<div class="max-w-sm">
-							<label for="email-address" class="sr-only">Email address</label>
-							<input
-								name="email"
-								on:input={handleInput}
-								placeholder="Rechercher un email"
-								class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-							/>
-							<label class="checkbox">
-								<input type="checkbox" name="seeBan" on:change={handleCheck}>
-								Cliquez pour voir les bannis
-							  </label>
-						</div>
-					</div>
-					<div>
+<div class="container column is-10">
+	<div class="section">
+		<div class="card">
+			<div class="max-w-sm">
+				<label for="email-address" class="sr-only">Email address</label>
+			</div>
+			<div class="card-content">
+				<div class="field">
+					<input
+						name="email"
+						on:input={handleInput}
+						placeholder="Rechercher un email"
+						class="input"
+					/>
+				</div>
+				<label class="button blue darken-1">
+					<input
+						type="button"
+					
+						name="seeBan"
+						on:click={handleCheck}
+					/>
+					<b style="color:white">Voir les bannis</b>
+				</label>
+				<p class="subtitle" />
+				<div class="content">
+					<table>
+						<tr>
+							<th>Company</th>
+							<th />
+						</tr>
 						{#if filteredMembers.length != 0}
 							{#each filteredMembers as member}
 								<Member
@@ -113,9 +125,12 @@
 								/>
 							{/each}
 						{/if}
-					</div>
+					</table>
 				</div>
 			</div>
-		
+		</div>
+	</div>
+</div>
 
-</main>
+<style>
+</style>
