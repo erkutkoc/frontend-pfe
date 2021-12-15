@@ -1,7 +1,8 @@
 <script>
 	import Navbar from '../components/Navbar.svelte';
-    import HomeRender from '../components/HomeRender.svelte';
+    import Filter from '../components/Filter.svelte';
 </script>
 
 <Navbar />
-<HomeRender/>
+<Filter />
+<section class="main-content columns is-fullheight" />

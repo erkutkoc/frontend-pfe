@@ -5,6 +5,7 @@
     export let token;
     export let banned;
     export let banDate;
+    export let admin;
 
     import UserServices from '../services/userServices.js';
     import '../styles/tailwind-output.css';
@@ -33,7 +34,7 @@
 		})
 	}
 
-    const admin = (e) => {
+    const makeAdmin = (e) => {
         e.target.innerText = "ADMIN"
         adminUser(token, id)
     }
@@ -94,11 +95,19 @@
                     </div>
 
                     <div class="card-footer-item">
-                        <button 
-                            on:click={(e) => admin(e)} 
-                            class="has-background-success max-w-10 has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
-                            >Rendre administrateur
-                        </button>
+                        {#if admin}
+                            <button 
+                                on:click={(e) => makeAdmin(e)} 
+                                class="has-background-success max-w-10 has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                                >Déjà Admin
+                            </button>
+                        {:else}
+                            <button 
+                                on:click={(e) => makeAdmin(e)} 
+                                class="has-background-success max-w-10 has-background-success relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                                >Rendre administrateur
+                            </button>
+                        {/if}
                     </div>
 				{/if}
 

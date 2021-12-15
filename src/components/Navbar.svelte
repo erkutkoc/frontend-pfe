@@ -41,10 +41,9 @@
 			{/if}
 			{#if USER}
 				{#if USER.administrateur}
-					<a class="navbar-item has-text-info" href="/administrations"> Administration </a>
+					<a class="navbar-item has-text-danger" href="/administrations"> Administration </a>
 				{/if}
-				<a class="navbar-item has-text-primary" href="/profile">{username}</a>
-
+				<a class="navbar-item has-text-info" href="/profile">{username}</a>
 				<a class="navbar-item" href="/logout"> Deconnexion </a>
 			{/if}
 		</div>
