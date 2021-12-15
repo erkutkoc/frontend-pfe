@@ -7,6 +7,8 @@
 	let shown = false;
 	let USER;
 	let fetchAddDataContainer;
+	let highCategories = [];
+	let subCategories = [];
 	$: allCampus = [];
 
 	export function showModal() {
@@ -27,6 +29,8 @@
 		const fetchAllCampus = await AnnonceServices.getAllCampus();
 		allCampus = fetchAllCampus.data;
 		selectedCampus.push(Number.parseInt(USER.adresse.id));
+		highCategories = categories.filter((e) => e.sur_categorie_id == null);
+		subCategories = categories.filter((e) => e.sur_categorie_id != null);
 	});
 	function onSubmit(e) {
 		const formData = new FormData(e.target);
@@ -136,11 +140,16 @@
 				<p class="label">Catégorie</p>
 				<div class="select">
 					<select name="categorie" bind:value={selectedCat} required>
-						<option value="">Veuillez choisir la categorie</option>
-						{#each categories as categorie}
-							<option value={categorie}>
-								{categorie.nom}
-							</option>
+						{#each highCategories as hCategorie}
+							<optgroup label={hCategorie.nom}>
+								{#each subCategories as sCategorie}
+									{#if hCategorie.id == sCategorie.sur_categorie_id}
+										<option value={sCategorie}>
+											{sCategorie.nom}
+										</option>
+									{/if}
+								{/each}
+							</optgroup>
 						{/each}
 					</select>
 				</div>

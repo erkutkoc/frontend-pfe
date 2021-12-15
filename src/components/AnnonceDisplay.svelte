@@ -68,7 +68,7 @@
 							<div class="card-content">
 								<h4 class="title is-4">{annonce.titre}</h4>
 								{#if annonce.prix != null}
-									<h5 class="title is-5">{annonce.prix}</h5>
+									<h5 class="title is-5">{annonce.prix} €</h5>
 								{:else}
 									<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 								{/if}

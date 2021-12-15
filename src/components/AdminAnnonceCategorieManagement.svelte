@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import annonceServices from '../services/annonceServices';
 	import categorieService from '../services/categorieService';
+	import { Snackbar, Button, Icon } from 'svelte-materialify';
 	let USER;
 	let categories = [];
 	let highCategories = [];
@@ -23,6 +24,8 @@
 	let categorieNameValue = null;
 	let selectedAddSubmitSubCat = null;
 	let displayAll = false;
+	let notifMsg, colorNotif;
+	let snackbar = false;
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
@@ -42,16 +45,20 @@
 		isSubCategorie = false;
 		categorieInput = '';
 		subCategorieInput = '';
+		notifMsg = 'Filtre réinitialiser';
+			colorNotif = '#5bc0de';
+			snackbar = true;
+
 	};
 	function handleInput(e) {
 		searchInput = e.target.value;
 		if (e.target.id == 'categorie') {
 			isCategorie = true;
-			$: highCategories = highCategories.filter((c) => c.nom.startsWith(searchInput));
+			$:highCategories = highCategories.filter((c) => c.nom.startsWith(searchInput));
 		}
 		if (e.target.id == 'sous-categorie') {
 			isSubCategorie = true;
-			$: subCategories = subCategories.filter((c) => c.nom.startsWith(searchInput));
+			$:subCategories = subCategories.filter((c) => c.nom.startsWith(searchInput));
 		}
 	}
 	function handleShow(e) {
@@ -66,58 +73,85 @@
 		}
 	}
 	async function handleDelete(e) {
-		categorieService.deleteCategorie(USER.token, e.target.id).then(function (result) {
-			return result;
-		});
-
-		let deleteList = [];
-		deleteList = categories.filter((c) => c.id == e.target.id || c.sur_categorie_id == e.target.id);
-		deleteList.forEach((element) => {
-			categories = categories.filter((e) => e.id != element.id);
-		});
-		highCategories = categories.filter((e) => e.sur_categorie_id == null);
-		subCategories = categories.filter((e) => e.sur_categorie_id != null);
+		try {
+			categorieService.deleteCategorie(USER.token, e.target.id).then(function (result) {
+				notifMsg = result.data;
+				colorNotif = '#5bc0de';
+				snackbar = true;
+			});
+			let deleteList = [];
+			deleteList = categories.filter(
+				(c) => c.id == e.target.id || c.sur_categorie_id == e.target.id
+			);
+			deleteList.forEach((element) => {
+				categories = categories.filter((e) => e.id != element.id);
+			});
+			highCategories = categories.filter((e) => e.sur_categorie_id == null);
+			subCategories = categories.filter((e) => e.sur_categorie_id != null);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 	async function submitCategorie(e) {
-		let toSend = {
-			Nom: inputCategorieName
-		};
-
-		let data = await categorieService.addSubCategorie(toSend, USER.token).then(function (result) {
-			return result.data;
-		});
-		categories.push(data);
-		highCategories = categories.filter((e) => e.sur_categorie_id == null);
-		subCategories = categories.filter((e) => e.sur_categorie_id != null);
-	}
-	async function submitSubCategorie(e) {
-		let toSend = {
-			Nom: inputSubCategorieName,
-			Sur_categorie_id: selectedAddSubmitSubCat.id
-		};
-
-		let data = await categorieService.addSubCategorie(toSend, USER.token).then(function (result) {
-			return result.data;
-		});
-		categories[categories.length] = data;
-		highCategories = categories.filter((e) => e.sur_categorie_id == null);
-		subCategories = categories.filter((e) => e.sur_categorie_id != null);
-	}
-	async function submitUpdate(e, categorie) {
-		let toSend = checkUpdateValue(categorie);
-		checkUpdateValue(categorie, toSend);
-		let resp = await categorieService
-			.updateCategorie(toSend, USER.token, admin, categorie.id)
-			.then(function (result) {
+		try {
+			let toSend = {
+				Nom: inputCategorieName
+			};
+			let data = await categorieService.addCategorie(toSend, USER.token).then(function (result) {
 				return result.data;
 			});
-		let index = categories.findIndex((e) => e.id == resp.id);
-		categories[index] = resp;
-		highCategories = categories.filter((e) => e.sur_categorie_id == null);
-		subCategories = categories.filter((e) => e.sur_categorie_id != null);
-		showUpdateInput = false;
-		selectedCat = null;
-		categorieNameValue = null;
+			categories.push(data);
+			highCategories = categories.filter((e) => e.sur_categorie_id == null);
+			subCategories = categories.filter((e) => e.sur_categorie_id != null);
+			notifMsg = 'La catégorie à été ajouté !';
+			colorNotif = '#5bc0de';
+			snackbar = true;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	async function submitSubCategorie(e) {
+		try {
+			let toSend = {
+				Nom: inputSubCategorieName,
+				Sur_categorie_id: selectedAddSubmitSubCat.id
+			};
+
+			let data = await categorieService.addCategorie(toSend, USER.token).then(function (result) {
+				return result.data;
+			});
+			categories[categories.length] = data;
+			highCategories = categories.filter((e) => e.sur_categorie_id == null);
+			subCategories = categories.filter((e) => e.sur_categorie_id != null);
+			notifMsg = 'La sous catégorie à été ajouté ! ';
+			colorNotif = '#5bc0de';
+			snackbar = true;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	async function submitUpdate(e, categorie) {
+		try {
+			let toSend = checkUpdateValue(categorie);
+			checkUpdateValue(categorie, toSend);
+			let resp = await categorieService
+				.updateCategorie(toSend, USER.token, admin, categorie.id)
+				.then(function (result) {
+					return result.data;
+				});
+			let index = categories.findIndex((e) => e.id == resp.id);
+			categories[index] = resp;
+			highCategories = categories.filter((e) => e.sur_categorie_id == null);
+			subCategories = categories.filter((e) => e.sur_categorie_id != null);
+			showUpdateInput = false;
+			selectedCat = null;
+			categorieNameValue = null;
+			notifMsg = 'La catégorie à été mise à jour ! ';
+			colorNotif = '#5bc0de';
+			snackbar = true;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	const checkUpdateValue = (categorie) => {
@@ -147,9 +181,19 @@
 	};
 </script>
 
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={2000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
 <div class="container column is-10">
 	<button
-		class="button is-primary is-outlined"
+		class="button is-primary"
 		id="displayAll"
 		on:click={() => {
 			if (!displayAll) {
@@ -173,7 +217,8 @@
 			<header class="card-header">
 				<p class="card-header-title">Ajouter une catégorie</p>
 				<button class="card-header-icon" value="createCat" id="create" on:click={handleShow}>
-					<i class="fas fa-angle-down" />
+					<i class="fas fa-angle-down" 
+					style="pointer-events:none" />
 				</button>
 			</header>
 			{#if isCreateCat}
@@ -200,7 +245,7 @@
 			<header class="card-header">
 				<p class="card-header-title">Ajouter une sous-catégorie</p>
 				<button class="card-header-icon" value="createSubCat" id="create" on:click={handleShow}>
-					<i class="fas fa-angle-down" />
+					<i class="fas fa-angle-down" style="pointer-events:none" />
 				</button>
 			</header>
 			{#if isCreateSubCat}
@@ -235,7 +280,7 @@
 			<header class="card-header">
 				<p class="card-header-title">Gérer les catégories</p>
 				<button class="card-header-icon" value="management" id="management" on:click={handleShow}>
-					<i class="fas fa-angle-down" />
+					<i class="fas fa-angle-down"  style="pointer-events:none"/>
 				</button>
 			</header>
 			{#if isManagement}
