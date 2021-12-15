@@ -25,7 +25,7 @@
 
 	const ban = (e, duration) => {
 		if (duration == 0) e.target.innerText = 'OK';
-		else e.target.innerText = 'BANNI';
+		else{ if(duration == 1) e.target.innerText = 'Banni pour 1 jour'; else if(duration == -1) e.target.innerText = 'Banni définitivement';}
 		banUser(token, id, duration);
 	};
 
@@ -49,6 +49,7 @@
 	<td style="">{email}</td>
 	<td style="">
 		<div class="is-pulled-right">
+            {#if !admin}
 			{#if banned}
 				<button class="button deep-purple accent-3" disabled> Banni jusqu'au {bandDateFormat}</button>
 				<button on:click={(e) => ban(e, 0)} class="button blue darken-1">Supprimer le ban </button>
@@ -64,7 +65,7 @@
 				{:else}
 					<button on:click={(e) => makeAdmin(e)} class="button green lighten-2">Rendre administrateur </button>
 				{/if}
-			{/if}
+			{/if}{:else}<p class="red-text darken-1">Modification non autorisée !</p>{/if}
 		</div></td
 	>
 </tr>

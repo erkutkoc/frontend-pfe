@@ -4,7 +4,8 @@
 	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from '../utils/stores.js';
 	import LoadingAnimation from './LoadingAnimation.svelte';
 	import { Snackbar } from 'svelte-materialify';
-
+	import { FontAwesomeIcon } from 'fontawesome-svelte';
+	import State from './State.svelte';
 	export let annonces;
 	export let currentToogle;
 	let admin;
@@ -95,35 +96,9 @@
 								{/if}
 								<!--AnnonceState début-->
 								{#if currentToogle == 'default'}
-									{#if annonce.etat === 'E'}
-										<span style="color:hsl(217, 71%, 53%) ; font-weight:bold"
-											>Annonce en attente
-										</span>
-										<a
-											><i
-												class="icon is-small fas fa-pause-circle"
-												style="color:hsl(217, 71%, 53%)"
-											/></a
-										>
-									{/if}
-									{#if annonce.etat === 'V'}
-										<span class=" has-text-primary-dark "> <b>Annonce validée </b></span>
-										<a><i class="icon is-small has-text-primary-dark fas fa-check-circle" /></a>
-									{/if}
-									{#if annonce.etat === 'T'}
-										<span class="" style="hsl(0, 0%, 29%)"> <b>Vendu</b></span>
-										<a><i class="icon is-small fas fa-times-circle" style="hsl(0, 0%, 29%)" /></a>
-									{/if}
-									{#if annonce.etat === 'R'}
-										<span style="color:#F98A0C "> <b>Annonce réservée</b> </span>
-										<a><i class="icon is-small fas fa-minus-circle" style="color:#F98A0C" /></a>
-									{/if}
-									{#if annonce.etat === 'A'}
-										<span class="has-text-danger-dark">
-											<b>Annonce supprimée</b>
-										</span>
-										<a><i class="fas fa-times-circle icon is-small has-text-danger-dark" /></a>
-									{/if}
+
+									<State {annonce} />
+				
 								{/if}
 								{#if annonce.etat === 'E' && admin}
 									<div id="icon">

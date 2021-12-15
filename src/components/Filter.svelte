@@ -53,12 +53,12 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
-		if (e.target.id == 'min') {
+		/*if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
 		if (e.target.id == 'max') {
 			selectedMax = e.target.value;
-		}
+		}*/
 		if (e.target.id == 'prixCroissant') {
 			sort = 'prixCroissant';
 			dropdown = !dropdown;
