@@ -1,18 +1,16 @@
 <script>
 	import Member from './MemberLine.svelte';
 	import { onMount } from 'svelte';
-
+	import LoadingAnimation from './LoadingAnimation.svelte';
 	let membersArray = [];
 	let bannedMembers = [];
 	let filteredMembers = [];
-	//sert de base pour les tris de string
 	let baseMembers = [];
-
 	let token;
 	let emailSearched = '';
 	let filtered = false;
 	let banned = false;
-
+	let isLoadingAnnonces = true;
 	let USER;
 	onMount(() => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
@@ -32,6 +30,8 @@
 					.sort((a, b) => a.email.localeCompare(b.email));
 			})
 			.catch((err) => console.log(err));
+			setTimeout(()=> {isLoadingAnnonces = false;}, 3000);
+		
 	}
 
 	async function fetchMembers() {
@@ -69,64 +69,79 @@
 	}
 </script>
 
-<div class="container column is-10">
-	<div class="section">
-		<div class="card">
-			<div class="max-w-sm">
-				<label for="email-address" class="sr-only">Email address</label>
-			</div>
-			<div class="card-content">
-				<div class="field">
-					<input
-						name="email"
-						on:input={handleInput}
-						placeholder="Rechercher un email"
-						class="input"
-					/>
-				</div>
-				<label class="button blue darken-1">
-					<input
-						type="button"
-					
-						name="seeBan"
-						on:click={handleCheck}
-					/>
-					<b style="color:white">Voir les bannis</b>
-				</label>
-				<p class="subtitle" />
-				<div class="content">
-					<table>
-						{#if filteredMembers.length != 0}
-							{#each filteredMembers as member}
-								<Member
-									email={member.email}
-									id={member.id}
-									{token}
-									{banned}
-									banDate={member.banni ? member.banni.substring(0, 10) : null}
-									admin={member.administrateur}
-								/>
-							{/each}
-						{:else if filtered}
-							<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
-						{:else}
-							{#each membersArray as member}
-								<Member
-									email={member.email}
-									id={member.id}
-									{token}
-									{banned}
-									banDate={member.banni}
-									admin={member.administrateur}
-								/>
-							{/each}
-						{/if}
-					</table>
+{#if !isLoadingAnnonces}
+	{#if baseMembers.length != 0}
+		<div class="container column is-10">
+			<div class="section">
+				<div class="card">
+					<div class="max-w-sm">
+						<label for="email-address" class="sr-only">Email address</label>
+					</div>
+					<div class="card-content">
+						<div class="field">
+							<input
+								name="email"
+								on:input={handleInput}
+								placeholder="Rechercher un email"
+								class="input"
+							/>
+						</div>
+						<label class="button blue darken-1">
+							<input type="button" name="seeBan" on:click={handleCheck} />
+							<b style="color:white">Voir les bannis</b>
+						</label>
+						<p class="subtitle" />
+						<div class="content">
+							<table>
+								{#if filteredMembers.length != 0}
+									{#each filteredMembers as member}
+										<Member
+											email={member.email}
+											id={member.id}
+											{token}
+											{banned}
+											banDate={member.banni ? member.banni.substring(0, 10) : null}
+											admin={member.administrateur}
+										/>
+									{/each}
+								{:else if filtered}
+									<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
+								{:else}
+									{#each membersArray as member}
+										<Member
+											email={member.email}
+											id={member.id}
+											{token}
+											{banned}
+											banDate={member.banni}
+											admin={member.administrateur}
+										/>
+									{/each}
+								{/if}
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+	{:else}
+		<div id="center"><p>Aucun utilisateur à gérer !</p></div>
+	{/if}
+{:else}
+	<LoadingAnimation />
+{/if}
 
 <style>
+	#center {
+		text-align: center;
+		font-size: xx-large;
+		font-style: italic;
+		font-weight: bolder;
+		position: absolute;
+		margin: auto;
+		top: 50%;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
 </style>
