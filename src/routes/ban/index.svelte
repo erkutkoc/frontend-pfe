@@ -20,6 +20,7 @@
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
 		fetchMembers(token)
+		console.log("Hallo?")
 	});
 
 
@@ -42,6 +43,7 @@
 	}
 
 	function handleCheck(e) {
+		console.log(filteredMembers)
 		if (e.target.checked) {
             baseMembers = bannedMembers
             banned = true
@@ -82,13 +84,13 @@
 			<div>
 				{#if filteredMembers.length != 0}
 					{#each filteredMembers as member}
-						<Member email={member.email} id={member.id} token={token} banned={banned} banDate={member.banni ? member.banni.substring(0, 10) : null} />
+						<Member email={member.email} id={member.id} token={token} banned={banned} banDate={member.banni ? member.banni.substring(0, 10) : null} admin={member.administrateur} />
 					{/each}
 				{:else if filtered}
 					<p class="has-text-centered">Désolé personne ne correspond à votre recherche</p>
 				{:else}
 					{#each membersArray as member}
-						<Member email={member.email} id={member.id} token={token} banned={banned} banDate={member.banni} />
+						<Member email={member.email} id={member.id} token={token} banned={banned} banDate={member.banni} admin={member.administrateur} />
 					{/each}
 				{/if}
 			</div>
