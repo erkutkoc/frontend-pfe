@@ -6,6 +6,7 @@
 	import UserServices from '../../services/userServices';
 	import { Snackbar } from 'svelte-materialify';
 	import LoadingAnimation from '../../components/LoadingAnimation.svelte';
+	//
 
 	let emailSearched = '';
 	let selectedDiscussion = null;
@@ -27,7 +28,7 @@
 		token = USER.token;
 		id = USER.id;
 		fetchDiscussions(token);
-		/*
+		
 		Pusher.logToConsole = true;
 
 		var pusher = new Pusher('93dc2573318267ee5994', {
@@ -36,8 +37,9 @@
 
 		var channel = pusher.subscribe('chat');
 		channel.bind('message', function(data) {
-		alert(JSON.stringify(data));
-		});*/
+			alert(JSON.stringify(data));
+			console.log("hello chat")
+		});
 	});
 
 	const fetchMessages = async (token, discussionId) => {
@@ -69,12 +71,6 @@
 				snackbar = true;
 			});
 	};
-
-	date_envoi: "2021-11-11T00:23:01"
-discussion_id: 1
-envoyeur_id: 2
-id: 1
-texte: "Bonjour"
 
 	const postMessage = async (token, message, discussionId) => {
 		await DiscussionServices.postMessage(token, message, discussionId).then((data) => {
@@ -140,6 +136,7 @@ texte: "Bonjour"
 </script>
 
 <main>
+	<script src="https://js.pusher.com/7.0.3/pusher.min.js"></script>
 	<Navbar />
 	<Snackbar top center rounded bind:active={snackbar} timeout={1000} style="background-color:red">
 		{errorNotification}
