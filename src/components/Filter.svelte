@@ -1,5 +1,6 @@
 <script>
 	import annonceServices from '../services/annonceServices';
+	import LoadingAnimation from './LoadingAnimation.svelte';
 	import AnnonceList from './AnnonceList.svelte';
 	import { annonces, filteredAnnonces, annoncesByCampus } from '../utils/stores.js';
 	import { onMount } from 'svelte';
@@ -11,6 +12,7 @@
 	let selectedMin = -1;
 	let selectedMax = -1;
 	let sort = 'default';
+	let isLoading = true;
 
 	let campus = [
 		{ id: -1, campus: ``, value: `` },
@@ -23,20 +25,21 @@
 		categories = res;
 		highCategories = categories.filter((e) => e.sur_categorie_id == null);
 		subCategories = categories.filter((e) => e.sur_categorie_id != null);
-		const resp = await annonceServices.findAllAnnonce();
+		const resp = await annonceServices.findAllAnnonce().then((r) => {
+			isLoading = false;
+			return r;
+		});
 		$annonces = resp.filter((a) => a.etat != 'A' && a.etat != 'T' && a.etat != 'E');
 		$filteredAnnonces = $annonces;
 	});
 
 	const fetchAnnoncesByCampus = async () => {
-
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
 		let temp = resp;
 
 		$annoncesByCampus = temp;
 
 		$filteredAnnonces = $annoncesByCampus;
-
 	};
 
 	function handleChange(e) {
@@ -181,7 +184,11 @@
 		</div>
 	</div>
 </div>
-<AnnonceList annonces={$filteredAnnonces} />
+{#if !isLoading}
+	<AnnonceList annonces={$filteredAnnonces} />
+{:else}
+	<LoadingAnimation />
+{/if}
 
 <style>
 	.panel-block {
