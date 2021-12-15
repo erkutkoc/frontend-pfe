@@ -111,3 +111,16 @@
 		>
 	</div>
 </div>
+<style>
+		button{
+		border:solid;
+		border-width: 0.3px;
+		border-radius: 5px;
+		border-color:blueviolet;
+		background-color: rgba(138,43, 226, 0.2);
+
+	}
+	span{
+		margin:5px;
+	}
+</style>

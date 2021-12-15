@@ -3,9 +3,10 @@
 	import AnnonceServices from '../services/annonceServices.js';
 	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from '../utils/stores.js';
 	import LoadingAnimation from './LoadingAnimation.svelte';
+	import State from './State.svelte';
 	import { Snackbar } from 'svelte-materialify';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
-	import State from './State.svelte';
+
 	export let annonces;
 	export let currentToogle;
 	let admin;
@@ -96,22 +97,20 @@
 								{/if}
 								<!--AnnonceState début-->
 								{#if currentToogle == 'default'}
-
 									<State {annonce} />
-				
 								{/if}
 								{#if annonce.etat === 'E' && admin}
 									<div id="icon">
 										<form on:submit|preventDefault={(e) => onChangeState(e, annonce)} method="POST">
 											<button type="submit" id={annonce.id} value="V">
-												Valider l'annonce
+												<span>Valider l'annonce</span>
 												<a
 													style="color:hsl(171, 100%, 29%)"
 													type="submit"
 													id={annonce.id}
 													value="V"
 												>
-													<i class="fas fa-check-circle" />
+													<FontAwesomeIcon icon="check-circle" />
 												</a>
 											</button>
 											<!-- <span>Annuler la réservation</span> -->
@@ -128,7 +127,7 @@
 													id={annonce.id}
 													value="R"
 												>
-													<i class="fas fa-minus-circle" /></a
+													<FontAwesomeIcon icon="minus-circle" /></a
 												>
 											</button>
 										</form>
@@ -138,7 +137,7 @@
 											<button type="submit" id={annonce.id} value="T">
 												<span style="hsl(0, 0%, 29%)">Changer l'état en vendu </span>
 												<a type="submit" id={annonce.id} value="T"
-													><i class="fas fa-times-circle" /></a
+													><FontAwesomeIcon icon="times-circle" /></a
 												>
 											</button>
 										</form>
@@ -151,7 +150,7 @@
 												<span class="" style="hsl(0, 0%, 29%)"> Changer l'état en vendu</span><a
 													type="submit"
 													id={annonce.id}
-													value="T"><i class="fas fa-times-circle" /></a
+													value="T"><FontAwesomeIcon icon="times-circle" /></a
 												>
 											</button>
 										</form>
@@ -164,7 +163,7 @@
 													type="submit"
 													id={annonce.id}
 													value="V"
-													><i class="fas fa-check-circle" />
+													><FontAwesomeIcon icon="check-circle" />
 												</a>
 											</button>
 											<!--  -->
@@ -181,7 +180,7 @@
 													type="submit"
 													id={annonce.id}
 													value="A"
-													><i class="fas fa-times-circle" />
+													><FontAwesomeIcon icon="times-circle" />
 												</a>
 											</button>
 										</form>
@@ -219,5 +218,15 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+	}
+	button {
+		border: solid;
+		border-width: 0.3px;
+		border-radius: 5px;
+		border-color: blueviolet;
+		background-color: rgba(138, 43, 226, 0.2);
+	}
+	span {
+		margin: 5px;
 	}
 </style>
