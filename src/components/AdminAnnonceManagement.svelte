@@ -18,10 +18,6 @@
 			notifMsg = error;
 			colorNotif = 'red';
 			snackbar = true;
-			setTimeout(() => {
-				goto('/');
-			}, 2500);
-			return;
 		}
 		admin = USER.administrateur;
 	});
@@ -30,20 +26,36 @@
 	}
 	const fetchUpdate = async (annonce, updatedState) => {
 		if (admin) {
-			let toSend = {
-				Id: annonce.id,
-				Titre: annonce.titre,
-				Description: annonce.description,
-				Prix: annonce.prix,
-				Etat: updatedState
-			};
-			AnnonceServices.updateAnnonce(toSend, USER.token, admin);
-			let index = annonces.findIndex((element) => element.id == annonce.id);
-			annonces[index].etat = updatedState;
-			annonces = annonces.filter((e) => e.id != annonce.id);
+			try {
+				let toSend = {
+					Id: annonce.id,
+					Titre: annonce.titre,
+					Description: annonce.description,
+					Prix: annonce.prix,
+					Etat: updatedState
+				};
+				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
+				let index = annonces.findIndex((element) => element.id == annonce.id);
+				annonces[index].etat = updatedState;
+				annonces = annonces.filter((e) => e.id != annonce.id);
+				if (updateState == 'E') {
+					notifMsg = "L'annonce à été valider !";
+					colorNotif = '#5bc0de';
+					snackbar = true;
+				} else {
+					notifMsg = "L'annonce à été supprimer !";
+					colorNotif = '#5bc0de';
+					snackbar = true;
+				}
+			} catch (error) {
+				notifMsg = "La requête n'a pas abouti !";
+				colorNotif = 'red';
+				snackbar = true;
+			}
 		}
 	};
 </script>
+
 <Snackbar
 	top
 	center

@@ -3,11 +3,14 @@
 	import AnnonceServices from '../services/annonceServices.js';
 	import { usersAnnonces, usersFilteredAnnonces, isLoadingMyAnnonce } from '../utils/stores.js';
 	import LoadingAnimation from './LoadingAnimation.svelte';
+	import { Snackbar } from 'svelte-materialify';
 
 	export let annonces;
 	export let currentToogle;
 	let admin;
 	let USER;
+	let notifMsg, colorNotif;
+	let snackbar = false;
 	// fetch user token high level on mount
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
@@ -18,24 +21,34 @@
 	});
 	//update state by annonce
 	const fetchUpdate = async (state, annonce) => {
-		let toSend = {
-			Id: annonce.id,
-			Titre: annonce.titre,
-			Description: annonce.description,
-			Prix: annonce.prix,
-			Etat: state,
-			Vendeur_id: USER.id
-		};
-		if (admin && state == 'E') {
-			AnnonceServices.updateAnnonce(toSend, USER.token, admin);
-			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
-			$usersAnnonces[index].etat = state;
-			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
-		} else {
-			AnnonceServices.updateAnnonce(toSend, USER.token);
-			let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
-			$usersAnnonces[index].etat = state;
-			$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+		try {
+			let toSend = {
+				Id: annonce.id,
+				Titre: annonce.titre,
+				Description: annonce.description,
+				Prix: annonce.prix,
+				Etat: state,
+				Vendeur_id: USER.id
+			};
+			if (admin && state == 'E') {
+				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
+				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
+				$usersAnnonces[index].etat = state;
+				$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+			} else {
+				AnnonceServices.updateAnnonce(toSend, USER.token);
+				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
+				$usersAnnonces[index].etat = state;
+				$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
+			}
+			notifMsg = "L'état de l'annonce a été mis à jour !";
+			colorNotif = '#5bc0de';
+			snackbar = true;
+		} catch (error) {
+			console.log(error);
+			notifMsg = "L'état de l'annonce n'a pas été mis à jour !";
+			colorNotif = 'red';
+			snackbar = true;
 		}
 	};
 	//click event to change state
@@ -44,6 +57,16 @@
 	}
 </script>
 
+<Snackbar
+	top
+	center
+	rounded
+	bind:active={snackbar}
+	timeout={5000}
+	style="background-color:{colorNotif}"
+>
+	{notifMsg}
+</Snackbar>
 {#if !$isLoadingMyAnnonce}
 	{#if annonces.length != 0}
 		<div class="container column is-fullhd">
