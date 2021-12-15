@@ -226,16 +226,16 @@
 							</div>-->
 							{#if message.envoyeur_id == id} 
 								<div class="card">
-									<footer class="card-footer relative max-w-xs has-background-primary-light"> 
-										<div class="card-footer-item inset-y-0 left-0">
+									<footer class="card-footer relative max-w-xs has-background-primary-light -right-0"> 
+										<div class="card-footer-item">
 											<p class="">{message.texte}</p>
 										</div>
 									</footer>
 								</div>
 							{:else}
 								<div class="card">
-									<footer class="card-footer relative max-w-xs has-background-info-dark"> 
-										<div class="card-footer-item inset-y-0 right-0">
+									<footer class="card-footer relative max-w-xs has-background-info-dark -right-0"> 
+										<div class="card-footer-item">
 											<p class="">{message.texte}</p>
 										</div>
 									</footer>
