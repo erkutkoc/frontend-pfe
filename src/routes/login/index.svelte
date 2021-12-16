@@ -37,6 +37,7 @@
 				goto('/');
 			});
 		} catch (err) {
+			console.log(err)
 			errorNotification = err;
 			snackbar = true;
 		}

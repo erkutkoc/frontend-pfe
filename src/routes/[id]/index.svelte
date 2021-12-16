@@ -12,7 +12,7 @@
 	import { Snackbar, Button, Icon } from 'svelte-materialify';
 	import { goto } from '$app/navigation';
 	import { mdiPen } from '@mdi/js';
-	import { currentAnnonce } from '../../utils/stores';
+	import EditAnnonce from '../../components/EditAnnonce.svelte';
 
 	const idAnnonce = $page.params.id;
 	let annonce;
@@ -20,13 +20,22 @@
 	let annonceCategorie;
 	let vendeur;
 	let snackbar = false;
-	let notifMsg, colorNotif;
+	let notifMsg;
+	let colorNotif;
 
-	const updateAnnonce = () => {
-		$currentAnnonce = annonce;
-		$currentAnnonce.vendeur_email = vendeur.email;
-		$currentAnnonce.categorie_nom = annonceCategorie;
-		goto('/' + idAnnonce + '/edit');
+	$: console.log(vendeur);
+	$: console.log(currentUser);
+	let component;
+	let props;
+	const showEditAnnonce = () => {
+		component = EditAnnonce;
+		props = {
+			shown: true,
+			currentAnnonce: annonce,
+			vendeur_email: vendeur.email,
+			categorie_nom: annonceCategorie,
+			currentUser: currentUser
+		};
 	};
 	onMount(async () => {
 		currentUser = JSON.parse(sessionStorage.getItem('user'));
@@ -40,7 +49,7 @@
 			snackbar = true;
 			setTimeout(() => {
 				goto('/');
-			}, 2500);
+			}, 4500);
 			return;
 		}
 		//Case where categorie is deleted == null
@@ -62,7 +71,7 @@
 	center
 	rounded
 	bind:active={snackbar}
-	timeout={2000}
+	timeout={4000}
 	style="background-color:{colorNotif}"
 >
 	{notifMsg}
@@ -77,20 +86,23 @@
 				class="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2"
 			>
 				<div>
-					<h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+					<div class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
 						{annonce.titre}
-
-						<Button
-							fab
-							size="small"
-							class="blue darken-2 white-text"
-							on:click={updateAnnonce}
-							style="float: right;"
-						>
-							<Icon path={mdiPen} />
-						</Button>
-					</h2>
-
+						{#if currentUser.id == vendeur.id}
+							<Button
+								fab
+								size="small"
+								class="blue darken-2 white-text"
+								on:click={showEditAnnonce}
+								style="float: right;"
+							>
+								<Icon path={mdiPen} />
+							</Button>
+						{/if}
+					</div>
+					{#if currentUser.id == vendeur.id}
+						<svelte:component this={component} {...props} />
+					{/if}
 					<p class="mt-4 text-gray-500">
 						{#if annonce.etat == 'E'}
 							<b><i id="attente">En attente</i></b>

@@ -225,6 +225,7 @@
 										value={campus.id}
 										on:change={onCheckCampus}
 										name="adresses"
+										style="border: solid ;border-color: gray;border-width: 0.3px;"
 									/>
 								</label>
 							{/if}
