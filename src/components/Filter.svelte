@@ -212,7 +212,7 @@
 			Réinitialiser
 		</button>
 	</div>
-	<div class="section" id="homeMsg">
+	<div class="section" id="homeMsg" >
 			<blockquote>
 				Nous avons tous des trésors enfouis au fond de notre grenier ou de nos placards. Trésors qui
 				profiteraient à d’autres. Valorisons-les en leur donnant une seconde vie. <FontAwesomeIcon
@@ -268,11 +268,9 @@
 		border-width: 0;
 		border-radius: 10px;
 		color: rgb(6, 108, 192);
-		margin:auto;
-		padding:auto;
+		margin:1px;
 	} 
 	#homeMsg{
-		margin:auto;
-		padding:auto;
+		padding:20px;
 	}
 </style>
