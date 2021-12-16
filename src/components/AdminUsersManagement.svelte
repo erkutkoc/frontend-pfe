@@ -51,7 +51,7 @@
 
 	function handleInput(e) {
 		emailSearched = e.target.value;
-		filteredMembers = baseMembers.filter((m) => m.email.startsWith(emailSearched));
+		filteredMembers = baseMembers.filter((m) => m.email.toLowerCase().startsWith(emailSearched.toLowerCase()));
 		filtered = true;
 	}
 

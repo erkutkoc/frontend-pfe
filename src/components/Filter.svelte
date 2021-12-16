@@ -74,7 +74,7 @@
 			dropdown = !dropdown;
 		}
 		if (inputSearch) {
-			$filteredAnnonces = $filteredAnnonces.filter((a) => a.titre.startsWith(inputSearch));
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.titre.toLowerCase().startsWith(inputSearch.toLowerCase()));
 		}
 		//Fonctionnalité future
 		/*if (selectedCamp) {
@@ -117,6 +117,7 @@
 		document.getElementById('min').value = '';
 		document.getElementById('max').value = '';
 		sort = 'default';
+		inputSearch = null;
 	}
 
 	let dropdown = false;
@@ -265,11 +266,13 @@
 		font-weight: bold;
 		border: solid;
 		border-width: 0;
-		border-radius: 30px;
+		border-radius: 10px;
 		color: rgb(6, 108, 192);
+		margin:auto;
+		padding:auto;
 	} 
 	#homeMsg{
 		margin:auto;
-		padding:20px;
+		padding:auto;
 	}
 </style>
