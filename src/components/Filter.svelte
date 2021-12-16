@@ -74,7 +74,7 @@
 			dropdown = !dropdown;
 		}
 		if (inputSearch) {
-			$filteredAnnonces = $filteredAnnonces.filter((a) => a.titre.startsWith(inputSearch));
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.titre.toLowerCase().startsWith(inputSearch.toLowerCase()));
 		}
 		//Fonctionnalité future
 		/*if (selectedCamp) {
@@ -117,6 +117,7 @@
 		document.getElementById('min').value = '';
 		document.getElementById('max').value = '';
 		sort = 'default';
+		inputSearch = null;
 	}
 
 	let dropdown = false;
@@ -211,7 +212,7 @@
 			Réinitialiser
 		</button>
 	</div>
-	<div class="section" id="homeMsg">
+	<div class="section" id="homeMsg" >
 			<blockquote>
 				Nous avons tous des trésors enfouis au fond de notre grenier ou de nos placards. Trésors qui
 				profiteraient à d’autres. Valorisons-les en leur donnant une seconde vie. <FontAwesomeIcon
@@ -265,11 +266,11 @@
 		font-weight: bold;
 		border: solid;
 		border-width: 0;
-		border-radius: 30px;
+		border-radius: 10px;
 		color: rgb(6, 108, 192);
+		margin:1px;
 	} 
 	#homeMsg{
-		margin:auto;
 		padding:20px;
 	}
 </style>
