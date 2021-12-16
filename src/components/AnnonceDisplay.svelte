@@ -9,29 +9,41 @@
 
 	export let annonces;
 	export let currentToogle;
-	let admin;
-	let USER;
-	let notifMsg, colorNotif;
+
+	let admin, USER, notifMsg, colorNotif;
 	let snackbar = false;
-	// fetch user token high level on mount
+	
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER) {
 			admin = USER.administrateur;
 		}
-		//$isLoadingMyAnnonce = !$isLoadingMyAnnonce;
 	});
-	//update state by annonce
+	const createObjectToSend = () => {
+		return admin
+			? {
+					Id: annonce.id,
+					Titre: annonce.titre,
+					Description: annonce.description,
+					Prix: annonce.prix,
+					Etat: state,
+					Vendeur_id: USER.id
+			  }
+			: {
+					Id: annonce.id,
+					Titre: annonce.titre,
+					Description: annonce.description,
+					Prix: annonce.prix,
+					Etat: state,
+					Vendeur_id: USER.id,
+					addressesToAdd: annonce.addressesToAdd,
+					Genre: annonce.genre,
+					Categorie_id: annonce.categorie_id
+			  };
+	};
 	const fetchUpdate = async (state, annonce) => {
 		try {
-			let toSend = {
-				Id: annonce.id,
-				Titre: annonce.titre,
-				Description: annonce.description,
-				Prix: annonce.prix,
-				Etat: state,
-				Vendeur_id: USER.id
-			};
+			let toSend = createObjectToSend();
 			if (admin && state == 'E') {
 				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
 				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
@@ -53,7 +65,6 @@
 			snackbar = true;
 		}
 	};
-	//click event to change state
 	function onChangeState(event, annonce) {
 		if (annonce) fetchUpdate(event.target[0].value, annonce);
 	}

@@ -3,29 +3,24 @@
 	import annonceServices from '../services/annonceServices';
 	import categorieService from '../services/categorieService';
 	import { Snackbar, Button, Icon } from 'svelte-materialify';
-	let USER;
+	let searchInput, categorieInput, subCategorieInput, admin;
+
 	let categories = [];
 	let highCategories = [];
 	let subCategories = [];
-	let admin;
 	let isSubCategorie = false;
 	let isCategorie = false;
-	let searchInput;
-	let categorieInput;
-	let subCategorieInput;
 	let isManagement = false;
 	let isCreateCat = false;
 	let isCreateSubCat = false;
-	let inputCategorieName;
-	let inputSubCategorieName;
-	let selectedCat = null;
-	let updateId;
 	let showUpdateInput = false;
+	let displayAll = false;
+	let snackbar = false;
+	let USER, inputCategorieName, inputSubCategorieName, updateId, notifMsg, colorNotif;
+	let selectedCat = null;
 	let categorieNameValue = null;
 	let selectedAddSubmitSubCat = null;
-	let displayAll = false;
-	let notifMsg, colorNotif;
-	let snackbar = false;
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER == null) return;
@@ -38,6 +33,7 @@
 			subCategories = categories.filter((e) => e.sur_categorie_id != null);
 		}
 	});
+	//Reset all filter input
 	const resetFilter = () => {
 		highCategories = categories.filter((e) => e.sur_categorie_id == null);
 		subCategories = categories.filter((e) => e.sur_categorie_id != null);
@@ -49,6 +45,7 @@
 		colorNotif = '#5bc0de';
 		snackbar = true;
 	};
+	//Detect input
 	function handleInput(e) {
 		searchInput = e.target.value;
 		if (e.target.id == 'categorie') {
@@ -333,128 +330,131 @@
 						</div>
 						<button class="button  is-primary is-fullwidth" on:click={resetFilter}>Reset</button>
 					</div>
-					{#each highCategories as hCategorie}
-						<p class="subtitle" />
-						<div class="content">
-							<table>
-								<thead>
-									<tr>
-										{#if showUpdateInput && updateId == hCategorie.id}
-											<td
-												><input
-													class="input is-primary"
-													type="text"
-													placeholder={hCategorie.nom}
-													bind:value={categorieNameValue}
-													required
-												/></td
-											>
-											<th>
-												<button
-													id={hCategorie.id}
-													on:click={() => {
-														showUpdateInput = false;
-														updateId = hCategorie.id;
-													}}
-													class="button is-danger is-focused is-pulled-right is-small"
-													style="width: 100px">Annuler</button
+					{#if categories.length != 0}
+						{#each highCategories as hCategorie}
+							<div class="content">
+								<table>
+									<thead>
+										<tr>
+											{#if showUpdateInput && updateId == hCategorie.id}
+												<td
+													><input
+														class="input is-primary"
+														type="text"
+														placeholder={hCategorie.nom}
+														bind:value={categorieNameValue}
+														required
+													/></td
 												>
-												<button
-													id={hCategorie.id}
-													on:click={(e) => submitUpdate(e, hCategorie)}
-													class="button is-info is-focused is-pulled-right is-small"
-													style="width: 100px">Valider</button
-												>
-											</th>
-										{:else if showUpdateInput == false}
-											<th>{hCategorie.nom}</th>
-											<th>
-												<button
-													id={hCategorie.id}
-													on:click={handleDelete}
-													class="button is-danger is-focused is-pulled-right is-small"
-													style="width: 100px">Supprimer</button
-												>
-												<button
-													id={hCategorie.id}
-													on:click={() => {
-														showUpdateInput = true;
-														updateId = hCategorie.id;
-													}}
-													class="button is-info is-focused is-pulled-right is-small"
-													style="width: 100px">Mettre à jour</button
-												>
-											</th>
-										{/if}
-									</tr>
-								</thead>
-								<tbody>
-									{#each subCategories as sCategorie}
-										{#if hCategorie.id == sCategorie.sur_categorie_id}
-											<tr>
-												{#if showUpdateInput && updateId == sCategorie.id}
-													<td
-														><input
-															class="input is-primary"
-															type="text"
-															placeholder={sCategorie.nom}
-															bind:value={categorieNameValue}
-														/>
-													</td><td>
-														<div class="field select">
-															<select bind:value={selectedCat}>
-																{#each highCategories as cat}
-																	<option value={cat}>
-																		{cat.nom}
-																	</option>
-																{/each}
-															</select>
-														</div></td
+												<th>
+													<button
+														id={hCategorie.id}
+														on:click={() => {
+															showUpdateInput = false;
+															updateId = hCategorie.id;
+														}}
+														class="button is-danger is-focused is-pulled-right is-small"
+														style="width: 100px">Annuler</button
 													>
-													<td>
-														<button
-															id={sCategorie.id}
-															on:click={() => {
-																showUpdateInput = false;
-																updateId = sCategorie.id;
-															}}
-															class="button is-danger is-focused is-pulled-right is-small"
-															style="width: 100px">Annuler</button
-														>
-														<button
-															id={sCategorie.id}
-															on:click={(e) => submitUpdate(e, sCategorie)}
-															class="button is-info is-focused is-pulled-right is-small"
-															style="width: 100px">Valider</button
-														></td
+													<button
+														id={hCategorie.id}
+														on:click={(e) => submitUpdate(e, hCategorie)}
+														class="button is-info is-focused is-pulled-right is-small"
+														style="width: 100px">Valider</button
 													>
-												{:else if showUpdateInput == false}
-													<td>{sCategorie.nom}</td>
-													<td>
-														<button
-															id={sCategorie.id}
-															on:click={handleDelete}
-															class="button is-danger is-focused is-pulled-right is-small"
-															style="width: 100px">Supprimer</button
+												</th>
+											{:else if showUpdateInput == false}
+												<th>{hCategorie.nom}</th>
+												<th>
+													<button
+														id={hCategorie.id}
+														on:click={handleDelete}
+														class="button is-danger is-focused is-pulled-right is-small"
+														style="width: 100px">Supprimer</button
+													>
+													<button
+														id={hCategorie.id}
+														on:click={() => {
+															showUpdateInput = true;
+															updateId = hCategorie.id;
+														}}
+														class="button is-info is-focused is-pulled-right is-small"
+														style="width: 100px">Mettre à jour</button
+													>
+												</th>
+											{/if}
+										</tr>
+									</thead>
+									<tbody>
+										{#each subCategories as sCategorie}
+											{#if hCategorie.id == sCategorie.sur_categorie_id}
+												<tr>
+													{#if showUpdateInput && updateId == sCategorie.id}
+														<td
+															><input
+																class="input is-primary"
+																type="text"
+																placeholder={sCategorie.nom}
+																bind:value={categorieNameValue}
+															/>
+														</td><td>
+															<div class="field select">
+																<select bind:value={selectedCat}>
+																	{#each highCategories as cat}
+																		<option value={cat}>
+																			{cat.nom}
+																		</option>
+																	{/each}
+																</select>
+															</div></td
 														>
-														<button
-															id={sCategorie.id}
-															on:click={() => {
-																showUpdateInput = true;
-																updateId = sCategorie.id;
-															}}
-															class="button is-info is-focused is-pulled-right is-small"
-															style="width: 100px">Mettre à jour</button
+														<td>
+															<button
+																id={sCategorie.id}
+																on:click={() => {
+																	showUpdateInput = false;
+																	updateId = sCategorie.id;
+																}}
+																class="button is-danger is-focused is-pulled-right is-small"
+																style="width: 100px">Annuler</button
+															>
+															<button
+																id={sCategorie.id}
+																on:click={(e) => submitUpdate(e, sCategorie)}
+																class="button is-info is-focused is-pulled-right is-small"
+																style="width: 100px">Valider</button
+															></td
 														>
-													</td>
-												{/if}
-											</tr>
-										{/if}
-									{/each}
-								</tbody>
-							</table>
-						</div>
-					{/each}
+													{:else if showUpdateInput == false}
+														<td>{sCategorie.nom}</td>
+														<td>
+															<button
+																id={sCategorie.id}
+																on:click={handleDelete}
+																class="button is-danger is-focused is-pulled-right is-small"
+																style="width: 100px">Supprimer</button
+															>
+															<button
+																id={sCategorie.id}
+																on:click={() => {
+																	showUpdateInput = true;
+																	updateId = sCategorie.id;
+																}}
+																class="button is-info is-focused is-pulled-right is-small"
+																style="width: 100px">Mettre à jour</button
+															>
+														</td>
+													{/if}
+												</tr>
+											{/if}
+										{/each}
+									</tbody>
+								</table>
+							</div>
+						{/each}
+					{:else}
+						<p class="subtitle" style="text-align:center">Liste des catégories vide !</p>
+					{/if}
 				</div>
 			{/if}
 		</div>
