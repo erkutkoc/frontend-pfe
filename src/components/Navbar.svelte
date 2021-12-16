@@ -26,8 +26,8 @@
 		<div class="navbar-start">
 			<a class="navbar-item" href="/"> Accueil </a>
 			{#if USER}
-				<a class="navbar-item" href="/myAnnonce"> Mes articles </a>
-				<a class="navbar-item" href="/chat"> Chat </a>
+				<a class="navbar-item" href="/myAnnonce"> Mes annonces </a>
+				<a class="navbar-item" href="/chat"> Chats </a>
 			{/if}
 			<div class="navbar-item has-dropdown is-hoverable">
 				<div class="navbar-dropdown is-boxed" />
@@ -41,7 +41,7 @@
 			{/if}
 			{#if USER}
 				{#if USER.administrateur}
-					<a class="navbar-item has-text-danger" href="/administrations"> Administration </a>
+					<a class="navbar-item has-text-danger" href="/administrations"> Administrations </a>
 				{/if}
 				<a class="navbar-item has-text-info" href="/profile">{username}</a>
 				<a class="navbar-item" href="/logout"> Deconnexion </a>

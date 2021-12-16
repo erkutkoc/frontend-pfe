@@ -118,7 +118,7 @@
 	<div class="modal-card ">
 		<header class="modal-card-head has-background-primary">
 			<p class="modal-card-title has-text-centered has-text-white has-text-weight-bold">
-				Ajouter un article
+				Ajouter une annonce
 			</p>
 			<button class="delete" on:click={hideModal} aria-label="close" />
 		</header>

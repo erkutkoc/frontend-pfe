@@ -151,7 +151,7 @@
 			</div>
 		</div>
 	{:else}
-		<div id="center"><p>Aucun article à valider !</p></div>
+		<div id="center"><p>Aucun annonce à valider !</p></div>
 	{/if}
 {:else}
 	<LoadingAnimation />
