@@ -1,10 +1,10 @@
 <script>
 	import annonceServices from '../services/annonceServices';
 	import LoadingAnimation from './LoadingAnimation.svelte';
-	//import AnnonceList from './AnnonceList.svelte';
 	import Annonce from './Annonce.svelte';
 	import { annonces, filteredAnnonces, annoncesByCampus } from '../utils/stores.js';
 	import { onMount } from 'svelte';
+	import { FontAwesomeIcon } from 'fontawesome-svelte';
 	let categories = [];
 	let highCategories = [];
 	let subCategories = [];
@@ -14,7 +14,7 @@
 	let selectedMax = -1;
 	let sort = 'default';
 	let isLoading = true;
-	let inputSearched = "";
+	let inputSearch = null;
 	let notifMsg, colorNotif;
 	let snackbar = false;
 	let campus = [
@@ -43,7 +43,7 @@
 		}
 	});
 	/* Fonctionnalité future : non fonctionnel
-	*/
+	 */
 	const fetchAnnoncesByCampus = async () => {
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
 		let temp = resp;
@@ -53,7 +53,7 @@
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
-		
+
 		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
@@ -73,18 +73,18 @@
 			sort = 'titreZA';
 			dropdown = !dropdown;
 		}
-
-		$filteredAnnonces  = $filteredAnnonces.filter((a) => a.titre.startsWith(emailSearched));
-		filtered = true;
-	
+		if (inputSearch) {
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.titre.startsWith(inputSearch));
+		}
+		//Fonctionnalité future
 		/*if (selectedCamp) {
 			fetchAnnoncesByCampus();
 		}*/
 		if (selectedCat) {
-			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
 		}
 		if (selectedMin != -1) {
-			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
 		}
 		if (selectedMax != -1) {
 			$filteredAnnonces = $filteredAnnonces.filter((a) => a.prix <= selectedMax);
@@ -114,8 +114,8 @@
 		$filteredAnnonces = $annonces;
 		selectedCat = null;
 		selectedCamp = null;
-		document.getElementById("min").value = "";
-		document.getElementById("max").value = "";
+		document.getElementById('min').value = '';
+		document.getElementById('max').value = '';
 		sort = 'default';
 	}
 
@@ -124,9 +124,17 @@
 
 <div>
 	<div class="panel-block">
+		<label class="label">Titre </label>
+		<input
+			class="input is-info custom-search"
+			type="text"
+			bind:value={inputSearch}
+			on:input={handleChange}
+		/>
+
 		<label class="label">Catégorie </label>
 		<div class="select">
-			<select bind:value={selectedCat} on:click={handleChange}>
+			<select class="custom-search" bind:value={selectedCat} on:click={handleChange}>
 				{#each highCategories as hCategorie}
 					<optgroup label={hCategorie.nom}>
 						{#each subCategories as sCategorie}
@@ -142,74 +150,126 @@
 		</div>
 
 		<label class="label">Min</label>
-		<div class="control">
-			<input id="min" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
-		</div>
+		<input
+			id="min"
+			class="input custom-search"
+			on:input={handleChange}
+			type="number"
+			step="0.01"
+			min="0"
+		/>
 		<label class="label">Max</label>
-		<div class="control">
-			<input id="max" class="input" on:input={handleChange} type="number" step="0.01" min="0" />
-		</div>
+		<input
+			id="max"
+			class="input custom-search"
+			on:input={handleChange}
+			type="number"
+			step="0.01"
+			min="0"
+		/>
 		<label class="label">Campus</label>
-		<div class="select">
-			<select bind:value={selectedCamp} on:click={handleChange} disabled>
+		<div class="select" style="margin:auto">
+			<select class="custom-search" bind:value={selectedCamp} on:click={handleChange} disabled>
 				{#each campus as camp}
 					<option value={camp}>
 						{camp.campus}
 					</option>
 				{/each}
 			</select>
-			<p class="has-text-link" style="text-align:center;">Future fonctionnalité</p>
+			<p class="has-text-link" style="text-align:center; margin:auto">Future fonctionnalité</p>
 		</div>
+
+		<div
+			class={dropdown
+				? 'dropdown is-left is-active custom-search'
+				: 'dropdown is-left custom-search'}
+		>
+			<div class="dropdown-trigger">
+				<button
+					class="button custom-search"
+					aria-haspopup="true"
+					aria-controls="dropdown-menu"
+					on:click={() => (dropdown = !dropdown)}
+				>
+					<span>Trier</span>
+					<span class="icon is-small">
+						<i class="fas fa-angle-down" aria-hidden="true" />
+					</span>
+				</button>
+			</div>
+			<div class="dropdown-menu custom-search" id="dropdown-menu" role="menu">
+				<div class="dropdown-content" on:click={handleChange}>
+					<a href="#" class="dropdown-item" id="prixCroissant"> Prix Croissant </a>
+					<a class="dropdown-item" id="prixDecroissant"> Prix Decroissant </a>
+					<hr class="dropdown-divider" />
+					<a href="#" class="dropdown-item" id="titreAZ"> A -> Z </a>
+					<a href="#" class="dropdown-item" id="titreZA"> Z -> A </a>
+				</div>
+			</div>
+		</div>
+		<button class="button is-info custom-search" on:click={handleResetFilter}>
+			Réinitialiser
+		</button>
+	</div>
+	<div class="section" id="homeMsg">
+			<blockquote>
+				Nous avons tous des trésors enfouis au fond de notre grenier ou de nos placards. Trésors qui
+				profiteraient à d’autres. Valorisons-les en leur donnant une seconde vie. <FontAwesomeIcon
+					icon={["far","smile-wink"]}
+				/>
+			</blockquote>
 	</div>
 </div>
 
-<div class="panel-block">
-	<button class="button is-info" on:click={handleResetFilter}> Reset </button>
-	<div class={dropdown ? 'dropdown is-left is-active' : 'dropdown is-left'}>
-		<div class="dropdown-trigger">
-			<button
-				class="button"
-				aria-haspopup="true"
-				aria-controls="dropdown-menu"
-				on:click={() => (dropdown = !dropdown)}
-			>
-				<span>Trier</span>
-				<span class="icon is-small">
-					<i class="fas fa-angle-down" aria-hidden="true" />
-				</span>
-			</button>
-		</div>
-		<div class="dropdown-menu" id="dropdown-menu" role="menu">
-			<div class="dropdown-content" on:click={handleChange}>
-				<a href="#" class="dropdown-item" id="prixCroissant"> Prix Croissant </a>
-				<a class="dropdown-item" id="prixDecroissant"> Prix Decroissant </a>
-				<hr class="dropdown-divider" />
-				<a href="#" class="dropdown-item" id="titreAZ"> A -> Z </a>
-				<a href="#" class="dropdown-item" id="titreZA"> Z -> A </a>
+{#if !isLoading}
+	<div class="container column is-10">
+		<div class="section">
+			<!--Annonce-->
+			<div class="columns is-desktop is-multiline ">
+				{#each $filteredAnnonces as annonce (annonce.id)}
+					<Annonce {annonce} />
+				{/each}
 			</div>
 		</div>
 	</div>
-</div>
-{#if !isLoading}
-<div class="container column is-10">
-	<div class="section">
-		<!--Annonce-->
-		<div class="columns is-desktop is-multiline ">
-			{#each $filteredAnnonces as annonce (annonce.id)}
-				<Annonce {annonce} />		
-			{/each}
-		</div>
-	</div>
-</div>
 {:else}
 	<LoadingAnimation />
 {/if}
 
 <style>
+	.custom-search {
+		max-width: 500px;
+		width: auto;
+		min-width: 200px;
+		margin: auto;
+	}
+	.label {
+		margin: auto;
+	}
 	.panel-block {
 		margin: auto;
 		height: auto;
 		font-size: 14px;
 		font-weight: bolder;
+	}
+	blockquote {
+		text-align: center;
+		background: rgb(72, 64, 203);
+		background: linear-gradient(
+			90deg,
+			rgba(72, 64, 203, 0.32816876750700286) 0%,
+			rgba(0, 212, 255, 1) 100%
+		);
+		font-style: italic;
+		font-size: medium;
+		font-weight: bold;
+		border: solid;
+		border-width: 0;
+		border-radius: 30px;
+		color: rgb(6, 108, 192);
+	} 
+	#homeMsg{
+		margin:auto;
+		padding:20px;
 	}
 </style>

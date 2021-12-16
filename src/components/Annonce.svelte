@@ -5,6 +5,8 @@
 	import { Snackbar } from 'svelte-materialify';
 	import CurrentState from './CurrentState.svelte';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
+	const baseUrl =
+    import.meta.env.VITE_BASE_URL
 
 	export let annonce;
 
@@ -85,7 +87,7 @@
 		<figure class="image is-5by3">
 			{#if annonce.urlPhoto[0]}
 				<img
-					src="https://backend-staging-pfe.herokuapp.com/medias/{annonce.urlPhoto[0]}"
+					src="{baseUrl}/medias/{annonce.urlPhoto[0]}"
 					alt="annonce"
 				/>
 			{:else}
@@ -100,6 +102,9 @@
 		{:else}
 			<h5 class="title is-5 is-italic has-text-primary">Objet à donner</h5>
 		{/if}
+		<a class="button is-small" id={annonce.id} href={'/' + annonce.id}
+		>Voir les détails</a
+	>
 		<!--Annonce State-->
 		<CurrentState {annonce} />
 		{#if admin}
@@ -115,9 +120,7 @@
 			</div>
 		{/if}
 		<!--Annonce State fin-->
-		<a class="button is-primary is-rounded is-pulled-right" id={annonce.id} href={'/' + annonce.id}
-			>Voir les détails</a
-		>
+
 	</div>
 </div>
 
@@ -128,6 +131,16 @@
 		border-radius: 5px;
 		border-color: blueviolet;
 		background-color: rgba(138, 43, 226, 0.2);
+	}
+	.button{
+		border: solid;
+		border-width: 0.3px;
+		border-radius: 5px;
+		border-color: blueviolet;
+		background-color: rgba(138, 43, 226, 0.2);
+		float:right;
+		color:rgb(1, 83, 104);
+		font-weight: bold;
 	}
 	span {
 		margin: 5px;

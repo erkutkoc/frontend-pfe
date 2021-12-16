@@ -86,11 +86,7 @@
 	};
 
 	const postDiscussion = async (member) => {
-		if (
-			newDiscussionEmail.length > 0 &&
-			newDiscussionEmail.localeCompare(USER.email) &&
-			!discussions.find((d) => d.dest.localeCompare(newDiscussionEmail) == 0)
-		) {
+		if (!discussions.some((e) => e.dest.toLowerCase() == newDiscussionEmail)) {
 			await UserServices.getUserByEmail(newDiscussionEmail, token)
 				.then(async (memberId) => {
 					await DiscussionServices.postDiscussion(token, memberId.data, id)
@@ -130,7 +126,7 @@
 		fetchMessages(token, selectedDiscussion.id);
 	};
 
-	const handleClickPost = () => {
+	const handleCreateChat = () => {
 		postDiscussion(newDiscussionEmail);
 		loading = true;
 	};
@@ -153,39 +149,39 @@
 			<p class="menu-label is-hidden-touch">Créer une discussion</p>
 			<ul class="menu-list">
 				<li>
-					<form  on:click|preventDefault={handleClickPost}>
 					<input
 						class="input"
 						name="userInput"
 						type="text"
-						placeholder="Ajouter une conversation"
-						on:bind={newDiscussionEmail}
+						placeholder="Entrez un email"
+						bind:value={newDiscussionEmail}
 					/>
-					<button type="submit" class="button is-info">Créer une conversation</button>
-				</form>
+					<button type="submit" class="button is-info" on:click={handleCreateChat}
+						>Créer une conversation</button
+					>
 				</li>
 			</ul>
-			<p class="menu-label is-hidden-touch">Discussions</p>
+			<p class="menu-label is-hidden-touch">Rechercher une discussion</p>
 			<ul class="menu-list">
 				<li>
 					<input
-						class="input"
-						name="userInput"
-						type="text"
-						placeholder="Rechercher un utilisateur"
+						class="input is-primary"
 						on:input={handleInput}
+						type="text"
+						placeholder="Entrez un email"
 					/>
 				</li>
+			</ul>
+			<p class="menu-label is-hidden-touch">Discussion</p>
+			<ul class="menu-list">
 				{#each filteredDiscussions as discussion}
 					<li>
 						<a
 							style="overflow-wrap: normal"
 							href="#"
-							class=""
 							on:click={(e) => {
 								handleClickDiscussion({ discussion });
-								isActive = true;
-								e.target.className = 'is-active';
+								isActive=true;
 							}}
 						>
 							{discussion.dest}
