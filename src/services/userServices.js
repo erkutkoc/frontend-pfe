@@ -104,7 +104,7 @@ const getUserByEmail = async(email, token) => {
                 body: JSON.stringify(toSend)
             })
     } catch (e) {
-        throw error.response.data;
+        throw e.response.data;
     }
 }
 

@@ -4,7 +4,7 @@
 </script>
 
 {#if annonce.etat === 'E'}
-	<span style="color:hsl(217, 71%, 53%) ;font-weight:bold"> Annonce en attente attente</span>
+	<span style="color:hsl(217, 71%, 53%) ;font-weight:bold"> Annonce en attente</span>
 
 	<a style="color:hsl(217, 71%, 53%)"><FontAwesomeIcon icon="pause-circle" /></a>
 {:else if annonce.etat === 'V'}

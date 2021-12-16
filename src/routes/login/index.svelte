@@ -5,7 +5,6 @@
 	import UserServices from '../../services/userServices.js';
 	import storage from '../../utils/storage';
 	import ErrorPage from '../../components/ErrorPage.svelte';
-	import { fade, scale } from 'svelte/transition';
 	import { Snackbar } from 'svelte-materialify';
 
 	let snackbar = false;
