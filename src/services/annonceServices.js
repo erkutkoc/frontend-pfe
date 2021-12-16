@@ -95,7 +95,6 @@ const updateAnnonce = async(data, token, admin) => {
                     }
                 })
         } else {
-            console.log("ok")
             return await axios
                 .put(baseUrl + "/annonces", data, {
                     headers: {
