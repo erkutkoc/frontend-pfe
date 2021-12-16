@@ -60,7 +60,7 @@
 	center
 	rounded
 	bind:active={snackbar}
-	timeout={2000}
+	timeout={3000}
 	style="background-color:{colorNotif}"
 >
 	{notifMsg}
