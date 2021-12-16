@@ -18,7 +18,7 @@
 			admin = USER.administrateur;
 		}
 	});
-	const createObjectToSend = () => {
+	const createObjectToSend = (state) => {
 		return admin
 			? {
 					Id: annonce.id,
@@ -26,7 +26,8 @@
 					Description: annonce.description,
 					Prix: annonce.prix,
 					Etat: state,
-					Vendeur_id: USER.id
+					Vendeur_id: USER.id,
+					Genre: annonce.genre
 			  }
 			: {
 					Id: annonce.id,
@@ -41,8 +42,7 @@
 			  };
 	};
 	const fetchUpdate = async (state) => {
-		try {
-			let toSend = createObjectToSend();
+			let toSend = createObjectToSend(state);
 			if (admin) {
 				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
 				let index = $annonces.findIndex((element) => element.id == annonce.id);
@@ -53,7 +53,7 @@
 				snackbar = true;
 				console.log(snackbar);
 			} else {
-				AnnonceServices.updateAnnonce(toSend, USER.token);
+				AnnonceServices.updateAnnonce(toSend, USER.token, false);
 				let index = $annonces.findIndex((element) => element.id == annonce.id);
 				$annonces[index].etat = state;
 				$filteredAnnonces = $filteredAnnonces.filter((e) => e.id != annonce.id);
@@ -62,11 +62,6 @@
 				snackbar = true;
 				console.log(snackbar);
 			}
-		} catch (error) {
-			notifMsg = "L'état de l'annonce n'a pas été mis à jour !";
-			colorNotif = 'red';
-			snackbar = true;
-		}
 	};
 	function onChangeState(updatedAnnonce) {
 		if (updatedAnnonce) fetchUpdate(updatedAnnonce.target[0].value);

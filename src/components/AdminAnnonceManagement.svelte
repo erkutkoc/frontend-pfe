@@ -35,7 +35,8 @@
 				Titre: annonce.titre,
 				Description: annonce.description,
 				Prix: annonce.prix,
-				Etat: updatedState
+				Etat: updatedState,
+				Genre : annonce.genre
 			};
 			AnnonceServices.updateAnnonce(toSend, USER.token, admin);
 			let index = annonces.findIndex((element) => element.id == annonce.id);

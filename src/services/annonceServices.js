@@ -86,6 +86,7 @@ const getAllCampus = async () => {
 const updateAnnonce = async (data, token, admin) => {
     try {
         if (admin) {
+            console.log(admin)
             return await axios
                 .put(baseUrl + "/annonces/admin", data, {
                     headers: {
@@ -94,6 +95,7 @@ const updateAnnonce = async (data, token, admin) => {
                     }
                 })
         } else {
+            console.log("ok")
             return await axios
                 .put(baseUrl + "/annonces", data, {
                     headers: {

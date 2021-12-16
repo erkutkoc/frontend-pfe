@@ -12,14 +12,14 @@
 
 	let admin, USER, notifMsg, colorNotif;
 	let snackbar = false;
-	
+
 	onMount(async () => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		if (USER) {
 			admin = USER.administrateur;
 		}
 	});
-	const createObjectToSend = () => {
+	const createObjectToSend = (state, annonce) => {
 		return admin
 			? {
 					Id: annonce.id,
@@ -27,7 +27,8 @@
 					Description: annonce.description,
 					Prix: annonce.prix,
 					Etat: state,
-					Vendeur_id: USER.id
+					Vendeur_id: USER.id,
+					Genre: annonce.genre
 			  }
 			: {
 					Id: annonce.id,
@@ -42,15 +43,16 @@
 			  };
 	};
 	const fetchUpdate = async (state, annonce) => {
-		try {
-			let toSend = createObjectToSend();
-			if (admin && state == 'E') {
+		console.log(admin)
+		console.log(annonce.etat)
+			let toSend = createObjectToSend(state, annonce);
+			if (admin && annonce.etat == 'E') {
 				AnnonceServices.updateAnnonce(toSend, USER.token, admin);
 				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
 				$usersAnnonces[index].etat = state;
 				$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
 			} else {
-				AnnonceServices.updateAnnonce(toSend, USER.token);
+				AnnonceServices.updateAnnonce(toSend, USER.token, false);
 				let index = $usersAnnonces.findIndex((element) => element.id == annonce.id);
 				$usersAnnonces[index].etat = state;
 				$usersFilteredAnnonces = $usersFilteredAnnonces.filter((e) => e.id != annonce.id);
@@ -58,12 +60,7 @@
 			notifMsg = "L'état de l'annonce a été mis à jour !";
 			colorNotif = '#5bc0de';
 			snackbar = true;
-		} catch (error) {
-			console.log(error);
-			notifMsg = "L'état de l'annonce n'a pas été mis à jour !";
-			colorNotif = 'red';
-			snackbar = true;
-		}
+
 	};
 	function onChangeState(event, annonce) {
 		if (annonce) fetchUpdate(event.target[0].value, annonce);

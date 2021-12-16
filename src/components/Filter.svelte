@@ -14,6 +14,7 @@
 	let selectedMax = -1;
 	let sort = 'default';
 	let isLoading = true;
+	let inputSearched = "";
 	let notifMsg, colorNotif;
 	let snackbar = false;
 	let campus = [
@@ -41,17 +42,18 @@
 			return;
 		}
 	});
+	/* Fonctionnalité future : non fonctionnel
+	*/
 	const fetchAnnoncesByCampus = async () => {
 		const resp = await annonceServices.findAllByCampus(selectedCamp.campus);
 		let temp = resp;
-
 		$annoncesByCampus = temp;
-
 		$filteredAnnonces = $annoncesByCampus;
 	};
 
 	function handleChange(e) {
 		$filteredAnnonces = $annonces;
+		
 		if (e.target.id == 'min') {
 			selectedMin = e.target.value;
 		}
@@ -72,6 +74,9 @@
 			dropdown = !dropdown;
 		}
 
+		$filteredAnnonces  = $filteredAnnonces.filter((a) => a.titre.startsWith(emailSearched));
+		filtered = true;
+	
 		/*if (selectedCamp) {
 			fetchAnnoncesByCampus();
 		}*/

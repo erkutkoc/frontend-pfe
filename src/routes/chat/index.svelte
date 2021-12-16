@@ -18,11 +18,11 @@
 	let message = '';
 	let newDiscussionEmail = '';
 	let id;
-	let otherName = ''
+	let otherName = '';
 	let loading = false;
 	let snackbar = false;
 	let errorNotification;
-	let isActive = false
+	let isActive = false;
 
 	let USER;
 	onMount(() => {
@@ -30,17 +30,23 @@
 		token = USER.token;
 		id = USER.id;
 		fetchDiscussions(token);
-		
+
 		Pusher.logToConsole = true;
 
 		var pusher = new Pusher('93dc2573318267ee5994', {
-		cluster: 'eu'
-    	});
+			cluster: 'eu'
+		});
 
 		var channel = pusher.subscribe('chat');
-		channel.bind('message', function(data) {
-			console.log(data)
-			let msg = {id: data.Id, discussion_id: data.discussion_id, envoyeur_id: data.Envoyeur_id, texte: data.Texte, date_envoi: data.Date_envoi}
+		channel.bind('message', function (data) {
+			console.log(data);
+			let msg = {
+				id: data.Id,
+				discussion_id: data.discussion_id,
+				envoyeur_id: data.Envoyeur_id,
+				texte: data.Texte,
+				date_envoi: data.Date_envoi
+			};
 			messages = [...messages, msg];
 		});
 	});
@@ -144,11 +150,44 @@
 
 	<section class="main-content columns is-fullheight">
 		<aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
-			<p class="menu-label is-hidden-touch">Discussion</p>
+			<p class="menu-label is-hidden-touch">Créer une discussion</p>
 			<ul class="menu-list">
+				<li>
+					<form  on:click|preventDefault={handleClickPost}>
+					<input
+						class="input"
+						name="userInput"
+						type="text"
+						placeholder="Ajouter une conversation"
+						on:bind={newDiscussionEmail}
+					/>
+					<button type="submit" class="button is-info">Créer une conversation</button>
+				</form>
+				</li>
+			</ul>
+			<p class="menu-label is-hidden-touch">Discussions</p>
+			<ul class="menu-list">
+				<li>
+					<input
+						class="input"
+						name="userInput"
+						type="text"
+						placeholder="Rechercher un utilisateur"
+						on:input={handleInput}
+					/>
+				</li>
 				{#each filteredDiscussions as discussion}
 					<li>
-						<a style="overflow-wrap: normal" href="#" class="" on:click={(e) =>{ handleClickDiscussion({ discussion }); isActive = true; e.target.className =  "is-active"}}>
+						<a
+							style="overflow-wrap: normal"
+							href="#"
+							class=""
+							on:click={(e) => {
+								handleClickDiscussion({ discussion });
+								isActive = true;
+								e.target.className = 'is-active';
+							}}
+						>
 							{discussion.dest}
 						</a>
 					</li>
@@ -161,14 +200,13 @@
 			<div class="section">
 				<section class="hero" style="background-color: rgba(32,156,238, 0.15);">
 					{#if isActive}
-					<div class="hero-body">
-						<div class="card" style="heigth: 100%; width: 100%">
-							
+						<div class="hero-body">
+							<div class="card" style="heigth: 100%; width: 100%">
 								<div class="card-content" style="; opacity : 0.7">
 									<div class="content">
 										<!--Message-->
 										{#each messages as message}
-											{#if message.envoyeur_id != id} 
+											{#if message.envoyeur_id != id}
 												<div style="heigth: 100%; width: 100%">
 													<p style="padding: .26em; text-align:left; overflow-wrap: normal">
 														<span class="tag is-medium is-success">{message.texte}</span><br /><span
@@ -189,58 +227,61 @@
 										<!--Fin message-->
 									</div>
 								</div>
+							</div>
 						</div>
-					</div>
 
-
-					<div class="hero-foot">
-						<footer class="section is-small">
-							<form on:submit|preventDefault={handleSubmit} action="#" method="POST">
-								<div class="field has-addons">
-									<div class="control is-expanded">
-										<input class="input" name="userInput" type="text" placeholder="Votre message" bind:value={message} />
+						<div class="hero-foot">
+							<footer class="section is-small">
+								<form on:submit|preventDefault={handleSubmit} action="#" method="POST">
+									<div class="field has-addons">
+										<div class="control is-expanded">
+											<input
+												class="input"
+												name="userInput"
+												type="text"
+												placeholder="Votre message"
+												bind:value={message}
+											/>
+										</div>
+										<div class="control">
+											<button class="button is-info"> Envoyer </button>
+										</div>
 									</div>
-									<div class="control">
-										<button class="button is-info"> Envoyer </button>
-									</div>
-								</div>
-							</form>
-						</footer>
-					</div>
+								</form>
+							</footer>
+						</div>
 					{:else}
-								<div id="center"><p>Bienvenue dans le chat</p></div>
-							{/if}
+						<div id="center"><p>Bienvenue dans le chat</p></div>
+					{/if}
 				</section>
 			</div>
 		</div>
 	</section>
-
 </main>
 
 <style>
-    #name{
-        color:hsl(204, 86%, 53%);
-        font-weight: bold;
-        font-size: xx-small;
-        font-style: italic;
-    }
-    #otherName{
-        color: hsl(171, 100%, 41%);
-        font-weight: bold;
-        font-size: xx-small;
-        font-style: italic;
-    }
+	#name {
+		color: hsl(204, 86%, 53%);
+		font-weight: bold;
+		font-size: xx-small;
+		font-style: italic;
+	}
+	#otherName {
+		color: hsl(171, 100%, 41%);
+		font-weight: bold;
+		font-size: xx-small;
+		font-style: italic;
+	}
 	#center {
-        text-align: center;
-        font-size: xx-large;
-        font-style: italic;
-        font-weight: bolder;
-        position: absolute;
-        margin: auto;
-        top: 50%;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
+		text-align: center;
+		font-size: xx-large;
+		font-style: italic;
+		font-weight: bolder;
+		position: absolute;
+		margin: auto;
+		top: 50%;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
 </style>
-
