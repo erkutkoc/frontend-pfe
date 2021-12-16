@@ -76,10 +76,10 @@
 			fetchAnnoncesByCampus();
 		}*/
 		if (selectedCat) {
-			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.categorie_id === selectedCat.id);
 		}
 		if (selectedMin != -1) {
-			$filteredAnnonces  = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
+			$filteredAnnonces = $filteredAnnonces.filter((a) => a.prix >= selectedMin);
 		}
 		if (selectedMax != -1) {
 			$filteredAnnonces = $filteredAnnonces.filter((a) => a.prix <= selectedMax);
@@ -109,8 +109,8 @@
 		$filteredAnnonces = $annonces;
 		selectedCat = null;
 		selectedCamp = null;
-		document.getElementById("min").value = "";
-		document.getElementById("max").value = "";
+		document.getElementById('min').value = '';
+		document.getElementById('max').value = '';
 		sort = 'default';
 	}
 
@@ -186,16 +186,16 @@
 	</div>
 </div>
 {#if !isLoading}
-<div class="container column is-10">
-	<div class="section">
-		<!--Annonce-->
-		<div class="columns is-desktop is-multiline ">
-			{#each $filteredAnnonces as annonce (annonce.id)}
-				<Annonce {annonce} />		
-			{/each}
+	<div class="container column is-10">
+		<div class="section">
+			<!--Annonce-->
+			<div class="columns is-desktop is-multiline ">
+				{#each $filteredAnnonces as annonce (annonce.id)}
+					<Annonce {annonce} />
+				{/each}
+			</div>
 		</div>
 	</div>
-</div>
 {:else}
 	<LoadingAnimation />
 {/if}

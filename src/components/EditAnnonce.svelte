@@ -22,7 +22,8 @@
 	let allCampus;
 	let selectedCampus = [];
 	let allCategories = [];
-
+	let highCategories = [];
+	let subCategories = [];
 	onMount(async () => {
 		const fetchAllCampus = await AnnonceServices.getAllCampus();
 		allCampus = fetchAllCampus.data;
@@ -32,6 +33,8 @@
 		//Case where categorie is deleted == null
 		let fetchCategories = await AnnonceServices.findAllCategorie();
 		allCategories = fetchCategories;
+		highCategories = allCategories.filter((e) => e.sur_categorie_id == null);
+		subCategories = allCategories.filter((e) => e.sur_categorie_id != null);
 	});
 	const onCheckCampus = (event) => {
 		let idCampusSelected = event.target.value;
@@ -66,17 +69,14 @@
 		};
 
 		try {
-			await AnnonceServices.updateAnnonce(toSend, currentUser.token)
-				.then((resp) => {
-					notifMsg = "L'annonce a été modifiée avec succès";
-					colorNotif = '#5bc0de'; //info, blue
-					snackbar = true;
-				})
-				.then((e) => {
-					setTimeout(() => {
-						goto('/' + currentAnnonce.id);
-					}, 3500);
-				});
+			await AnnonceServices.updateAnnonce(toSend, currentUser.token).then((resp) => {
+				notifMsg = "L'annonce a été modifiée avec succès";
+				colorNotif = '#5bc0de'; //info, blue
+				snackbar = true;
+				setTimeout(() => {
+					goto('/' + currentAnnonce.id);
+				}, 3500);
+			});
 		} catch (error) {
 			notifMsg = error;
 			colorNotif = 'red';

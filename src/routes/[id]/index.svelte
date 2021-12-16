@@ -23,8 +23,6 @@
 	let notifMsg;
 	let colorNotif;
 
-	$: console.log(vendeur);
-	$: console.log(currentUser);
 	let component;
 	let props;
 	const showEditAnnonce = () => {
