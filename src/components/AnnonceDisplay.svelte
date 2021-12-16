@@ -210,7 +210,7 @@
 			</div>
 		</div>
 	{:else}
-		<div id="center"><p>Vous n'avez pas d'article !</p></div>
+		<div id="center"><p>Vous n'avez pas d'annonce !</p></div>
 	{/if}
 {:else}
 	<LoadingAnimation />

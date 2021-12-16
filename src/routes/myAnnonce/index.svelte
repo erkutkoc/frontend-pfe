@@ -48,7 +48,7 @@
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a on:click={() => (currentToogle = 'default')}>
 							<span class="icon is-small has-text-grey-lighter"><i class="fas fa-circle" /></span>
-							<span>Articles</span>
+							<span>Annonces</span>
 						</a>
 					</li>
 					<li class={currentToogle === 'E' ? 'is-active' : ''}>
