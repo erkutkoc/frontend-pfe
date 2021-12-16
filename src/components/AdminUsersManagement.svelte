@@ -2,6 +2,8 @@
 	import Member from './MemberLine.svelte';
 	import { onMount } from 'svelte';
 	import LoadingAnimation from './LoadingAnimation.svelte';
+	import UserServices from '../services/userServices.js';
+
 	let membersArray = [];
 	let bannedMembers = [];
 	let filteredMembers = [];
@@ -15,43 +17,29 @@
 	onMount(() => {
 		USER = JSON.parse(sessionStorage.getItem('user'));
 		token = USER.token;
+		fetchMembers(token)
 	});
 
-	$: {
-		let promise = fetchMembers();
-		promise
-			.then((result) => {
-				baseMembers = membersArray = result
-					.filter((m) => new Date(m.banni).valueOf() < Date.now())
-					.filter((m) => m.id != USER.id)
-					.sort((a, b) => a.email.localeCompare(b.email));
-				bannedMembers = result
-					.filter((m) => new Date(m.banni).valueOf() > Date.now())
-					.sort((a, b) => a.email.localeCompare(b.email));
-			})
-			.catch((err) => console.log(err));
+
+	const fetchMembers = async (token) => {
+		await UserServices.getAllUsers(token).then((members) => {
+			baseMembers = membersArray = members.data
+				.filter((m) => new Date(m.banni).valueOf() < Date.now())
+				.filter((m) => m.id != USER.id)
+				.sort((a, b) => a.email.localeCompare(b.email));
+			bannedMembers = members.data
+				.filter((m) => new Date(m.banni).valueOf() > Date.now())
+				.sort((a, b) => a.email.localeCompare(b.email));
+			isLoadingAnnonces = false;
+		})
+		.catch((err) => {
 			setTimeout(()=> {isLoadingAnnonces = false;}, 3000);
-		
-	}
-
-	async function fetchMembers() {
-		if (token == undefined) return [];
-		const response = await fetch('https://pfe-backend1.herokuapp.com/Members', {
-			headers: { 'Content-Type': 'application/json', Authorization: token },
-			method: 'GET'
-		});
-		const resp = await response.json();
-
-		if (response.ok) {
-			return resp;
-		} else {
-			throw new Error(text);
-		}
+		})
 	}
 
 	function handleInput(e) {
 		emailSearched = e.target.value;
-		filteredMembers = baseMembers.filter((m) => m.email.startsWith(emailSearched));
+		filteredMembers = baseMembers.filter((m) => m.email.toUpperCase().startsWith(emailSearched.toUpperCase()));
 		filtered = true;
 	}
 
