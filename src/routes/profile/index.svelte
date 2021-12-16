@@ -6,12 +6,15 @@
     import Navbar from "../../components/Navbar.svelte";
     import AnnonceServices from '../../services/annonceServices.js';
     import UserServices from '../../services/userServices.js';
+	import { Snackbar } from 'svelte-materialify';
 
     let campus = []
     let campusUser = 1
     let email = ""
     let token
     let loading = false
+	let snackbar = false
+	let errorNotification
 
     let USER;
 	onMount(async () => {
@@ -25,7 +28,7 @@
     
     function onSubmit (e){
     
-        loading = true
+        //loading = true
         const formData = new FormData(e.target);
             const data = [];
 
@@ -44,7 +47,9 @@
 			USER.campus_Id = user.campus_Id
 			storage('user', USER);
 			USER = JSON.parse(sessionStorage.getItem('user'))
-			loading = false
+			//loading = false
+			errorNotification = "Vos données ont bien été modifiées"
+			snackbar = true
 		})
 	}
 
@@ -53,6 +58,9 @@
 
 <main>
     <Navbar />
+	<Snackbar top center rounded bind:active={snackbar} timeout={3000} style="background-color:green">
+		{errorNotification}
+	</Snackbar>
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>
@@ -103,6 +111,7 @@
 					<button
 						type="submit"
 						class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						style="color:white"
 					>
                         {#if loading}
                             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
