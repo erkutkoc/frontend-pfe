@@ -44,7 +44,10 @@
 		await UserServices.updateProfile(token, email, data.password, Number.parseInt(data.campus)).then((data) => {
 			let user = data.data
 			user.motDePasse = ''
+			console.log(USER)
 			USER.campus_Id = user.campus_Id
+			sessionStorage.removeItem('user')
+			console.log(USER)
 			storage('user', USER);
 			USER = JSON.parse(sessionStorage.getItem('user'))
 			//loading = false
