@@ -46,7 +46,7 @@
 				notifMsg = "L'annonce à été valider !";
 				colorNotif = '#5bc0de';
 				snackbar = true;
-			} else {
+			} else if(updatedState == 'A') {
 				notifMsg = "L'annonce à été supprimer !";
 				colorNotif = '#5bc0de';
 				snackbar = true;
