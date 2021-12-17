@@ -69,14 +69,17 @@
 		};
 
 		try {
-			await AnnonceServices.updateAnnonce(toSend, currentUser.token).then((resp) => {
-				notifMsg = "L'annonce a été modifiée avec succès";
-				colorNotif = '#5bc0de'; //info, blue
-				snackbar = true;
-				setTimeout(() => {
-					goto('/' + currentAnnonce.id);
-				}, 3500);
-			});
+			await AnnonceServices.updateAnnonce(toSend, currentUser.token)
+				.then((resp) => {
+					notifMsg = "L'annonce a été modifiée avec succès";
+					colorNotif = '#5bc0de'; //info, blue
+					snackbar = true;
+				})
+				.then(() => {
+					setTimeout(() => {
+						return (window.location.href = '/' + currentAnnonce.id);
+					}, 3500);
+				});
 		} catch (error) {
 			notifMsg = error;
 			colorNotif = 'red';

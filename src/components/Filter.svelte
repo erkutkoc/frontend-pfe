@@ -74,7 +74,9 @@
 			dropdown = !dropdown;
 		}
 		if (inputSearch) {
-			$filteredAnnonces = $filteredAnnonces.filter((a) => a.titre.toLowerCase().startsWith(inputSearch.toLowerCase()));
+			$filteredAnnonces = $filteredAnnonces.filter((a) =>
+				a.titre.toLowerCase().startsWith(inputSearch.toLowerCase())
+			);
 		}
 		//Fonctionnalité future
 		/*if (selectedCamp) {
@@ -212,13 +214,13 @@
 			Réinitialiser
 		</button>
 	</div>
-	<div class="section" id="homeMsg" >
-			<blockquote>
-				Nous avons tous des trésors enfouis au fond de notre grenier ou de nos placards. Trésors qui
-				profiteraient à d’autres. Valorisons-les en leur donnant une seconde vie. <FontAwesomeIcon
-					icon={["far","smile-wink"]}
-				/>
-			</blockquote>
+	<div class="section" id="homeMsg">
+		<blockquote> &lt;&lt
+			Nous avons tous des trésors enfouis au fond de notre grenier ou de nos placards. Trésors qui
+			profiteraient à d’autres. Valorisons-les en leur donnant une seconde vie. <FontAwesomeIcon
+				icon={['far', 'smile-wink']} 
+			/> &gt;&gt;
+		</blockquote>
 	</div>
 </div>
 
@@ -268,9 +270,9 @@
 		border-width: 0;
 		border-radius: 10px;
 		color: rgb(6, 108, 192);
-		margin:1px;
-	} 
-	#homeMsg{
-		padding:20px;
+		margin: 1px;
+	}
+	#homeMsg {
+		padding: 20px;
 	}
 </style>
