@@ -42,7 +42,7 @@
 			let index = annonces.findIndex((element) => element.id == annonce.id);
 			annonces[index].etat = updatedState;
 			annonces = annonces.filter((e) => e.id != annonce.id);
-			if (updatedState == 'E') {
+			if (updatedState == 'V') {
 				notifMsg = "L'annonce à été valider !";
 				colorNotif = '#5bc0de';
 				snackbar = true;
