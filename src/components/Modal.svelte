@@ -67,18 +67,19 @@
 		fetchAddDataContainer.append('Categorie_id', selectedCat.id);
 		fetchAddDataContainer.append('adressesToAdd', selectedCampus);
 		isLoading = true;
+
 		try {
-			await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token).then((rep) => {
-			isLoading = false;
-			goto('/' + rep.data);
-		});
+			await AnnonceServices.uploadAnnonce(fetchAddDataContainer, USER.token)
+				.then((addedAnnonce) => {
+					isLoading=false;
+					goto('/' + addedAnnonce.data);
+				})
 		} catch (error) {
 			console.log(error);
-			notifMsg = "L'annonce n'a pas été ajouter !";
+			notifMsg = "L'annonce n'a pas été ajoutée !";
 			colorNotif = 'red';
 			snackbar = true;
 		}
-
 	}
 	let genres = [
 		{ id: 1, genre: `Bien`, value: 'B' },
@@ -100,6 +101,10 @@
 		fetchAddDataContainer = formData;
 	};
 </script>
+
+{#if isLoading}
+	<LoadingAnimation />
+{/if}
 <Snackbar
 	top
 	center
@@ -110,9 +115,6 @@
 >
 	{notifMsg}
 </Snackbar>
-{#if isLoading}
-	<LoadingAnimation />
-{/if}
 <div class={shown ? 'modal is-active' : 'modal'}>
 	<div class="modal-background " />
 	<div class="modal-card ">

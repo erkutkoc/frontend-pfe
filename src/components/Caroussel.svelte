@@ -39,19 +39,19 @@
 			<SplideSlide>
 				{#if videoTypes.includes(media.split('.')[1])}
 					<!-- if it's a video -->
-					<div class="card-image">
-						<figure class="image is-5by3">
-							<!-- svelte-ignore a11y-media-has-caption -->
-							<video controls src="{baseUrl}/medias/{media}" class="bg-gray-100 rounded-lg" />
-						</figure>
-					</div>
-				{:else}
-					<figure class="image is-5by3">
-						<img
+					<!-- svelte-ignore a11y-media-has-caption -->
+					<figure class="image is-3by2">
+						<video
+							controls
+							class="has-ratio"
 							src="{baseUrl}/medias/{media}"
-							alt="imgs de l'annonce"
-							class="bg-gray-100 rounded-lg"
+							frameborder="0"
+							allowfullscreen
 						/>
+					</figure>
+				{:else}
+					<figure class="image is-3by2">
+						<img src="{baseUrl}/medias/{media}" alt="imgs de l'annonce" />
 					</figure>
 				{/if}
 			</SplideSlide>
@@ -60,8 +60,7 @@
 </div>
 
 <style>
-	.photosAnnonce,
-	.card-image {
+	.photosAnnonce {
 		margin-bottom: 500px;
 	}
 </style>

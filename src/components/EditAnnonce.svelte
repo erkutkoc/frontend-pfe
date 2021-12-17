@@ -9,7 +9,6 @@
 	import { onMount } from 'svelte';
 	import { Snackbar } from 'svelte-materialify';
 	import LoadingAnimation from './LoadingAnimation.svelte';
-	import { goto } from '$app/navigation';
 
 	let snackbar = false;
 	let colorNotif;
