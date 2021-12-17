@@ -254,6 +254,7 @@
 		height: auto;
 		font-size: 14px;
 		font-weight: bolder;
+		flex-wrap: wrap;
 	}
 	blockquote {
 		text-align: center;
