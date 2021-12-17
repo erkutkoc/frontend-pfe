@@ -47,11 +47,12 @@
 							src="{baseUrl}/medias/{media}"
 							frameborder="0"
 							allowfullscreen
+							style="object-fit: fill;"
 						/>
 					</figure>
 				{:else}
 					<figure class="image is-3by2">
-						<img src="{baseUrl}/medias/{media}" alt="imgs de l'annonce" />
+						<img src="{baseUrl}/medias/{media}" alt="imgs de l'annonce" style="object-fit: fill;" />
 					</figure>
 				{/if}
 			</SplideSlide>
